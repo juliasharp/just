@@ -10,7 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.6",
     "nuxt": "^3.12.3",
-    "vue": "latest"
+    "vite-svg-loader": "^5.1.0",
+    "vue": "latest",
+    "vue-router": "^4.4.0"
+  },
+  "devDependencies": {
+    "sass": "^1.77.8"
   }
 }

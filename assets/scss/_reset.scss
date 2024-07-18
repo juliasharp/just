@@ -1,0 +1,44 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	outline: none;
+}
+
+body {
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+body {
+	font-size: 18px;
+	line-height: 1.1;
+	font-family: 'Arial';
+	width: 100%;
+	letter-spacing: -0.02em;
+	background: rgb(240, 240, 238);
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+	display: inline-flex;
+	cursor: pointer;
+}
+
+img {
+	max-width: 100%;
+	vertical-align: top;
+	height: auto;
+}
+
+button {
+	appearance: none;
+	outline: none;
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
+}
