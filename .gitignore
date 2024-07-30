@@ -17,5 +17,9 @@ logs
 .DS_Store
 .fleet
 .idea
+.npmrc
 
 # Local env files
+.env
+.env.*
+!.env.example
