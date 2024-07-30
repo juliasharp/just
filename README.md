@@ -6,8 +6,8 @@
 - featured projects squares
 - find space for team photo
 - footer arrow
-- header disappear on scroll down
-- contact form
+- header contact button colors
+- contact form button
 - add read more collapse to projects
 - see more/less for partners
 
