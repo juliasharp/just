@@ -8,12 +8,15 @@ const route = useRoute();
       <!--Header Animation & Video -->
       <Header></Header>
       <!-- About -->
+      <Evergreen />
       <!-- Services -->
-      <Services></Services>
+      <Services />
       <!-- Projects -->
+      <Projects />
       <!-- Team -->
+      <Team />
       <!-- Partners -->
-      <Partners></Partners>
+      <Partners />
       <!-- Team Photo -->
   </NuxtLayout>
 </template>
@@ -21,7 +24,13 @@ const route = useRoute();
 <style lang="scss" scoped>
 .section {
    &-with-title {
-      padding: 150px 0;
+      padding: 120px 0;
+      @media (max-width: 1600px) {
+         padding: 105px 0;
+      }
+      @media (max-width: 760px) {
+         padding: 65px 0;
+      }
    }
    &-container {
       max-width: calc(100% - 240px);

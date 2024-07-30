@@ -53,11 +53,14 @@ function showForm() {
     content: '';
     display: block;
     background: url('/src/logo.svg') no-repeat;
-    width: calc(100vw - 70px);
+    width: 100%;
+    max-width: 1345px;
     height: 427px;
     position: absolute;
     top: -98px;
     z-index: 9;
+    left: 50%;
+    transform: translateX(-50%);
   }
 }
 
@@ -74,13 +77,16 @@ function showForm() {
   }
   &-left {
     p {
-      font-weight: 700;
+      font-family: 'Inter Bold';
       font-size: 140px;
+      @media (max-width: 1420px) {
+        font-size: 105px;
+      }
     }
   }
   &-right {
     margin-bottom: 25px;
-    font-weight: 700;
+    font-family: 'Calling Code';
     a {
       margin-right: 55px;
     }
@@ -93,9 +99,10 @@ function showForm() {
 
 .copyright {
   margin: 0 50px;
+  font-family: 'Calling Code';
   text-transform: uppercase;
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
   padding: 14px 0;
 }
 </style>

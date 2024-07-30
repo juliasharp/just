@@ -1,9 +1,30 @@
-// @font-face {
-//   font-family: "Times New Roman";
-//   src: url('@/assets/fonts/Plain-Medium.ttf');
-//   font-display: swap;
-//   font-weight: 500;
-// }
+@font-face {
+  font-family: "Inter";
+  src: url('@/assets/fonts/Inter-Regular.ttf');
+  font-display: swap;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Inter Bold";
+  src: url('@/assets/fonts/Inter-Bold.ttf');
+  font-display: swap;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Calling Code";
+  src: url('@/assets/fonts/CallingCode-Bold.ttf');
+  font-display: swap;
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Neumatic Compressed";
+  src: url('@/assets/fonts/Neumatic-Compressed-Medium.otf');
+  font-display: swap;
+  font-weight: 700;
+}
 
 h1, .h1 {
   font-size: 50px;
@@ -11,8 +32,11 @@ h1, .h1 {
 
 h3, .h3 {
   font-size: 25px;
-  font-family: "calling-code", sans-serif;
+  font-family: 'Calling Code';
   font-weight: 700;
   line-height: 1.25em;
   text-transform: uppercase;
+  @media (max-width: 760px) {
+    font-size: 20px;
+  }
 }

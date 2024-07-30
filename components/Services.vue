@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useWordpressApi } from '~/composables/useWordpressApi';
+import { ref } from 'vue';
 
 const services = ref([]);
 const selectedService = ref(null);
+
+const config = useRuntimeConfig();
 
 const query = `
   query NewQuery {
@@ -20,26 +21,33 @@ const query = `
   }
 `;
 
-onMounted(async () => {
-  try {
-    const response = await useWordpressApi(query);
-    if (response.data.page.landingPage.serviceAreas) {
-      services.value = response.data.page.landingPage.serviceAreas.map((service) => ({
+const { data, error } = await useFetch(config.public.wordpressUrl, {
+  method: 'post',
+  body: JSON.stringify({ query }),
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  transform: (data) => {
+    if (data?.data?.page?.landingPage?.serviceAreas) {
+      return data.data.page.landingPage.serviceAreas.map((service) => ({
         serviceName: service.serviceName,
         serviceAreas: service.serviceArea.map(area => area.serviceArea.trim())
       }));
-      console.log("transformed services: ", services.value);
-
-      if (services.value.length > 0) {
-        selectedService.value = services.value[0].serviceName;
-      }
     } else {
-      console.error("Unexpected response structure", response);
+      console.error("Unexpected response structure for services", data);
+      return [];
     }
-  } catch (error) {
-    console.error(error);
   }
 });
+
+if (error.value) {
+  console.error('Error fetching data:', error.value);
+} else {
+  services.value = data.value;
+  if (services.value.length > 0) {
+    selectedService.value = services.value[0].serviceName;
+  }
+}
 
 const selectService = (serviceName) => {
   selectedService.value = serviceName;
@@ -53,15 +61,15 @@ const selectService = (serviceName) => {
       <SectionTitle title="what we do" color="sage"></SectionTitle>
       <div class="flex services">
         <div class="services-left">
-          <ul v-for="(service, index) in services" :key="index" >
-            <li class="service-name">
+          <ul >
+            <li v-for="(service, index) in services" :key="index" class="service-name" :class="(selectedService === service.serviceName) ? 'active': ''">
               <h4>
                 <a @click="selectService(service.serviceName)">{{ service.serviceName }}</a>
               </h4>
             </li>
           </ul>
         </div>
-        <div class="service-right">
+        <div class="services-right">
           <ul v-for="service in services" :key="service.serviceName" class="service-breakdown" v-show="selectedService === service.serviceName">
             <li v-for="area in service.serviceAreas" :key="area">{{ area }}</li>
           </ul>
@@ -75,11 +83,13 @@ const selectService = (serviceName) => {
 .section {
   &-bg {
     background-color: #000;
-    height: 1080px;
   }
   &-container {
     max-width: calc(100% - 240px);
     margin: 0 auto;
+    @media (max-width: 760px) {
+      max-width: calc(100% - 40px);
+    }
   }
 }
 
@@ -87,6 +97,13 @@ const selectService = (serviceName) => {
   &s {
     margin-top: 70px;
     padding: 0 65px;
+    @media (max-width: 1600px) {
+      margin-top: 55px;
+      padding: 0 45px;
+    }
+    @media (max-width: 1280px) {
+      padding: 0 20px;
+    }
     ul {
       list-style: none;
     }
@@ -94,16 +111,42 @@ const selectService = (serviceName) => {
       max-width: 50%;
       margin-right: 25%;
     }
+    &-right {
+      flex-basis: 40%;
+      flex-shrink: 0;
+    }
   }
   &-name {
     color: #ffffff;
+    position: relative;
+    width: max-content;
+    &.active {
+      &:after {
+        content: '';
+        width: calc(100% + 10px);
+        height: 5px;
+        position: absolute;
+        bottom: 37px;
+        left: -5px;
+        z-index: 8;
+        background: #E838BB;
+        //fix this transition
+        transition: ease 0.3s all;
+      }
+    }
     h4 {
+      font-family: 'Inter Bold';
       text-transform: uppercase;
-      font-size: 85px;
+      font-size: 75px;
       line-height: 1.1;
       padding-bottom: 40px;
-      @media(max-width: 1600px) {
-        font-size: 75px;
+      @media (max-width: 1800px) {
+        font-size: 65px;
+        padding-bottom: 30px;
+      }
+      @media (max-width: 1600px) {
+        font-size: 55px;
+        padding-bottom: 30px;
       }
     }
   }
@@ -113,6 +156,9 @@ const selectService = (serviceName) => {
     li {
       font-size: 36px;
       line-height: 1.5;
+      @media (max-width: 1600px) {
+        font-size: 34px;
+      }
     }
   }
 }

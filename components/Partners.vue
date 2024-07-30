@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useWordpressApi } from '~/composables/useWordpressApi';
+import { ref } from 'vue';
+import { useFetch } from '#imports';
 
 const partners = ref([]);
 
+const config = useRuntimeConfig();
+
 const query = `
   query NewQuery {
-    page(id: 6, idType: DATABASE_ID) {
+    page(id: "6", idType: DATABASE_ID) {
       landingPage {
         partners {
           partnerLink
@@ -22,39 +24,46 @@ const query = `
   }
 `;
 
-onMounted(async () => {
-  try {
-    const response = await useWordpressApi(query);
-    
-    if (response.data.page.landingPage.partners) {
-      partners.value = response.data.page.landingPage.partners.map((partner: any) => ({
+const { data, error } = await useFetch(config.public.wordpressUrl, {
+  method: 'post',
+  body: JSON.stringify({ query }),
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  transform: (data) => {
+    if (data?.data?.page?.landingPage?.partners) {
+      return data.data.page.landingPage.partners.map((partner) => ({
         link: partner.partnerLink,
         imageUrl: partner.loho.node.link,
         imageAlt: partner.loho.node.altText || 'Partner logo'
       }));
-      
     } else {
-      console.error("Unexpected response structure", response);
+      console.error("Unexpected response structure for partners", data);
+      return [];
     }
-  } catch (error) {
-    console.error(error);
   }
 });
+
+if (error.value) {
+  console.error('Error fetching data:', error.value);
+} else {
+  partners.value = data.value;
+}
 </script>
 
 <template>
   <div class="section-bg section-with-title">
     <div class="section-container">
       <SectionTitle title="partners" color="brown"></SectionTitle>
-      <div class="partners">
-        <PartnerLogo
-          v-for="(partner, index) in partners" 
-          :key="index" 
-          :link="partner.link" 
-          :image-url="partner.imageUrl" 
-          :image-alt="partner.imageAlt">
-        </PartnerLogo>
-      </div>
+      <ul class="partners">
+        <li v-for="(partner, index) in partners" :key="index">
+          <PartnerLogo 
+            :link="partner.link" 
+            :image-url="partner.imageUrl" 
+            :image-alt="partner.imageAlt">
+          </PartnerLogo>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
@@ -73,5 +82,11 @@ onMounted(async () => {
 
 .partners {
   margin-top: 120px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  li {
+    flex-basis: 20%;
+  }
 }
 </style>

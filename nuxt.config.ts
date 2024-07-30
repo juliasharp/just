@@ -20,7 +20,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      wordpressUrl: 'http://just.local/graphql'
+      wordpressUrl: process.env.WORDPRESS_URL || 'http://just.local/graphql'
     }
-  }
+  },
+  modules: ["vue3-carousel-nuxt"],
 })
