@@ -14,7 +14,7 @@ defineProps({
 
 <template>
   <div class="partner">
-    <NuxtLink :to="link">
+    <NuxtLink :to="link" target="_blank">
       <img :src="imageUrl" :alt="imageAlt" />
     </NuxtLink>
   </div>
