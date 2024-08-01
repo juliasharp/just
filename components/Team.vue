@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import IconClose from '/src/icon-close.svg?component';
-import { ref, onMounted } from 'vue';
-import { useWordpressApi } from '~/composables/useWordpressApi';
+import { ref, computed } from 'vue';
 
 const team = ref([]);
 const selectedTeamMember = ref(null);
 
 const config = useRuntimeConfig();
 
-const query = `
+// Encode the GraphQL query for inclusion in the URL
+const encodedQuery = encodeURIComponent(`
   query NewQuery {
     page(id: "6", idType: DATABASE_ID) {
       landingPage {
@@ -26,18 +26,15 @@ const query = `
       }
     }
   }
-`;
+`);
 
-const { data, error } = await useFetch(config.public.wordpressUrl, {
-  method: 'post',
-  body: JSON.stringify({ query }),
-  headers: {
-    'Content-Type': 'application/json'
-  },
+const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${encodedQuery}`, {
+  method: 'get',
   transform: (data) => {
     if (data?.data?.page?.landingPage?.team) {
       return data.data.page.landingPage.team.map((member) => ({
         name: member.name,
+        role: member.role,
         bioPicLink: member.bioPic.node.link,
         bioPicAlt: member.bioPic.node.altText || 'Team member photo',
         bio: member.bio,
@@ -50,7 +47,7 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
 });
 
 if (error.value) {
-  console.error('Error fetching data:', error.value);
+  console.error('Error fetching team data:', error.value);
 } else {
   team.value = data.value;
 }

@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useFetch } from '#imports';
 
 const partners = ref([]);
 
 const config = useRuntimeConfig();
 
-const query = `
+// Encode the GraphQL query for inclusion in the URL
+const encodedQuery = encodeURIComponent(`
   query NewQuery {
     page(id: "6", idType: DATABASE_ID) {
       landingPage {
@@ -22,14 +22,10 @@ const query = `
       }
     }
   }
-`;
+`);
 
-const { data, error } = await useFetch(config.public.wordpressUrl, {
-  method: 'post',
-  body: JSON.stringify({ query }),
-  headers: {
-    'Content-Type': 'application/json'
-  },
+const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${encodedQuery}`, {
+  method: 'get',
   transform: (data) => {
     if (data?.data?.page?.landingPage?.partners) {
       return data.data.page.landingPage.partners.map((partner) => ({
@@ -45,7 +41,7 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
 });
 
 if (error.value) {
-  console.error('Error fetching data:', error.value);
+  console.error('Error fetching partner data:', error.value);
 } else {
   partners.value = data.value;
 }
