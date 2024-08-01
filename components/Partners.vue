@@ -54,7 +54,7 @@ if (error.value) {
 <template>
   <div class="section-bg section-with-title">
     <div class="section-container">
-      <SectionTitle title="partners" color="brown"></SectionTitle>
+      <SectionTitle title="collaborators" color="brown"></SectionTitle>
       <ul class="partners">
         <li v-for="(partner, index) in partners" :key="index">
           <PartnerLogo 
@@ -65,6 +65,7 @@ if (error.value) {
         </li>
       </ul>
     </div>
+    <h5 class="aia-banner">2023 AIA COMMUNITY ALLIANCE AWARD WINNER</h5>
   </div>
 </template>
 
@@ -88,5 +89,11 @@ if (error.value) {
   li {
     flex-basis: 20%;
   }
+}
+
+.aia-banner {
+  font-family: 'Neumatic Compressed';
+  color: '#ffffff';
+  font-size: 150px;
 }
 </style>

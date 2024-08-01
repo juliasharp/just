@@ -110,10 +110,16 @@ const selectService = (serviceName) => {
     &-left {
       max-width: 50%;
       margin-right: 25%;
+      @media (max-width: 1600px) {
+        margin-right: 15%;
+      }
     }
     &-right {
       flex-basis: 40%;
       flex-shrink: 0;
+      @media (max-width: 1600px) {
+        flex-basis: 35%;
+      }
     }
   }
   &-name {

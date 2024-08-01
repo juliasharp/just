@@ -14,6 +14,7 @@ const query = `
       landingPage {
         team {
           name
+          role
           bioPic {
             node {
               altText
