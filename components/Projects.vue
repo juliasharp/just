@@ -5,8 +5,8 @@ const selectedProject = ref(null);
 
 const config = useRuntimeConfig();
 const { data, error } = await useFetch(config.public.wordpressUrl, {
-  method: 'post',
-  body: JSON.stringify({
+  method: 'get',
+  query: {
     query: `
       query NewQuery {
         page(id: "6", idType: DATABASE_ID) {
@@ -28,12 +28,9 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
           }
         }
       }`
-  }),
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  transform: (data:any) => {
-    if (data?.data?.page?.landingPage?.projects) {
+  }, 
+  transform(data:any) {
+    if (data.data.page.landingPage.projects) {
       return data.data.page.landingPage.projects.map((project) => ({
         name: project.projectName,
         description: project.projectDescription,
@@ -45,14 +42,14 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
         })) : []
       }));
     } else {
-      console.error("Unexpected response structure for projects", data);
+      console.error("Unexpected response structure", data);
       return [];
     }
   }
 });
 
 if (error.value) {
-  console.error('Error fetching project data:', error.value);
+  console.error('Error fetching data:', error.value);
 } else {
   projects.value = data.value;
   if (projects.value.length > 0) {
@@ -130,7 +127,7 @@ onBeforeUnmount(() => {
             <span class="project-date">{{ project.date }}</span>
             <span class="meta">{{ project.meta }}</span>
             <h5>{{ project.name }}</h5>
-            <p v-html="project.description"></p>
+            <p>{{ project.description }}</p>
           </div>
         </div>
       </div>
