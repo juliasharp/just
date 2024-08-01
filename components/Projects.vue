@@ -5,8 +5,8 @@ const selectedProject = ref(null);
 
 const config = useRuntimeConfig();
 const { data, error } = await useFetch(config.public.wordpressUrl, {
-  method: 'get',
-  query: {
+  method: 'post',
+  body: JSON.stringify({
     query: `
       query NewQuery {
         page(id: "6", idType: DATABASE_ID) {
@@ -28,9 +28,12 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
           }
         }
       }`
-  }, 
-  transform(data:any) {
-    if (data.data.page.landingPage.projects) {
+  }),
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  transform: (data:any) => {
+    if (data?.data?.page?.landingPage?.projects) {
       return data.data.page.landingPage.projects.map((project) => ({
         name: project.projectName,
         description: project.projectDescription,
@@ -42,14 +45,14 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
         })) : []
       }));
     } else {
-      console.error("Unexpected response structure", data);
+      console.error("Unexpected response structure for projects", data);
       return [];
     }
   }
 });
 
 if (error.value) {
-  console.error('Error fetching data:', error.value);
+  console.error('Error fetching project data:', error.value);
 } else {
   projects.value = data.value;
   if (projects.value.length > 0) {
