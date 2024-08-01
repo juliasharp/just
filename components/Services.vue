@@ -6,7 +6,8 @@ const selectedService = ref(null);
 
 const config = useRuntimeConfig();
 
-const query = `
+// Encode the GraphQL query for inclusion in the URL
+const encodedQuery = encodeURIComponent(`
   query NewQuery {
     page(id: 6, idType: DATABASE_ID) {
       landingPage {
@@ -19,14 +20,10 @@ const query = `
       }
     }
   }
-`;
+`);
 
-const { data, error } = await useFetch(config.public.wordpressUrl, {
-  method: 'post',
-  body: JSON.stringify({ query }),
-  headers: {
-    'Content-Type': 'application/json'
-  },
+const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${encodedQuery}`, {
+  method: 'get',
   transform: (data) => {
     if (data?.data?.page?.landingPage?.serviceAreas) {
       return data.data.page.landingPage.serviceAreas.map((service) => ({
@@ -41,7 +38,7 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
 });
 
 if (error.value) {
-  console.error('Error fetching data:', error.value);
+  console.error('Error fetching service data:', error.value);
 } else {
   services.value = data.value;
   if (services.value.length > 0) {
