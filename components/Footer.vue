@@ -40,6 +40,9 @@ function showForm() {
       <p class="copyright">copyright just 2024</p>
     </div>
   </div>
+  <div class="footer-img">
+    <NuxtImg src="/just-team.jpg" />
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -93,6 +96,13 @@ function showForm() {
   &-divider {
     margin: 0 50px;
     border: 0.5px solid #707070;
+  }
+}
+
+.footer-img {
+  position: relative;
+  img {
+    width: 100%;
   }
 }
 

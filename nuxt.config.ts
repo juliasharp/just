@@ -23,5 +23,5 @@ export default defineNuxtConfig({
       wordpressUrl: process.env.WORDPRESS_URL || 'http://just.local/graphql'
     }
   },
-  modules: ["vue3-carousel-nuxt"],
+  modules: ["vue3-carousel-nuxt", "@nuxt/image"],
 })
