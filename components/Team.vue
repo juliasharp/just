@@ -85,7 +85,7 @@ const settings = {
   snapAlign: 'start',
   breakpoints: {
     900: {
-      itemsToShow: 3,
+      itemsToShow: 5,
     },
     1280: {
       itemsToShow: 5,
@@ -96,7 +96,10 @@ const settings = {
 </script>
 
 <template>
-  <div class="team">
+  <div class="team section-bg">
+    <div class="section-container">
+      <SectionTitle title="our team" color="sage"></SectionTitle>
+    </div>
     <div class="team-container">
       <div class="team-container-inner flex">
           <Carousel v-bind="settings">
@@ -124,7 +127,7 @@ const settings = {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .team {
   background-color: #000000;
   &-item {
@@ -171,10 +174,24 @@ const settings = {
   }
 }
 
+.section-container {
+  padding: 120px 0 100px;
+  max-width: calc(100% - 240px);
+  margin: 0 auto;
+}
+
 .close-btn {
   position: absolute;
   top: 25px;
   right: 30px;
   cursor: pointer;
+}
+
+.aia-banner {
+  font-family: 'Neumatic Compressed';
+  color: #ffffff;
+  font-size: 150px;
+  text-align: center;
+  padding: 40px 0;
 }
 </style>

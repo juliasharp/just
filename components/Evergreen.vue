@@ -80,7 +80,7 @@ const initAnimations = () => {
       pin: true,
       pinSpacing: true,
       scrub: 0.2,
-      markers: true,
+      //markers: true,
       onUpdate: (self) => {
         const segmentIndex = Math.floor(self.progress / (1 / data.length));
         handleTextChange(segmentIndex);

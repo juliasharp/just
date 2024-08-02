@@ -2,6 +2,7 @@
 import { gsap } from 'gsap';
 import lottie from 'lottie-web';
 import LogoShapes from '@/assets/header-shapes.json';
+//import LogoShapes from '@/assets/header-shapes-new.json';
 
 const lottieContainer = ref(null);
 
@@ -22,7 +23,7 @@ const initAnimations = () => {
       pin: true,
       pinSpacing: true,
       scrub: 0.2,
-      markers: true,
+      //markers: true,
     }
   });
 

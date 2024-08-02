@@ -239,6 +239,9 @@ onBeforeUnmount(() => {
       flex-basis: 320px;
       flex-shrink: 0;
     }
+    @media (min-width: 1601px) {
+      flex-basis: 380px;
+    }
     @media (max-width: 1180px) {
       margin-top: 50px;
     }
@@ -329,6 +332,12 @@ onBeforeUnmount(() => {
   &-2 {
     @media (min-width: 1181px) {
       top: 17px;
+      left: 251px;
+    }
+    @media (min-width: 1281px) {
+      left: 281px;
+    }
+    @media (min-width: 1601px) {
       left: 321px;
     }
     @media (max-width: 1180px) {
@@ -341,8 +350,20 @@ onBeforeUnmount(() => {
     left: 17px;
   }
   &-4 {
-    bottom: 17px;
-    left: 321px;
+    @media (min-width: 1181px) {
+      left: 251px;
+      bottom: 17px;
+    }
+    @media (min-width: 1281px) {
+      left: 281px;
+    }
+    @media (min-width: 1601px) {
+      left: 321px;
+    }
+    @media (max-width: 1180px) {
+      right: 17px;
+      top: 251px;
+    }
   }
   &-5 {
     bottom: 17px;
@@ -355,7 +376,13 @@ onBeforeUnmount(() => {
   &-7 {
     @media (min-width: 1181px) {
       top: 17px;
-      left: 566px;
+      left: 526px;
+    }
+    @media (min-width: 1281px) {
+      left: 557px;
+    }
+    @media (min-width: 1601px) {
+      left: 656px;
     }
     @media (max-width: 1180px) {
       right: 17px;
@@ -365,7 +392,17 @@ onBeforeUnmount(() => {
   &-8 {
     @media (min-width: 1181px) {
       bottom: 17px;
-      left: 566px;
+      left: 526px;
+    }
+    @media (min-width: 1281px) {
+      left: 556px;
+    }
+    @media (min-width: 1601px) {
+      left: 656px;
+    }
+    @media (max-width: 1180px) {
+      left: 17px;
+      top: 251px;
     }
   }
 }

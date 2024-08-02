@@ -36,7 +36,6 @@ function showForm() {
           <a @click="showForm">CONTACT</a>
         </div>
       </div>
-      
       <hr class="footer-divider">
       <p class="copyright">copyright just 2024</p>
     </div>

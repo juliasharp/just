@@ -89,7 +89,9 @@ if (error.value) {
 
 .aia-banner {
   font-family: 'Neumatic Compressed';
-  color: '#ffffff';
+  color: #ffffff;
   font-size: 150px;
+  text-align: center;
+  padding: 50px 0;
 }
 </style>

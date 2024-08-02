@@ -13,6 +13,8 @@ const subject = ref('');
 const email = ref('');
 const message = ref('');
 
+const focusedField = ref('');
+
 const disabled = computed(() => {
   return !name.value || !subject.value || !email.value || !message.value;
 });
@@ -35,8 +37,13 @@ function closeForm() {
   isShown.value = false;
 }
 
-function onFocus(){
-  console.log("focus");
+function onFocus(fieldName) {
+  focusedField.value = fieldName;
+  console.log("Focus on:", fieldName);
+}
+
+function onBlur() {
+  focusedField.value = '';
 }
 
 watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessage]) => {
@@ -45,6 +52,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   console.log('Email:', newEmail);
   console.log('Message:', newMessage);
 });
+
 </script>
 
 <template>
@@ -60,26 +68,26 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
       </div>
       <div class="contact-form__body">
         <div class="form-input__field" @focus="onFocus">
-          <input type="text" label="Name" name="name" spellcheck="false" class="form-input" v-model="name">
-          <label value="" for="name" class="form-label">Name</label>
+          <input type="text" label="Name" name="name" spellcheck="false" class="form-input" v-model="name" @focus="onFocus('name')" @blur="onBlur">
+          <label :class="{ focused: focusedField === 'name' }" for="name" class="form-label">Name</label>
         </div>
         <div class="form-input__field">
-          <input type="text" label="Subject" name="subject" spellcheck="false" class="form-input" v-model="subject">
-          <label value="" for="name" class="form-label">Subject</label>
+          <input type="text" label="Subject" name="subject" spellcheck="false" class="form-input" v-model="subject" @focus="onFocus('name')" @blur="onBlur">
+          <label :class="{ focused: focusedField === 'name' }" value="" for="name" class="form-label">Subject</label>
         </div>
         <div class="form-input__field">
-          <input type="text" label="Email" name="email" spellcheck="false" class="form-input" v-model="email">
-          <label value="" for="name" class="form-label">Email</label>
+          <input type="text" label="Email" name="email" spellcheck="false" class="form-input" v-model="email" @focus="onFocus('name')" @blur="onBlur">
+          <label :class="{ focused: focusedField === 'name' }" value="" for="name" class="form-label">Email</label>
         </div>
         <div class="form-input__field">
-          <input type="text" label="Message" name="name" spellcheck="false" class="form-input" v-model="message">
-          <label value="" for="name" class="form-label">Message</label>
+          <input type="text" label="Message" name="name" spellcheck="false" class="form-input" v-model="message" @focus="onFocus('name')" @blur="onBlur">
+          <label :class="{ focused: focusedField === 'name' }" value="" for="name" class="form-label">Message</label>
         </div>
       </div>
-      <div class="contact-form-footer">
+      <div class="contact-form__footer">
         <div class="contact-form-button-container">
           <button class="contact-form-button" :disabled="disabled">
-            <div class="css-yz760h epg31qi0">Send
+            <div class="button">Send
               <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
                 ></path>
@@ -110,21 +118,40 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   }
   &__inner {
     position: static;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
   &__body {
     padding: 0 40px;
     padding-top: calc(37.13px + 0.893655vw);
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
   }
   &__header {
+    padding: 40px 45px 0;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
     display: flex;
     align-items: flex-start;
-    padding: 40px 45px 0;
     h3 {
       flex-grow: 1;
       font-size: 45px;
       padding-right: 20px;
       font-family: 'Inter Bold';
     }
+  }
+  &__footer {
+    padding: 0 40px;
+    margin-top: 20px;
+    padding-top: 0px;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding-bottom: 50px;
   }
   &-button {
     appearance: none;
@@ -137,11 +164,9 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
     border-radius: 0px;
     text-align: center;
     box-shadow: none;
-    font-family: Plain, -apple-system, serif;
-    letter-spacing: -0.01em;
+    font-family: 'Inter Bold';
     text-transform: none;
     line-height: 1em;
-    font-weight: 600;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizelegibility;
     transition: background 0.3s ease-in-out 0s, color 0.3s ease-in-out 0s, border 0.3s ease-in-out 0s, box-shadow 0.3s ease-in-out 0s, transform 0.3s ease-in-out 0s, opacity 0.3s ease-in-out 0s;
@@ -152,6 +177,22 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
     border: 2px solid rgb(240, 240, 238);
     color: rgb(240, 240, 238);
   }
+}
+
+.contact-form-button {
+  &[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: transparent;
+    color: rgb(240, 240, 238);
+    border-color: rgb(240, 240, 238);
+  }
+}
+
+.button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .button-close {
