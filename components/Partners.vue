@@ -69,7 +69,6 @@ if (error.value) {
 .section {
   &-bg {
     background-color: #000;
-    height: 1080px;
   }
   &-container {
     max-width: calc(100% - 240px);
