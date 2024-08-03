@@ -8,6 +8,7 @@ const route = useRoute();
       <!--Header Animation & Video -->
       <Header></Header>
       <!-- About -->
+      <Philosophy />
       <Evergreen />
       <!-- Services -->
       <Services />
@@ -24,9 +25,9 @@ const route = useRoute();
 <style lang="scss" scoped>
 .section {
    &-with-title {
-      padding: 120px 0;
+      padding: 100px 0;
       @media (max-width: 1600px) {
-         padding: 105px 0;
+         padding: 95px 0;
       }
       @media (max-width: 760px) {
          padding: 65px 0;

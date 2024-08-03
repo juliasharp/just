@@ -15,7 +15,7 @@ const data = [
   `<p><span style="font-family: 'Inter-Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project.</p><p style='padding-top:20px;'><span style="font-family: 'Inter-Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</p>`, 
   `JUST is your access to engage diverse expertise and perspectives to inform and guide your project. Drawing on decades of experience from designers, creatives, subject matter experts, leaders, and activists, <span style="font-family: 'Inter-Bold'">JUST Collaborate</span> is your platform to imagine, innovate, and implement!`, 
   `With a project specific approach, <span style="font-family: 'Inter-Bold'">JUST Design</span> will integrate our expertise in creating and guiding equitable processes to work with you to develop your project through key phases of design, and bring it to life!`,
-  `EQUITABLE FUTURE`
+  `<span style="font-size:4.68vw; font-family:'Inter Bold';display:flex;justify-content:center;">EQUITABLE FUTURE<span>`
 ];
 const currentIndex = ref(0);
 
@@ -64,26 +64,27 @@ const handleTextChange = (index) => {
 const initAnimations = () => {
   //gsap.registerPlugin(ScrollTrigger);
 
-  // const lottieInstance = lottie.loadAnimation({
-  //   container: lottieContainer.value,
-  //   renderer: 'svg',
-  //   loop: false,
-  //   autoplay: false,
-  //   animationData: ACDAnimation
-  // });
+  const lottieInstance = lottie.loadAnimation({
+    container: lottieContainer.value,
+    renderer: 'svg',
+    loop: false,
+    autoplay: false,
+    animationData: ACDAnimation
+  });
 
   gsap.timeline({
     scrollTrigger: {
       trigger: '.js-section-scroller',
       start: 'top top',
-      end: window.innerHeight * data.length + ' top',
+      end: () => `+=${window.innerHeight * data.length}`,
       pin: true,
       pinSpacing: true,
       scrub: 0.2,
-      //markers: true,
+      markers: true,
       onUpdate: (self) => {
         const segmentIndex = Math.floor(self.progress / (1 / data.length));
         handleTextChange(segmentIndex);
+        lottieInstance.goToAndStop(lottieInstance.totalFrames * self.progress, true);
       }
     }
   });
@@ -91,7 +92,7 @@ const initAnimations = () => {
   // lottieInstance.addEventListener('DOMLoaded', () => {
   //   gsap.timeline({
   //     scrollTrigger: {
-  //       trigger: '.js-section-scroller top',
+  //       trigger: '.js-section-scroller' + top,
   //       end: window.innerHeight * (data.length) + ' top',
   //       scrub: 0.2
   //     }
@@ -121,7 +122,7 @@ onBeforeUnmount(() => {
 <div class="evergreen">
   <div class="section-bg">
     <div class="evergreen-inner">
-      <h2>JUST is a creative agency of activists and experts, designing equitable futures NOW !</h2>
+      <!-- <h2>JUST is a creative agency of activists and experts, designing equitable futures NOW !</h2> -->
       <div class="section-scroller js-section-scroller">
         <!--<script id="section-scroller-data">-->
          <div class="section-scroller__inner">
@@ -130,9 +131,9 @@ onBeforeUnmount(() => {
               {{ currentHeader }}
             </div>
           </div>
-          <!-- <div class="evergreen__visual">
+          <div class="evergreen__visual">
             <div class="js-lottie-container" ref="lottieContainer"></div>
-          </div> -->
+          </div>
           <div class="evergreen__footer">
             <div class="evergreen-textHeader" ref="textHeader">{{ currentTextHeader }}</div>
             <div class="evergreen-text" ref="textContainer" v-html="currentText"></div>
@@ -149,7 +150,8 @@ onBeforeUnmount(() => {
   position: relative;
   width: 100%;
   &-inner {
-    padding: 148px 80px 50px;
+    // padding: 148px 80px 50px;
+    padding: 30px 80px 50px;
     max-width: 1825px;
     margin: 0 auto;
     @media (max-width: 1600px) {
@@ -217,18 +219,22 @@ h2 {
       padding-top: 35px;
     }
   }
+  &__header {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .header-item {
   font-family: 'Inter Bold';
-  font-size: 90px;
+  font-size: 4.68vw;
   color: #C6F250;
-  @media (max-width: 1600px) {
-    font-size: 78px;
-  }
-  @media (max-width: 1380px) {
-    font-size: 65px;
-  }
+  // @media (max-width: 1600px) {
+  //   font-size: 78px;
+  // }
+  // @media (max-width: 1380px) {
+  //   font-size: 65px;
+  // }
   @media (max-width: 1180px) {
     font-size: 55px;
   }
@@ -248,8 +254,13 @@ h2 {
   -ms-flex-align: center;
   align-items: center;
   justify-content: center;
-  svg path {
-    fill: #E838BB;
-  }
+  // svg path {
+  //   fill: #E838BB;
+  // }
+}
+
+.future {
+  font-family: 'Inter Bold';
+  font-size: 106px;
 }
 </style>

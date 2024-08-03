@@ -22,6 +22,8 @@ const isShown = computed({
 function showForm() {
   isShown.value = true;
 }
+
+const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <template>
@@ -32,16 +34,21 @@ function showForm() {
           <p>GET IN TOUCH</p>
         </div>
         <div class="footer-right flex">
-          <NuxtLink to="https://www.instagram.com/__justdesign/">@_justdesign</NuxtLink>
+          <NuxtLink to="https://www.instagram.com/__justdesign/">@__justdesign</NuxtLink>
           <a @click="showForm">CONTACT</a>
         </div>
       </div>
-      <hr class="footer-divider">
-      <p class="copyright">copyright just 2024</p>
     </div>
   </div>
-  <div class="footer-img">
-    <NuxtImg src="/just-team.jpg" />
+  <div class="footer-bottom">
+    <div class="footer-img">
+      <!-- <NuxtImg src="/just-team.jpg" /> -->
+    </div>
+    <div class="footer-bottom-content">
+      <!-- <p>THE FUTURE CAN BE JUST - DESIGN IT !</p> -->
+      <hr class="footer-divider">
+      <p class="copyright">copyright &copy; just {{ currentYear }}</p>
+    </div>
   </div>
 </template>
 
@@ -56,10 +63,10 @@ function showForm() {
     display: block;
     background: url('/src/logo.svg') no-repeat;
     width: 100%;
-    max-width: 1345px;
-    height: 427px;
+    // max-width: 1345px;
+    height: 100%;
     position: absolute;
-    top: -98px;
+    top: -134px;
     z-index: 9;
     left: 50%;
     transform: translateX(-50%);
@@ -95,23 +102,29 @@ function showForm() {
   }
   &-divider {
     margin: 0 50px;
-    border: 0.5px solid #707070;
+    border: 0.5px solid #cacaca;
+  }
+  &-bottom {
+    position: relative;
+    height: 100vh;
   }
 }
 
 .footer-img {
   position: relative;
-  img {
-    width: 100%;
-  }
+  height: 100vh;
+  background-image: url('/public/just-team.jpg');
+  z-index: -1;
+  position: relative;
+  background-size: cover;
 }
 
 .copyright {
   margin: 0 50px;
-  font-family: 'Calling Code';
+  font-family: 'Inter Bold';
   text-transform: uppercase;
-  font-weight: 700;
   font-size: 14px;
   padding: 14px 0;
+  color: #ffffff;
 }
 </style>

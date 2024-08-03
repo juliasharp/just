@@ -7,7 +7,7 @@ const selectedTeamMember = ref(null);
 
 const config = useRuntimeConfig();
 
-// Encode the GraphQL query for inclusion in the URL
+//TODO: implement click outside to close team bio.
 const encodedQuery = encodeURIComponent(`
   query NewQuery {
     page(id: "6", idType: DATABASE_ID) {
@@ -116,6 +116,7 @@ const settings = {
                     <IconClose />
                   </div>
                   <h3>{{ member.name }}</h3>
+                  <span>{{ member.role }}</span>
                   <p>{{ member.bio }}</p>
                 </div>
               </div>
@@ -165,10 +166,14 @@ const settings = {
         font-family: 'Inter Bold';
         text-transform: uppercase;
         font-size: 35px;
-        margin-bottom: 20px;
+        margin-bottom: 8px;
+      }
+      span {
+        display: block;
       }
       p {
         line-height: 1.4;
+        margin-top: 38px;
       }
     }
   }

@@ -4,6 +4,11 @@ import lottie from 'lottie-web';
 import LogoShapes from '@/assets/header-shapes.json';
 //import LogoShapes from '@/assets/header-shapes-new.json';
 
+//TO DO: animation needs to happen on load: shapes scroll quickly together, 
+//shrink and then video loads. When going back up, It should just play 
+//the video on loop
+
+//kill animation at 1200px
 const lottieContainer = ref(null);
 
 const initAnimations = () => {
@@ -19,10 +24,10 @@ const initAnimations = () => {
     scrollTrigger: {
       trigger: '.header-container',
       start: 'top top',
-      end: window.innerHeight * 3 + ' top',
+      end: window.innerHeight * 4 + ' top',
       pin: true,
       pinSpacing: true,
-      scrub: 0.2,
+      scrub: 0.1,
       //markers: true,
     }
   });
@@ -32,10 +37,11 @@ const initAnimations = () => {
       scrollTrigger: {
         trigger: '.header-container',
         end: window.innerHeight * 4 + ' top',
-        scrub: 0.2
+        scrub: 0.1
       }
     }).to(lottieInstance, {
       frame: lottieInstance.totalFrames - 1,
+      duration: 1,
       onUpdate: () => lottieInstance.goToAndStop(lottieInstance.frame, true)
     });
   });

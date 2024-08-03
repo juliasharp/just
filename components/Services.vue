@@ -47,6 +47,7 @@ if (error.value) {
 }
 
 const selectService = (serviceName) => {
+  console.log("service selected");
   selectedService.value = serviceName;
 };
 
@@ -58,10 +59,30 @@ const selectService = (serviceName) => {
       <SectionTitle title="what we do" color="sage"></SectionTitle>
       <div class="flex services">
         <div class="services-left">
-          <ul >
-            <li v-for="(service, index) in services" :key="index" class="service-name" :class="(selectedService === service.serviceName) ? 'active': ''">
+          <ul>
+            <li class="service-name" :class="{ active: selectedService === 'DESIGN' }">
               <h4>
-                <a @click="selectService(service.serviceName)">{{ service.serviceName }}</a>
+                <a @click="selectService('DESIGN')"><span>DESIGN</span></a>
+              </h4>
+            </li>
+            <li class="service-name" :class="{ active: selectedService === 'ENGAGEMENT' }">
+              <h4>
+                <a @click="selectService('ENGAGEMENT')"><span>ENGAGEMENT</span></a>
+              </h4>
+            </li>
+            <li class="service-name" :class="{ active: selectedService === 'CONSULTING' }">
+              <h4>
+                <a @click="selectService('CONSULTING')"><span>CONSULTING</span></a>
+              </h4>
+            </li>
+            <li class="service-name" :class="{ active: selectedService === 'EDUCATION & TRAINING' }">
+              <h4>
+                <a @click="selectService('EDUCATION & TRAINING')"><span>EDUCATION &</span><span class="delay">TRAINING</span></a>
+              </h4>
+            </li>
+            <li class="service-name" :class="{ active: selectedService === 'ACTIVATION' }">
+              <h4>
+                <a @click="selectService('ACTIVATION')"><span>ACTIVATION</span></a>
               </h4>
             </li>
           </ul>
@@ -105,7 +126,7 @@ const selectService = (serviceName) => {
       list-style: none;
     }
     &-left {
-      max-width: 50%;
+      flex-basis: 50%;
       margin-right: 25%;
       @media (max-width: 1600px) {
         margin-right: 15%;
@@ -123,24 +144,45 @@ const selectService = (serviceName) => {
     color: #ffffff;
     position: relative;
     width: max-content;
-    &.active {
+    max-width: calc(50vw - 100px);
+    span {
+      display: block;
+      position: relative;
+      width: max-content;
       &:after {
+        transform: scaleX(0);
+        transform-origin: bottom left;
+        transition: transform 0.6s ease;
         content: '';
         width: calc(100% + 10px);
         height: 5px;
         position: absolute;
-        bottom: 37px;
+        bottom: 11px;
         left: -5px;
         z-index: 8;
         background: #E838BB;
-        //fix this transition
-        transition: ease 0.3s all;
+        @media (max-width: 1600px) {
+          bottom: 7px;
+        }
       }
+    }
+    &.active {
+      span {
+        &:after {
+          transform: scaleX(1);
+          //fix this transition
+          transition: ease 0.3s all;
+          transition-delay: 0.5s;
+        }
+      }
+    }
+    a {
+      display: block;
     }
     h4 {
       font-family: 'Inter Bold';
       text-transform: uppercase;
-      font-size: 75px;
+      font-size: 3.9vw;
       line-height: 1.1;
       padding-bottom: 40px;
       @media (max-width: 1800px) {
@@ -163,6 +205,12 @@ const selectService = (serviceName) => {
         font-size: 34px;
       }
     }
+  }
+}
+
+.active .delay {
+  &:after { 
+    transition-delay: 1s !important;
   }
 }
 </style>

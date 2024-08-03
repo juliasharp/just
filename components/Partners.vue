@@ -61,7 +61,8 @@ if (error.value) {
         </li>
       </ul>
     </div>
-    <h5 class="aia-banner">2023 AIA COMMUNITY ALLIANCE AWARD WINNER</h5>
+    <h5 class="aia-banner"><NuxtLink to="https://centersf.org/community-alliance-awards/?utm_campaign=later-linkinbio-centerarchdesignsf&utm_content=later-38927758&utm_medium=social&utm_source=linkin.bio">2023 AIA COMMUNITY ALLIANCE AWARD WINNER</NuxtLink></h5>
+    <h5 class="aia-banner">SBE CERTIFIED</h5>
   </div>
 </template>
 
@@ -83,13 +84,14 @@ if (error.value) {
   align-items: center;
   li {
     flex-basis: 20%;
+    margin-bottom: 40px;
   }
 }
 
 .aia-banner {
-  font-family: 'Neumatic Compressed';
+  font-family: 'Inter Bold';
   color: #ffffff;
-  font-size: 150px;
+  font-size: calc(0.034 * 100vw);
   text-align: center;
   padding: 50px 0;
 }

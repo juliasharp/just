@@ -88,6 +88,10 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
 
+const projectDescription = () => {
+  return project.projectDescription
+}
+
 </script>
 
 <template>
@@ -127,7 +131,7 @@ onBeforeUnmount(() => {
             <span class="project-date">{{ project.date }}</span>
             <span class="meta">{{ project.meta }}</span>
             <h5>{{ project.name }}</h5>
-            <p>{{ project.description }}</p>
+            <div v-if="project.description" v-html="project.description"></div>
           </div>
         </div>
       </div>
