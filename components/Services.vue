@@ -207,6 +207,9 @@ const selectService = (serviceName) => {
     li {
       font-size: 2.5vw;
       line-height: 1.5;
+      @media (max-width: 760px) {
+        font-size: 3.5vw;
+      }
     }
   }
 }

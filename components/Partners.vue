@@ -70,6 +70,7 @@ if (error.value) {
 .section {
   &-bg {
     background-color: #000;
+    z-index: 1;
   }
   &-container {
     max-width: calc(100% - 240px);
@@ -94,5 +95,8 @@ if (error.value) {
   font-size: calc(0.034 * 100vw);
   text-align: center;
   padding: 50px 0;
+  @media (max-width: 760px) {
+    padding: 20px 0;
+  }
 }
 </style>

@@ -21,6 +21,8 @@ const initAnimations = () => {
       markers: true,
     }
   });
+
+  ScrollTrigger.normalizeScroll(true);
 }
 
 onMounted(() => {

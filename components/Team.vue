@@ -85,7 +85,7 @@ const settings = {
   snapAlign: 'start',
   breakpoints: {
     900: {
-      itemsToShow: 5,
+      itemsToShow: 4,
     },
     1280: {
       itemsToShow: 5,
@@ -150,6 +150,9 @@ const settings = {
   }
   &-photo {
     max-width: calc(100vw / 5);
+    @media (max-width: 900px) {
+      max-width: calc(100vw / 4);
+    }
     img {
       height: 100%;
     }
@@ -162,11 +165,17 @@ const settings = {
       color: #000000;
       padding: 100px 80px 60px;
       text-align: left;
+      @media (max-width: 1280px) {
+        padding: 65px 50px 50px;
+      }
       h3 {
         font-family: 'Inter Bold';
         text-transform: uppercase;
         font-size: 35px;
         margin-bottom: 8px;
+        @media (max-width: 1280px) {
+          font-size: 28px;
+        }
       }
       span {
         display: block;

@@ -32,6 +32,9 @@ const route = useRoute();
       @media (max-width: 1180px) {
          padding: 65px 0;
       }
+      @media (max-width: 760px) {
+         padding: 40px 0;
+      }
    }
    &-container {
       max-width: calc(100% - 240px);
