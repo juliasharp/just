@@ -167,6 +167,9 @@ const projectDescription = () => {
     @media (max-width: 1180px) {
       padding:  40px 50px;
     }
+    @media (max-width: 760px) {
+      padding:  40px 30px;
+    }
     &:before,
     &:after {
       content: '';
@@ -277,7 +280,7 @@ const projectDescription = () => {
       font-size: 35px;
       padding-bottom: 90px;
       @media (max-width: 1600px) {
-        font-size: 30px;
+        font-size: 2.5vw;
         padding-bottom: 70px;
       }
     }

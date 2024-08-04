@@ -29,7 +29,7 @@ const route = useRoute();
       @media (max-width: 1600px) {
          padding: 95px 0;
       }
-      @media (max-width: 760px) {
+      @media (max-width: 1180px) {
          padding: 65px 0;
       }
    }

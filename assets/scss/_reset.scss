@@ -11,15 +11,17 @@ body {
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-}
-
-body {
 	font-size: 18px;
 	line-height: 1.1;
 	font-family: 'Inter';
 	width: 100%;
 	letter-spacing: -0.02em;
 	background: rgb(240, 240, 238);
+}
+
+div {
+	position: relative;
+	display: block;
 }
 
 a {

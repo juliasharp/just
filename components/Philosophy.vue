@@ -48,9 +48,16 @@ onMounted(() => {
     padding-left: 80px;
     padding-right: 80px;
     max-width: 1825px;
+    @media (max-width: 767px) {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
   }
   &-text {
     margin-top: 60px;
+    @media (max-width: 767px) {
+      margin-top: 35px;
+    }
     h2 {
       color: #ffffff;
       font-size: 3.6vw;

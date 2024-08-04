@@ -161,6 +161,9 @@ onBeforeUnmount(() => {
       padding: 65px 20px;
     }
   }
+  &__visual {
+    position: unset;
+  }
   &__footer {
     display: flex;
     flex-direction: column;

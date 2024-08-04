@@ -183,6 +183,9 @@ const settings = {
   padding: 120px 0 100px;
   max-width: calc(100% - 240px);
   margin: 0 auto;
+  @media (max-width: 1180px) {
+    max-width: calc(100% - 80px);
+  }
 }
 
 .close-btn {

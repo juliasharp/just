@@ -115,12 +115,16 @@ const selectService = (serviceName) => {
   &s {
     margin-top: 70px;
     padding: 0 65px;
-    @media (max-width: 1600px) {
+    @media (min-width: 1601px) {
       margin-top: 55px;
       padding: 0 45px;
     }
-    @media (max-width: 1280px) {
+    @media (min-width: 1281px) {
       padding: 0 20px;
+    }
+    @media (max-width: 1280px) {
+      margin-top: 35px;
+      padding: 0 30px;
     }
     ul {
       list-style: none;
@@ -164,6 +168,10 @@ const selectService = (serviceName) => {
         @media (max-width: 1600px) {
           bottom: 7px;
         }
+        @media (max-width: 760px) {
+          bottom: 2px;
+          height: 3px;
+        }
       }
     }
     &.active {
@@ -182,15 +190,13 @@ const selectService = (serviceName) => {
     h4 {
       font-family: 'Inter Bold';
       text-transform: uppercase;
-      font-size: 3.9vw;
+      font-size: 3.9vw ;
       line-height: 1.1;
       padding-bottom: 40px;
       @media (max-width: 1800px) {
-        font-size: 65px;
         padding-bottom: 30px;
       }
       @media (max-width: 1600px) {
-        font-size: 55px;
         padding-bottom: 30px;
       }
     }
@@ -199,11 +205,8 @@ const selectService = (serviceName) => {
     color: #ffffff;
     list-style: none;
     li {
-      font-size: 36px;
+      font-size: 2.5vw;
       line-height: 1.5;
-      @media (max-width: 1600px) {
-        font-size: 34px;
-      }
     }
   }
 }
