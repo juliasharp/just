@@ -81,7 +81,7 @@ const orderedTeam = computed(() => {
 });
 
 const settings = {
-  itemsToShow: 2,
+  itemsToShow: 3,
   snapAlign: 'start',
   breakpoints: {
     900: {
@@ -150,11 +150,14 @@ const settings = {
   }
   &-photo {
     max-width: calc(100vw / 5);
-    @media (max-width: 900px) {
+    @media (max-width: 1280px) {
       max-width: calc(100vw / 4);
     }
+    @media (max-width: 900px) {
+      max-width: calc(100vw / 3);
+    }
     img {
-      height: 100%;
+      // height: 100%;
     }
   }
   &-info {
