@@ -280,6 +280,10 @@ const projectDescription = () => {
       font-size: 35px;
       padding-bottom: 90px;
       @media (max-width: 1600px) {
+        font-size: 2.2vw;
+        padding-bottom: 70px;
+      }
+      @media (max-width: 1280px) {
         font-size: 2.5vw;
         padding-bottom: 70px;
       }

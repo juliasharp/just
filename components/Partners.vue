@@ -75,6 +75,9 @@ if (error.value) {
   &-container {
     max-width: calc(100% - 240px);
     margin: 0 auto;
+    @media (max-width: 760px) {
+      max-width: calc(100% - 80px);
+    }
   }
 }
 
@@ -83,9 +86,15 @@ if (error.value) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  @media (max-width: 760px) {
+    margin-top: 60px;
+  }
   li {
     flex-basis: 20%;
     margin-bottom: 40px;
+    @media (max-width: 760px) {
+      flex-basis: 50%;
+    }
   }
 }
 

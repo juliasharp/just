@@ -141,6 +141,9 @@ const settings = {
       width: calc(20% + 760px) !important;
       flex: 0 0 auto;
       max-width: none;
+      @media (max-width: 760px) {
+        width: calc(33.33% + 350px) !important;
+      }
     }
     &-content {
       display: flex;
@@ -171,6 +174,11 @@ const settings = {
       @media (max-width: 1280px) {
         padding: 65px 50px 50px;
       }
+      @media (max-width: 760px) {
+        width: 350px;
+        font-size: 12px;
+        padding: 36px 20px 30px;
+      }
       h3 {
         font-family: 'Inter Bold';
         text-transform: uppercase;
@@ -178,6 +186,9 @@ const settings = {
         margin-bottom: 8px;
         @media (max-width: 1280px) {
           font-size: 28px;
+        }
+        @media (max-width: 760px) {
+          font-size: 22px;
         }
       }
       span {
