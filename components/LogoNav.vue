@@ -61,7 +61,6 @@ function showContact() {
 	z-index: 99;
 	svg * {
 		fill: currentColor;
-		
 	}
 }
 
@@ -70,13 +69,25 @@ function showContact() {
 	width: 48px;
 	height: 48px;
 	border-radius: 50%;
+	background: transparent;
+	display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+	color: #fff;
+	mix-blend-mode: difference;
+	svg * {
+    fill: currentColor;
+	}
 	&:hover {
 		background: black;
+		mix-blend-mode: difference;
 		svg {
 			transform: scale(0.666);
 			z-index: 1;
 			path {
-				fill: transparent;
+				fill: white;
 			}
 		}
 	}

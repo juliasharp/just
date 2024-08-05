@@ -60,6 +60,7 @@ if (error.value) {
           </PartnerLogo>
         </li>
       </ul>
+      <a href="#" data-partners-see-more="" class="btn-more">See more</a>
     </div>
     <h5 class="aia-banner"><NuxtLink to="https://centersf.org/community-alliance-awards/?utm_campaign=later-linkinbio-centerarchdesignsf&utm_content=later-38927758&utm_medium=social&utm_source=linkin.bio">2023 AIA COMMUNITY ALLIANCE AWARD WINNER</NuxtLink></h5>
     <h5 class="aia-banner">SBE CERTIFIED</h5>
@@ -86,12 +87,20 @@ if (error.value) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  @media (max-width: 1280px) {
+    margin-top: 90px;
+  }
   @media (max-width: 760px) {
     margin-top: 60px;
   }
   li {
     flex-basis: 20%;
-    margin-bottom: 40px;
+    margin-bottom: 65px;
+    display: flex;
+    justify-content: center;
+    @media (max-width: 1400px) {
+      flex-basis: 25%;
+    }
     @media (max-width: 760px) {
       flex-basis: 50%;
     }

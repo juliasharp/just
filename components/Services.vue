@@ -190,7 +190,7 @@ const selectService = (serviceName) => {
     h4 {
       font-family: 'Inter Bold';
       text-transform: uppercase;
-      font-size: 3.9vw ;
+      font-size: 3.9vw;
       line-height: 1.1;
       padding-bottom: 40px;
       @media (max-width: 1800px) {
@@ -198,6 +198,9 @@ const selectService = (serviceName) => {
       }
       @media (max-width: 1600px) {
         padding-bottom: 30px;
+      }
+      @media (max-width: 760px) {
+        font-size: 4.7vw;
       }
     }
   }

@@ -24,6 +24,12 @@ defineProps({
 .partner {
   img {
     max-width: 160px;
+    @media (max-width: 1600px) {
+      max-width: 130px;
+    }
+    @media (max-width: 1280px) {
+      max-width: 100px;
+    }
   }
 }
 </style>

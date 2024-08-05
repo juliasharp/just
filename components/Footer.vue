@@ -23,7 +23,23 @@ function showForm() {
   isShown.value = true;
 }
 
-const currentYear = computed(() => new Date().getFullYear());
+const initAnimations = () => {
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '.footer-container',
+      start: 'top top',
+      end: 'bottom top',
+      pin: true,
+      pinSpacing: true,
+      scrub: 0.2,
+      markers: true
+    }
+  })
+}
+
+// onMounted(() => {
+//   initAnimations();
+// });
 </script>
 
 <template>
@@ -38,16 +54,6 @@ const currentYear = computed(() => new Date().getFullYear());
           <a @click="showForm">CONTACT</a>
         </div>
       </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <div class="footer-img">
-      <!-- <NuxtImg src="/just-team.jpg" /> -->
-    </div>
-    <div class="footer-bottom-content">
-      <!-- <p>THE FUTURE CAN BE JUST - DESIGN IT !</p> -->
-      <hr class="footer-divider">
-      <p class="copyright">copyright &copy; just {{ currentYear }}</p>
     </div>
   </div>
 </template>
@@ -67,14 +73,16 @@ const currentYear = computed(() => new Date().getFullYear());
     height: 100%;
     position: absolute;
     top: -134px;
-    z-index: 9;
+    z-index: 0;
     left: 50%;
     transform: translateX(-50%);
+    @media (max-width: 760px) {
+      top: -48px;
+    }
   }
 }
 
 .footer {
-  position: relative;
   height: 100vh;
   &-container {
     flex-direction: column;
@@ -83,6 +91,9 @@ const currentYear = computed(() => new Date().getFullYear());
   &-inner {
     align-items: flex-end;
     margin: 0 50px;
+    @media (max-width: 760px) {
+      margin: 0 20px;
+    }
   }
   &-left {
     p {
@@ -91,6 +102,9 @@ const currentYear = computed(() => new Date().getFullYear());
       @media (max-width: 1420px) {
         font-size: 105px;
       }
+      @media (max-width: 1280px) {
+        font-size: 7.46vw;
+      }
     }
   }
   &-right {
@@ -98,33 +112,10 @@ const currentYear = computed(() => new Date().getFullYear());
     font-family: 'Calling Code';
     a {
       margin-right: 55px;
+      @media (max-width: 760px) {
+        margin-right: 30px;
+      }
     }
   }
-  &-divider {
-    margin: 0 50px;
-    border: 0.5px solid #cacaca;
-  }
-  &-bottom {
-    position: relative;
-    height: 100vh;
-  }
-}
-
-.footer-img {
-  position: relative;
-  height: 100vh;
-  background-image: url('/public/just-team.jpg');
-  z-index: -1;
-  position: relative;
-  background-size: cover;
-}
-
-.copyright {
-  margin: 0 50px;
-  font-family: 'Inter Bold';
-  text-transform: uppercase;
-  font-size: 14px;
-  padding: 14px 0;
-  color: #ffffff;
 }
 </style>

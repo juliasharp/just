@@ -287,6 +287,9 @@ const projectDescription = () => {
         font-size: 2.5vw;
         padding-bottom: 70px;
       }
+      @media (max-width: 760px) {
+        font-size: 3.3vw;
+      }
     }
   }
 }

@@ -13,7 +13,12 @@ const subject = ref('');
 const email = ref('');
 const message = ref('');
 
-const focusedField = ref('');
+const focusedField = ref({
+  name: false,
+  subject: false,
+  email: false,
+  message: false
+});
 
 const disabled = computed(() => {
   return !name.value || !subject.value || !email.value || !message.value;
@@ -37,13 +42,14 @@ function closeForm() {
   isShown.value = false;
 }
 
-function onFocus(fieldName) {
-  focusedField.value = fieldName;
-  console.log("Focus on:", fieldName);
+function onFocus(fieldName: string) {
+  focusedField.value[fieldName] = true;
 }
 
-function onBlur() {
-  focusedField.value = '';
+function onBlur(fieldName: string) {
+  if (!fieldName || !eval(fieldName).value) {
+    focusedField.value = '';
+  }
 }
 
 watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessage]) => {
@@ -67,21 +73,57 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
         </button>
       </div>
       <div class="contact-form__body">
-        <div class="form-input__field" @focus="onFocus">
-          <input type="text" label="Name" name="name" spellcheck="false" class="form-input" v-model="name" @focus="onFocus('name')" @blur="onBlur">
-          <label :class="{ focused: focusedField === 'name' }" for="name" class="form-label">Name</label>
+        <div class="form-input__field">
+          <input
+            type="text"
+            label="Name"
+            name="name"
+            spellcheck="false"
+            class="form-input"
+            v-model="name"
+            @focus="onFocus('name')"
+            @blur="onBlur('name')"
+          />
+          <label :class="{ focused: focusedField.name || name }" for="name" class="form-label">Name</label>
         </div>
         <div class="form-input__field">
-          <input type="text" label="Subject" name="subject" spellcheck="false" class="form-input" v-model="subject" @focus="onFocus('name')" @blur="onBlur">
-          <label :class="{ focused: focusedField === 'name' }" value="" for="name" class="form-label">Subject</label>
+          <input
+            type="text"
+            label="Subject"
+            name="subject"
+            spellcheck="false"
+            class="form-input"
+            v-model="subject"
+            @focus="onFocus('subject')"
+            @blur="onBlur('subject')"
+          />
+          <label :class="{ focused: focusedField.subject || subject }" for="subject" class="form-label">Subject</label>
         </div>
         <div class="form-input__field">
-          <input type="text" label="Email" name="email" spellcheck="false" class="form-input" v-model="email" @focus="onFocus('name')" @blur="onBlur">
-          <label :class="{ focused: focusedField === 'name' }" value="" for="name" class="form-label">Email</label>
+          <input
+            type="text"
+            label="Email"
+            name="email"
+            spellcheck="false"
+            class="form-input"
+            v-model="email"
+            @focus="onFocus('email')"
+            @blur="onBlur('email')"
+          />
+          <label :class="{ focused: focusedField.email || email }" for="email" class="form-label">Email</label>
         </div>
         <div class="form-input__field">
-          <input type="text" label="Message" name="name" spellcheck="false" class="form-input" v-model="message" @focus="onFocus('name')" @blur="onBlur">
-          <label :class="{ focused: focusedField === 'name' }" value="" for="name" class="form-label">Message</label>
+          <input
+            type="text"
+            label="Message"
+            name="message"
+            spellcheck="false"
+            class="form-input"
+            v-model="message"
+            @focus="onFocus('message')"
+            @blur="onBlur('message')"
+          />
+          <label :class="{ focused: focusedField.message || message }" for="message" class="form-label">Message</label>
         </div>
       </div>
       <div class="contact-form__footer">
@@ -89,18 +131,17 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
           <button class="contact-form-button" :disabled="disabled">
             <div class="button">Send
               <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
-                ></path>
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"></path>
               </svg>
             </div>
           </button>
-      </div>
+        </div>
       </div>
     </div>
   </form>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .contact-form {
   position: fixed;
   z-index: 99;
@@ -193,10 +234,23 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 48px;
+  padding: 0px;
+  width: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  color: #FFFFFF;
+  &:hover {
+    color: #390F7D;
+    background: #ffffff;
+  }
 }
 
 .button-close {
-  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-input__field {
@@ -222,6 +276,9 @@ input {
   background: transparent;
   color: rgb(240, 240, 238);
   border-bottom-color: rgb(240, 240, 238);
+  @media (min-width: 1024px) {
+    padding-top: calc(13.43px + 0.178731vw);
+  }
 }
 
 label {

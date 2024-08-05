@@ -177,7 +177,7 @@ const settings = {
       @media (max-width: 760px) {
         width: 350px;
         font-size: 12px;
-        padding: 36px 20px 30px;
+        padding: 28px 20px 20px;
       }
       h3 {
         font-family: 'Inter Bold';
@@ -197,6 +197,9 @@ const settings = {
       p {
         line-height: 1.4;
         margin-top: 38px;
+        @media (max-width: 760px) {
+          margin-top: 20px;
+        }
       }
     }
   }
@@ -208,6 +211,9 @@ const settings = {
   margin: 0 auto;
   @media (max-width: 1180px) {
     max-width: calc(100% - 80px);
+  }
+  @media (max-width: 760px) {
+    padding: 45px 0 40px;
   }
 }
 

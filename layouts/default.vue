@@ -7,7 +7,6 @@ const props = defineProps({
 
 const showContactForm = ref(false);
 
-
 onMounted(() => {
   const logo = document.querySelector('.logo');
   const mailButton = document.querySelector('.mail-button');
@@ -19,6 +18,25 @@ onMounted(() => {
     content: '#smooth-content',
     smooth: 2,
   });
+
+  // ScrollTrigger.create({
+  //   trigger: '.header-container',
+  //   start: 'top top',
+  //   end: 'bottom bottom',
+  //   onEnter: () => {
+  //     gsap.to([logo, mailButton], { autoAlpha: 0, duration: 0.5 });
+  //   },
+  //   onLeaveBack: () => {
+  //     gsap.to([logo, mailButton], { autoAlpha: 1, duration: 0.5 });
+  //   },
+  //   onUpdate: (self) => {
+  //     if (self.direction === -1 && !self.isActive) {
+  //       gsap.to([logo, mailButton], { autoAlpha: 1, duration: 0.5 });
+  //     } else if (self.direction === 1 && !self.isActive) {
+  //       gsap.to([logo, mailButton], { autoAlpha: 0, duration: 0.5 });
+  //     }
+  //   }
+  // });
 
   ScrollTrigger.create({
     start: 'top top',
@@ -42,6 +60,7 @@ onMounted(() => {
       <div id="smooth-content">
         <slot />
         <Footer v-model:showForm="showContactForm"></Footer>
+        <FooterImage />
       </div>
     </div>
     <ContactForm v-if="showContactForm" v-model:showForm="showContactForm"/>

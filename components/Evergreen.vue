@@ -171,7 +171,7 @@ onBeforeUnmount(() => {
   }
   &-text {
     color: #C6F250;
-    font-size: 44px;
+    font-size: 35px;
     line-height: 1.2;
     @media (max-width: 1480px) {
       font-size: 34px;
@@ -184,7 +184,7 @@ onBeforeUnmount(() => {
     }
     &Header {
       font-family: 'Calling Code';
-      font-size: 28px;
+      font-size: 26px;
       padding-bottom: 12px;
       color: #C6F250;
     }
@@ -257,6 +257,10 @@ h2 {
   -ms-flex-align: center;
   align-items: center;
   justify-content: center;
+  @media (max-width: 1600px) {
+    top: -155px;
+    transform: scale(0.75);
+  }
   // svg path {
   //   fill: #E838BB;
   // }
