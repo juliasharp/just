@@ -36,6 +36,16 @@ onMounted(() => {
       <SectionTitle title="who we are" color="pink"></SectionTitle>
       <div class="philosophy-text">
         <h2><span>JUST</span> is a creative agency of activists and experts, designing equitable futures <span>NOW</span> !</h2>
+        <div class="text-inner">
+          <p>Unjust systems have been by design - they can and must be redesigned!</p>
+          <p>Our design approach is rooted in an understanding of the essential dynamics that foster healthy, equitable, and resilient projects - empowering our clients and outcomes by:</p>
+          <ul>
+            <li>Broadening awareness of what projects can and should be responsible for</li>
+            <li>Uncovering and surfacing opportunities</li>
+            <li>Providing tools to scaffold agency and culture</li>
+            <li>Cultivating stewardship of Mother Earth</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -57,6 +67,9 @@ onMounted(() => {
   }
   &-text {
     margin-top: 60px;
+    @media (max-width: 1600px) {
+      margin-top: 40px;
+    }
     @media (max-width: 767px) {
       margin-top: 35px;
     }
@@ -70,6 +83,24 @@ onMounted(() => {
       span {
         font-family: 'Inter Bold';
       }
+    }
+  }
+}
+
+.text-inner {
+  color: #FFFFFF;
+  font-size: 36px;
+  font-size: 2.5vw;
+  margin-top: 45px;
+  p:last-of-type {
+    margin-top: 30px;
+  }
+  ul {
+    margin-top: 38px;
+    margin-left: 26px;
+    font-size: 2vw;
+    li:not(:first-of-type) {
+      margin-top: 15px;
     }
   }
 }

@@ -57,8 +57,12 @@ if (error.value) {
   }
 }
 
+//set active project to first project name
+const activeProject = ref(projects.value[0].name);
+
 const selectProject = (name) => {
   selectedProject.value = name;
+  activeProject.value = name;
 };
 
 const settings = {
@@ -88,10 +92,6 @@ onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
 });
 
-const projectDescription = () => {
-  return project.projectDescription
-}
-
 </script>
 
 <template>
@@ -115,7 +115,7 @@ const projectDescription = () => {
               </Carousel>
             </template>
             <template v-else>
-              <li v-for="(project, index) in projects" :key="index">
+              <li v-for="(project, index) in projects" :key="index" :class="activeProject === project.name ? 'active' : ''">
                 <a @click="selectProject(project.name)">{{ project.name }}</a>
               </li>
             </template>
