@@ -19,6 +19,12 @@ const currentYear = computed(() => new Date().getFullYear());
 .footer-bottom {
   position: relative;
   height: 100vh;
+  &-content {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: end;
+  }
 }
 
 .footer-img {
