@@ -26,7 +26,7 @@ function showForm() {
 const initAnimations = () => {
   gsap.timeline({
     scrollTrigger: {
-      trigger: '.footer-container',
+      trigger: '.footer',
       start: 'top top',
       end: 'bottom top',
       pin: true,
@@ -37,9 +37,9 @@ const initAnimations = () => {
   })
 }
 
-// onMounted(() => {
-//   initAnimations();
-// });
+onMounted(() => {
+  initAnimations();
+});
 </script>
 
 <template>
@@ -67,17 +67,27 @@ const initAnimations = () => {
   &:before {
     content: '';
     display: block;
-    background: url('/src/logo.svg') no-repeat;
+    background: url('/src/footer-logo.svg') no-repeat;
     width: 100%;
     // max-width: 1345px;
     height: 100%;
     position: absolute;
-    top: -134px;
+    top: 0;
     z-index: 0;
     left: 50%;
     transform: translateX(-50%);
-    @media (max-width: 760px) {
-      top: -48px;
+  }
+  &:after {
+    content: '';
+    background: url('/src/just-footer-arrow.svg') no-repeat;
+    width: 100%;
+    height: 27.3vh;
+    display: block;
+    position: absolute;
+    bottom: 183px;
+    left: 50%;
+    @media (max-width: 1480px) {
+      bottom: 135px;
     }
   }
 }
@@ -98,10 +108,7 @@ const initAnimations = () => {
   &-left {
     p {
       font-family: 'Inter Bold';
-      font-size: 140px;
-      @media (max-width: 1420px) {
-        font-size: 105px;
-      }
+      font-size: 8.5vw;
       @media (max-width: 1280px) {
         font-size: 7.46vw;
       }
@@ -112,8 +119,30 @@ const initAnimations = () => {
     font-family: 'Calling Code';
     a {
       margin-right: 55px;
+      position: relative;
+      width: fit-content;
       @media (max-width: 760px) {
         margin-right: 30px;
+      }
+      &:after {
+        transform: scaleX(0);
+        transform-origin: bottom left;
+        transition: transform 0.6s ease;
+        content: "";
+        width: calc(100% + 10px);
+        height: 3px;
+        position: absolute;
+        bottom: 1px;
+        left: -5px;
+        z-index: 8;
+        background: #E838BB;
+      }
+      &:hover {
+        &:after {
+          transform: scaleX(1);
+          transition: ease 0.3s all;
+          transition-delay: 0.2s;
+        }
       }
     }
   }

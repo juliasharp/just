@@ -64,6 +64,9 @@ onMounted(() => {
       color: #ffffff;
       font-size: 3.6vw;
       line-height: 1.21;
+      @media (max-width: 1600px) {
+        font-size: 3vw;
+      }
       span {
         font-family: 'Inter Bold';
       }

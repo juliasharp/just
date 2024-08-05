@@ -27,7 +27,7 @@ const route = useRoute();
    &-with-title {
       padding: 100px 0;
       @media (max-width: 1600px) {
-         padding: 95px 0;
+         padding: 75px 0;
       }
       @media (max-width: 1180px) {
          padding: 65px 0;

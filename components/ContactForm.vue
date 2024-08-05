@@ -62,6 +62,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
 </script>
 
 <template>
+  <transition name="slide">
   <form action="https://formspree.io/f/xjvnonvd" method="POST" class="contact-form">
     <div class="contact-form__inner">
       <div class="contact-form__header">
@@ -139,6 +140,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
       </div>
     </div>
   </form>
+  </transition>
 </template>
 
 <style lang="scss" scoped>
@@ -152,8 +154,8 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   bottom: 0;
   background: #390F7D;
   color: white;
-  transition: transform 700ms cubic-bezier(0.44, 0.24, 0.16, 1);
-  // transform: translate3d(110%, 0, 0);
+  width: calc(340px + 17vw);
+  //transform: translate3d(100%, 0, 0);
   @media (min-width: 1024px) {
     width: calc(340px + 17vw);
   }
@@ -299,4 +301,13 @@ label {
   }
 }
 
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 700ms cubic-bezier(0.44, 0.24, 0.16, 1);
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translate3d(100%, 0, 0);
+}
 </style>
