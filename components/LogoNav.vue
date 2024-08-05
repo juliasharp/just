@@ -31,7 +31,7 @@ function showContact() {
 <template>
 	<div class="header flex">
 		<div class="logo animate-in">
-			<LogoSVG></LogoSVG>
+			<!-- <LogoSVG></LogoSVG> -->
 		</div>
 		<div class="header-right">
 			<button class="button mail-button animate-in" shape="circle" @click="showContact">

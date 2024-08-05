@@ -159,11 +159,12 @@ const selectService = (serviceName) => {
         transition: transform 0.6s ease;
         content: '';
         width: calc(100% + 10px);
-        height: 5px;
+        height: 4px;
         position: absolute;
         bottom: 11px;
         left: -5px;
         z-index: 8;
+        border-radius: 2px;
         background: #E838BB;
         @media (max-width: 1600px) {
           bottom: 7px;
