@@ -114,17 +114,11 @@ const selectService = (serviceName) => {
 .service {
   &s {
     margin-top: 70px;
-    padding: 0 65px;
     @media (min-width: 1601px) {
       margin-top: 55px;
-      padding: 0 45px;
-    }
-    @media (min-width: 1281px) {
-      padding: 0 20px;
     }
     @media (max-width: 1280px) {
       margin-top: 35px;
-      padding: 0 30px;
     }
     ul {
       list-style: none;
@@ -161,13 +155,13 @@ const selectService = (serviceName) => {
         width: calc(100% + 10px);
         height: 4px;
         position: absolute;
-        bottom: 11px;
+        bottom: 2px;
         left: -5px;
         z-index: 8;
         border-radius: 2px;
         background: #E838BB;
         @media (max-width: 1600px) {
-          bottom: 7px;
+          bottom: 0px;
         }
         @media (max-width: 760px) {
           bottom: 2px;

@@ -38,7 +38,7 @@ const currentYear = computed(() => new Date().getFullYear());
 
 .footer-divider {
   margin: 0 50px;
-  border: 0.5px solid #cacaca;
+  border: 0.5px solid #C6F250;
 }
 
 .copyright {
@@ -47,6 +47,6 @@ const currentYear = computed(() => new Date().getFullYear());
   text-transform: uppercase;
   font-size: 14px;
   padding: 14px 0;
-  color: #ffffff;
+  color: #C6F250;
 }
 </style>

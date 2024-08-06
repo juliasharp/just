@@ -9,7 +9,7 @@ const lottieContainer = ref(null);
 const currentText = ref('');
 const currentHeader = ref('');
 const currentTextHeader = ref('');
-const headers = ['ACT', 'COLLABORATE', 'DESIGN'];
+const headers = ['ACT ', ' COLLABORATE ', ' DESIGN'];
 const dataHeaders = ['DETERMINE YOUR ACTION', 'BUILD YOUR TEAM', 'CREATE AND REALIZE'];
 const data = [
   `<p><span style="font-family: 'Inter-Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project. <span style="font-family: 'Inter-Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</p>`, 
@@ -25,7 +25,7 @@ const handleTextChange = (index) => {
   const textElement = textContainer.value;
   const newText = data[index];
   const newTextHeader = dataHeaders[index];
-  const newHeader = headers.slice(0, index + 1).join(' + ');
+  const newHeader = headers.slice(0, index + 1).join('  +  ');
   
   gsap.to(textElement, {
     opacity: 0,
@@ -138,7 +138,8 @@ onBeforeUnmount(() => {
   &-text {
     color: #C6F250;
     font-size: 32px;
-    line-height: 1.2;
+    line-height: 1.3;
+    height: 120px;
     @media (max-width: 1480px) {
       font-size: 28px;
     } 
@@ -178,7 +179,7 @@ h2 {
 
 .section-scroller {
   &__inner {
-    padding: 60px 0 48px;
+    padding: 60px 0 60px;
     height: 100vh;
     position: relative;
     display: flex;
@@ -187,10 +188,6 @@ h2 {
     @media (max-width: 1600px) {
       padding-top: 35px;
     }
-  }
-  &__header {
-    display: flex;
-    justify-content: center;
   }
 }
 

@@ -1,15 +1,6 @@
 <script setup lang="ts">
+
 const initAnimations = () => {
-  //gsap.registerPlugin(ScrollTrigger);
-
-  // const lottieInstance = lottie.loadAnimation({
-  //   container: lottieContainer.value,
-  //   renderer: 'svg',
-  //   loop: false,
-  //   autoplay: false,
-  //   animationData: ACDAnimation
-  // });
-
   gsap.timeline({
     scrollTrigger: {
       trigger: '.philosophy',
@@ -18,6 +9,21 @@ const initAnimations = () => {
       pin: true,
       pinSpacing: true,
       scrub: 0.2,
+      markers: true, // For debugging, can be removed
+    }
+  });
+
+  // Add fade-in animation for the h2 element
+  gsap.from('.philosophy-text h2', {
+    opacity: 0,
+    y: 5, // Slight upward motion for a more dynamic effect
+    duration: 2,
+    ease: 'ease-in-out',
+    delay: 1,
+    scrollTrigger: {
+      trigger: '.philosophy-text h2',
+      start: 'top 60%', // Adjust this value based on when you want the fade to star
+      toggleActions: 'play none none none', // Play the animation once when the trigger is hit
       markers: true,
     }
   });
@@ -35,8 +41,8 @@ onMounted(() => {
     <div class="philosophy-container">
       <div class="philosophy-text">
         <h2><span>JUST</span> is a creative agency of activists and experts, designing equitable futures <span>NOW</span> !</h2>
-        <SectionTitle title="philosophy // approach" color="pink"></SectionTitle>
         <div class="text-inner">
+          <SectionTitle title="philosophy // approach" color="pink"></SectionTitle>
           <p>Unjust systems have been by design - they can and must be redesigned!</p>
           <p>Our design approach is rooted in an understanding of the essential dynamics that foster healthy, equitable, and resilient projects - empowering our clients and outcomes by:</p>
           <ul>
@@ -56,6 +62,9 @@ onMounted(() => {
   position: relative;
   height: 100vh;
   background: #400A82;
+  @media (min-width: 1601px) {
+    padding-top: 85px;
+  }
   &-container {
     padding-left: 80px;
     padding-right: 80px;
@@ -66,19 +75,24 @@ onMounted(() => {
     }
   }
   &-text {
-    // @media (max-width: 1600px) {
-    //   margin-top: 40px;
-    // }
-    // @media (max-width: 767px) {
-    //   margin-top: 35px;
-    // }
+    @media (min-width: 1280px) {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: calc(100vh - 150px);
+    }
+    @media (min-width: 1601px) {
+      height: calc(100vh - 200px);
+    }
     h2 {
+      opacity: 1; /* Ensure it starts fully visible post-animation */
+      transform: translateY(0);
       color: #ffffff;
       font-size: 3.6vw;
       line-height: 1.21;
       margin-bottom: 75px;
       @media (max-width: 1600px) {
-        font-size: 3vw;
+        font-size: 3.5vw;
       }
       span {
         font-family: 'Inter Bold';
@@ -87,11 +101,14 @@ onMounted(() => {
   }
 }
 
+.section-title {
+  margin-bottom: 40px;
+}
+
 .text-inner {
   color: #FFFFFF;
   font-size: 36px;
   font-size: 2.5vw;
-  margin-top: 45px;
   p:last-of-type {
     margin-top: 30px;
   }

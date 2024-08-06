@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import LinkedinSVG from '/src/linkedin.svg?component';
 const props = defineProps({
 	showForm: {
 		type: Boolean,
@@ -51,6 +52,7 @@ onMounted(() => {
         </div>
         <div class="footer-right flex">
           <NuxtLink to="https://www.instagram.com/__justdesign/">@__justdesign</NuxtLink>
+          <NuxtLink to="https://www.linkedin.com/company/just-design-inc/"><LinkedinSVG class="linkedin" /></NuxtLink>
           <a @click="showForm">CONTACT</a>
         </div>
       </div>
@@ -124,6 +126,9 @@ onMounted(() => {
       @media (max-width: 760px) {
         margin-right: 30px;
       }
+      &:last-of-type {
+        margin-right: 0;
+      }
       &:after {
         transform: scaleX(0);
         transform-origin: bottom left;
@@ -132,7 +137,7 @@ onMounted(() => {
         width: calc(100% + 10px);
         height: 3px;
         position: absolute;
-        bottom: 1px;
+        bottom: -4px;
         left: -5px;
         z-index: 8;
         background: #E838BB;
@@ -146,5 +151,10 @@ onMounted(() => {
       }
     }
   }
+}
+
+.linkedin {
+  width: 15px;
+  height: 17px;
 }
 </style>

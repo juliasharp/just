@@ -69,6 +69,11 @@ if (error.value) {
 
 <style lang="scss" scoped>
 .section {
+  &-with-title {
+    @media (min-width: 1601px) {
+      padding-top: 120px;
+    }
+  }
   &-bg {
     background-color: #000;
     z-index: 1;
