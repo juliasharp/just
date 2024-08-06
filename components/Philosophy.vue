@@ -9,7 +9,7 @@ const initAnimations = () => {
       pin: true,
       pinSpacing: true,
       scrub: 0.2,
-      markers: true, // For debugging, can be removed
+      // markers: true,
     }
   });
 
@@ -24,7 +24,7 @@ const initAnimations = () => {
       trigger: '.philosophy-text h2',
       start: 'top 60%', // Adjust this value based on when you want the fade to star
       toggleActions: 'play none none none', // Play the animation once when the trigger is hit
-      markers: true,
+      // markers: true,
     }
   });
 

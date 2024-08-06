@@ -33,7 +33,6 @@ const initAnimations = () => {
       pin: true,
       pinSpacing: true,
       scrub: 0.2,
-      markers: true
     }
   })
 }
