@@ -124,7 +124,7 @@ onBeforeUnmount(() => {
       padding: 105px 50px 50px;
     }
     @media (max-width: 760px) {
-      padding: 65px 20px;
+      padding: 85px 20px 100px;
     }
   }
   &__visual {
@@ -211,7 +211,7 @@ h2 {
     font-size: 55px;
   }
   @media (max-width: 760px) {
-    font-size: 28px;
+    font-size: 24px;
   }
 }
 
