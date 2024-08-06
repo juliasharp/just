@@ -90,6 +90,9 @@ onMounted(() => {
     @media (max-width: 1480px) {
       bottom: 135px;
     }
+    @media (max-width: 760px) {
+      display: none;
+    }
   }
 }
 
@@ -104,9 +107,13 @@ onMounted(() => {
     margin: 0 50px;
     @media (max-width: 760px) {
       margin: 0 20px;
+      display: block;
     }
   }
   &-left {
+    @media (max-width: 760px) {
+      margin-bottom: 20px;
+    }
     p {
       font-family: 'Inter Bold';
       font-size: 8.5vw;

@@ -94,6 +94,10 @@ onMounted(() => {
       @media (max-width: 1600px) {
         font-size: 3.5vw;
       }
+      @media (max-width: 760px) {
+        font-size: 22px;
+        margin-bottom: 35px;
+      }
       span {
         font-family: 'Inter Bold';
       }
@@ -107,8 +111,10 @@ onMounted(() => {
 
 .text-inner {
   color: #FFFFFF;
-  font-size: 36px;
   font-size: 2.5vw;
+  @media (max-width: 760px) {
+    font-size: 16px;
+  }
   p:last-of-type {
     margin-top: 30px;
   }
@@ -116,6 +122,9 @@ onMounted(() => {
     margin-top: 38px;
     margin-left: 26px;
     font-size: 2vw;
+    @media (max-width: 760px) {
+    font-size: 16px;
+  }
     li:not(:first-of-type) {
       margin-top: 15px;
     }

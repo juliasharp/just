@@ -244,6 +244,7 @@ onBeforeUnmount(() => {
     position: relative;
     @media (min-width: 1181px) {
       flex-basis: 320px;
+      padding-right: 75px;
       flex-shrink: 0;
     }
     @media (min-width: 1601px) {

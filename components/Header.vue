@@ -97,6 +97,9 @@ onMounted(() => {
     display: flex;
     justify-content: center;
     align-items: center;
+    @media (max-width: 760px) {
+      padding: 7px;
+    }
     video {
       position: absolute;
       width: calc(100% - 30px);
@@ -111,6 +114,12 @@ onMounted(() => {
       position: absolute;
       @media (max-width: 1600px) {
         transform: scale(0.75);
+      }
+      @media (max-width: 1400px) {
+        transform: scale(0.65);
+      }
+      @media (max-width: 1180px) {
+        transform: scale(0.5);
       }
     }
   }

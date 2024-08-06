@@ -144,7 +144,7 @@ onBeforeUnmount(() => {
       font-size: 28px;
     } 
     @media (max-width: 760px) {
-      font-size: 20px;
+      font-size: 16px;
     }
     span {
       font-family: 'Inter Bold';
@@ -154,6 +154,9 @@ onBeforeUnmount(() => {
       font-size: 40px;
       padding-bottom: 12px;
       color: #C6F250;
+      @media (max-width: 760px) {
+        font-size: 22px;
+      }
     }
   }
 }
@@ -187,6 +190,9 @@ h2 {
     justify-content: space-between;
     @media (max-width: 1600px) {
       padding-top: 35px;
+    }
+    @media (max-width: 760px) {
+      padding-bottom: 40px;
     }
   }
 }

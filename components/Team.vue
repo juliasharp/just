@@ -193,6 +193,7 @@ const settings = {
       }
       span {
         display: block;
+        font-family: 'Inter Bold';
       }
       p {
         line-height: 1.4;
