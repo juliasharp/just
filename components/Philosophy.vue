@@ -1,31 +1,35 @@
 <script setup lang="ts">
 
 const initAnimations = () => {
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: '.philosophy',
-      start: 'top top',
-      end: window.innerHeight + ' top',
-      pin: true,
-      pinSpacing: true,
-      scrub: 0.2,
-      // markers: true,
-    }
-  });
+  const mm = gsap.matchMedia();
 
-  // Add fade-in animation for the h2 element
-  gsap.from('.philosophy-text h2', {
-    opacity: 0,
-    y: 5, // Slight upward motion for a more dynamic effect
-    duration: 2,
-    ease: 'ease-in-out',
-    delay: 1,
-    scrollTrigger: {
-      trigger: '.philosophy-text h2',
-      start: 'top 60%', // Adjust this value based on when you want the fade to star
-      toggleActions: 'play none none none', // Play the animation once when the trigger is hit
-      // markers: true,
-    }
+  mm.add('(min-width: 768px)', () => {
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: '.philosophy',
+        start: 'top top',
+        end: window.innerHeight + ' top',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.2,
+        // markers: true,
+      }
+    });
+
+    // Add fade-in animation for the h2 element
+    gsap.from('.philosophy-text h2', {
+      opacity: 0,
+      y: 5, // Slight upward motion for a more dynamic effect
+      duration: 2,
+      ease: 'ease-in-out',
+      delay: 1,
+      scrollTrigger: {
+        trigger: '.philosophy-text h2',
+        start: 'top 60%', // Adjust this value based on when you want the fade to star
+        toggleActions: 'play none none none', // Play the animation once when the trigger is hit
+        // markers: true,
+      }
+    });
   });
 
   ScrollTrigger.normalizeScroll(true);

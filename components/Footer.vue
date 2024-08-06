@@ -25,16 +25,20 @@ function showForm() {
 }
 
 const initAnimations = () => {
-  gsap.timeline({
-    scrollTrigger: {
-      trigger: '.footer',
-      start: 'top top',
-      end: 'bottom top',
-      pin: true,
-      pinSpacing: true,
-      scrub: 0.2,
-    }
-  })
+  const mm = gsap.matchMedia();
+
+  mm.add('(min-width: 768px)', () => {
+    gsap.timeline({
+      scrollTrigger: {
+        trigger: '.footer',
+        start: 'top top',
+        end: 'bottom top',
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.2,
+      }
+    })
+  });
 }
 
 onMounted(() => {
