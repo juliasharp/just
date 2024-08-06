@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
 import lottie from 'lottie-web';
-import ACDAnimation from '@/assets/ACD-animation.json';
+import ACDAnimation from '@/assets/ACD-arrow-animation.json';
 
 const textContainer = ref(null);
 
@@ -12,7 +12,7 @@ const currentTextHeader = ref('');
 const headers = ['ACT', 'COLLABORATE', 'DESIGN'];
 const dataHeaders = ['DETERMINE YOUR ACTION', 'BUILD YOUR TEAM', 'CREATE AND REALIZE'];
 const data = [
-  `<p><span style="font-family: 'Inter-Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project.</p><p style='padding-top:20px;'><span style="font-family: 'Inter-Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</p>`, 
+  `<p><span style="font-family: 'Inter-Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project. <span style="font-family: 'Inter-Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</p>`, 
   `JUST is your access to engage diverse expertise and perspectives to inform and guide your project. Drawing on decades of experience from designers, creatives, subject matter experts, leaders, and activists, <span style="font-family: 'Inter-Bold'">JUST Collaborate</span> is your platform to imagine, innovate, and implement!`, 
   `With a project specific approach, <span style="font-family: 'Inter-Bold'">JUST Design</span> will integrate our expertise in creating and guiding equitable processes to work with you to develop your project through key phases of design, and bring it to life!`,
   `<span style="font-size:4.68vw; font-family:'Inter Bold';display:flex;justify-content:center;">EQUITABLE FUTURE<span>`
@@ -27,8 +27,6 @@ const handleTextChange = (index) => {
   const newTextHeader = dataHeaders[index];
   const newHeader = headers.slice(0, index + 1).join(' + ');
   
-  //gsap.set(textElement, { height: textElement.offsetHeight });
-  
   gsap.to(textElement, {
     opacity: 0,
     duration: 0.2,
@@ -42,28 +40,8 @@ const handleTextChange = (index) => {
 
   currentIndex.value = index;
 };
-  
-//   headers.value.forEach((_, headerIndex) => {
-//     const headerElement = textContainer.value.parentNode.children[headerIndex];
-//     if (headerIndex === index) {
-//       gsap.to(headerElement, { opacity: 1, y: '0%' });
-//     } else {
-//       gsap.to(headerElement, { opacity: 0, y: '10%' });
-//     }
-//   });
-
-//   gsap.fromTo(
-//     textContainer.value.parentNode.children[index],
-//     { opacity: 0, y: '10%' },
-//     { opacity: 1, y: '0%' }
-//   );
-  
-//   currentIndex.value = index;
-// };
 
 const initAnimations = () => {
-  //gsap.registerPlugin(ScrollTrigger);
-
   const lottieInstance = lottie.loadAnimation({
     container: lottieContainer.value,
     renderer: 'svg',
@@ -84,28 +62,17 @@ const initAnimations = () => {
       onUpdate: (self) => {
         const segmentIndex = Math.floor(self.progress / (1 / data.length));
         handleTextChange(segmentIndex);
-        lottieInstance.goToAndStop(lottieInstance.totalFrames * self.progress, true);
+        const frame = Math.min(lottieInstance.totalFrames * self.progress, lottieInstance.totalFrames - 1);
+        lottieInstance.goToAndStop(frame, true);
+      },
+      onLeave: () => {
+        lottieInstance.goToAndStop(lottieInstance.totalFrames - 1, true);
       }
     }
   });
-
-  // lottieInstance.addEventListener('DOMLoaded', () => {
-  //   gsap.timeline({
-  //     scrollTrigger: {
-  //       trigger: '.js-section-scroller' + top,
-  //       end: window.innerHeight * (data.length) + ' top',
-  //       scrub: 0.2
-  //     }
-  //   }).to(lottieInstance, {
-  //     frame: lottieInstance.totalFrames - 1,
-  //     //remove blob when animation is over.
-  //     onUpdate: () => lottieInstance.goToAndStop(lottieInstance.frame, true)
-  //   });
-  // });
 };
 
 onMounted(() => {
-  //Initialize first state
   currentText.value = data[0];
   currentHeader.value = headers[0];
   currentTextHeader.value = dataHeaders[0];
@@ -114,7 +81,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   gsap.killTweensOf(textContainer.value);
-  //gsap.killTweensOf(headers.value);
 });
 </script>
 
@@ -171,10 +137,10 @@ onBeforeUnmount(() => {
   }
   &-text {
     color: #C6F250;
-    font-size: 35px;
+    font-size: 32px;
     line-height: 1.2;
     @media (max-width: 1480px) {
-      font-size: 34px;
+      font-size: 28px;
     } 
     @media (max-width: 760px) {
       font-size: 20px;
@@ -183,8 +149,8 @@ onBeforeUnmount(() => {
       font-family: 'Inter Bold';
     }
     &Header {
-      font-family: 'Calling Code';
-      font-size: 26px;
+      font-family: 'Inter Bold';
+      font-size: 40px;
       padding-bottom: 12px;
       color: #C6F250;
     }

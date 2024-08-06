@@ -33,9 +33,9 @@ onMounted(() => {
 <template>
   <div class="philosophy section-with-title">
     <div class="philosophy-container">
-      <SectionTitle title="who we are" color="pink"></SectionTitle>
       <div class="philosophy-text">
         <h2><span>JUST</span> is a creative agency of activists and experts, designing equitable futures <span>NOW</span> !</h2>
+        <SectionTitle title="philosophy // approach" color="pink"></SectionTitle>
         <div class="text-inner">
           <p>Unjust systems have been by design - they can and must be redesigned!</p>
           <p>Our design approach is rooted in an understanding of the essential dynamics that foster healthy, equitable, and resilient projects - empowering our clients and outcomes by:</p>
@@ -66,17 +66,17 @@ onMounted(() => {
     }
   }
   &-text {
-    margin-top: 60px;
-    @media (max-width: 1600px) {
-      margin-top: 40px;
-    }
-    @media (max-width: 767px) {
-      margin-top: 35px;
-    }
+    // @media (max-width: 1600px) {
+    //   margin-top: 40px;
+    // }
+    // @media (max-width: 767px) {
+    //   margin-top: 35px;
+    // }
     h2 {
       color: #ffffff;
       font-size: 3.6vw;
       line-height: 1.21;
+      margin-bottom: 75px;
       @media (max-width: 1600px) {
         font-size: 3vw;
       }

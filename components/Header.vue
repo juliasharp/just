@@ -1,58 +1,12 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
 import lottie from 'lottie-web';
-//import LogoShapes from '@/assets/header-shapes.json';
 import LogoShapes from '@/assets/just-shapes-NEWNEW.json';
-//import LogoShapes from '@/assets/header-shapes-new.json';
-
-//TO DO: animation needs to happen on load: shapes scroll quickly together, 
-//shrink and then video loads. When going back up, It should just play 
-//the video on loop
 
 const lottieContainer = ref(null);
 
 const showAnimation = ref(true);
 const showVideo = ref(false);
-
-// const initAnimations = () => {
-//   const lottieInstance = lottie.loadAnimation({
-//     container: lottieContainer.value,
-//     renderer: 'svg',
-//     loop: false,
-//     autoplay: false,
-//     animationData: LogoShapes
-//   });
-
-//   gsap.timeline({
-//     scrollTrigger: {
-//       trigger: '.header-container',
-//       start: 'top top',
-//       end: window.innerHeight + ' top',
-//       pin: true,
-//       pinSpacing: true,
-//       scrub: 0.1,
-//       //markers: true,
-//     },
-//   });
-
-//   lottieInstance.addEventListener('DOMLoaded', () => {
-//     gsap.timeline({
-//       scrollTrigger: {
-//         trigger: '.header-container',
-//         end: window.innerHeight + ' top',
-//         scrub: 0.1
-//       }
-//     }).to(lottieInstance, {
-//       frame: lottieInstance.totalFrames - 1,
-//       duration: 2,
-//       onUpdate: () => lottieInstance.goToAndStop(lottieInstance.frame, true),
-//       onComplete: () => {
-//         showAnimation.value = false;
-//         showVideo.value = true;
-//       }
-//     });
-//   });
-// }
 
 const initAnimations = () => {
   const lottieInstance = lottie.loadAnimation({
@@ -96,7 +50,7 @@ const initAnimations = () => {
         }
       }
     );
-    animationTimeline.call(() => {}, null, '+=1');
+    animationTimeline.call(() => {}, null, '+=2');
   });
 };
 
