@@ -28,8 +28,8 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
           }
         }
       }`
-  }, 
-  transform(data:any) {
+  },
+  transform(data: any) {
     if (data.data.page.landingPage.projects) {
       return data.data.page.landingPage.projects.map((project) => ({
         name: project.projectName,
@@ -57,12 +57,13 @@ if (error.value) {
   }
 }
 
-//set active project to first project name
-const activeProject = ref(projects.value[0].name);
+const activeProject = ref(projects.value[0]?.name || '');
+const carouselKey = ref(0);
 
 const selectProject = (name) => {
   selectedProject.value = name;
   activeProject.value = name;
+  carouselKey.value += 1; // Update the key to force re-mount
 };
 
 const settings = {
@@ -109,21 +110,21 @@ onBeforeUnmount(() => {
           <ul class="projects-names">
             <template v-if="isSmallViewport">
               <Carousel v-bind="settings">
-                <Slide v-for="(project, index) in projects" :key="index">
+                <Slide v-for="(project, index) in projects" :key="project.name">
                   <a @click="selectProject(project.name)">{{ project.name }}</a>
                 </Slide>
               </Carousel>
             </template>
             <template v-else>
-              <li v-for="(project, index) in projects" :key="index" :class="activeProject === project.name ? 'active' : ''">
+              <li v-for="(project, index) in projects" :key="projects.name" :class="activeProject === project.name ? 'active' : ''">
                 <a @click="selectProject(project.name)">{{ project.name }}</a>
               </li>
             </template>
           </ul>
         </div>
         <div class="project-right">
-          <div class="project-info" v-for="(project, index) in projects" :key="project.name" v-show="selectedProject === project.name">
-            <Carousel :items-to-show="1" :wrap-around="true" :autoplay="2000" :key="project.name">
+          <div class="project-info" v-for="(project, index) in projects" :key="carouselKey" v-show="selectedProject === project.name">
+            <Carousel :items-to-show="1" :wrap-around="true" :autoplay="2500" :key="project.name">
               <Slide v-for="(image, imgIndex) in project.images" :key="imgIndex">
                 <img :src="image.link" :alt="image.altText" />
               </Slide>
