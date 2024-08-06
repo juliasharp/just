@@ -122,8 +122,8 @@ onBeforeUnmount(() => {
           </ul>
         </div>
         <div class="project-right">
-          <div class="project-info" v-for="(project, index) in projects" :key="index" v-show="selectedProject === project.name">
-            <Carousel :items-to-show="1" :wrap-around="true" :autoplay="2000">
+          <div class="project-info" v-for="(project, index) in projects" :key="project.name" v-show="selectedProject === project.name">
+            <Carousel :items-to-show="1" :wrap-around="true" :autoplay="2000" :key="project.name">
               <Slide v-for="(image, imgIndex) in project.images" :key="imgIndex">
                 <img :src="image.link" :alt="image.altText" />
               </Slide>
@@ -280,12 +280,10 @@ onBeforeUnmount(() => {
       font-size: 35px;
       padding-bottom: 90px;
       @media (max-width: 1600px) {
-        font-size: 2.2vw;
-        padding-bottom: 70px;
+        font-size: 2vw;
+        padding-bottom: 6vw;
       }
       @media (max-width: 1280px) {
-        font-size: 2.5vw;
-        padding-bottom: 70px;
       }
       @media (max-width: 760px) {
         font-size: 3.3vw;

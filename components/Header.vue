@@ -67,7 +67,7 @@ onMounted(() => {
       </div>
     </div>
     <div v-show="showVideo" class="header__video">
-      <video muted loop autoplay playsinline="" src="https://just.julia-sharp.com/wp-content/uploads/2024/08/JUST-header-Video-DRAFT1.mp4" data-object-fit="contain"></video>
+      <video muted loop autoplay playsinline="" src="https://just.julia-sharp.com/wp-content/uploads/2024/08/Just-Video.mp4" data-object-fit="contain"></video>
     </div>
   </div>
 </template>
