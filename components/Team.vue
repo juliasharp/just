@@ -213,9 +213,9 @@ const settings = {
   @media (max-width: 1600px) {
     padding: 75px 0;
   }
-  @media (max-width: 1180px) {
-    max-width: calc(100% - 80px);
-  }
+  // @media (max-width: 1180px) {
+  //   max-width: calc(100% - 80px);
+  // }
   @media (max-width: 760px) {
     padding: 45px 0 40px;
   }

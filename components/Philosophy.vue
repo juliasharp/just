@@ -115,7 +115,7 @@ onMounted(() => {
 
 .text-inner {
   color: #FFFFFF;
-  font-size: 2.5vw;
+  font-size: 2.3vw;
   @media (max-width: 760px) {
     font-size: 16px;
   }

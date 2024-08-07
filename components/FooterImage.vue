@@ -34,6 +34,10 @@ const currentYear = computed(() => new Date().getFullYear());
   background-image: url('/public/just-team.jpg');
   z-index: -1;
   background-size: cover;
+  background-position: center center;
+  @media (max-width: 1100px) {
+    background-image: url('/public/just-team-mobile.jpg');
+  }
 }
 
 .footer-divider {

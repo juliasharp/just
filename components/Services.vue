@@ -187,12 +187,15 @@ const selectService = (serviceName) => {
       text-transform: uppercase;
       font-size: 3.9vw;
       line-height: 1.1;
-      padding-bottom: 40px;
+      padding-bottom: 60px;
       @media (max-width: 1800px) {
         padding-bottom: 30px;
       }
       @media (max-width: 1600px) {
-        padding-bottom: 30px;
+        padding-bottom: 50px;
+      }
+      @media (max-width: 1480px) {
+        padding-bottom: 36px;
       }
       @media (max-width: 760px) {
         font-size: 4.7vw;

@@ -48,7 +48,7 @@ if (error.value) {
 </script>
 
 <template>
-  <div class="section-bg section-with-title">
+  <div class="partners-outer section-bg section-with-title">
     <div class="section-container">
       <SectionTitle title="collaborators" color="brown"></SectionTitle>
       <ul class="partners">
@@ -62,7 +62,7 @@ if (error.value) {
       </ul>
       <a href="#" data-partners-see-more="" class="btn-more">See more</a>
     </div>
-    <h5 class="aia-banner"><NuxtLink to="https://centersf.org/community-alliance-awards/?utm_campaign=later-linkinbio-centerarchdesignsf&utm_content=later-38927758&utm_medium=social&utm_source=linkin.bio">2023 AIA COMMUNITY ALLIANCE AWARD WINNER</NuxtLink></h5>
+    <h5 class="aia-banner"><NuxtLink to="https://centersf.org/community-alliance-awards/?utm_campaign=later-linkinbio-centerarchdesignsf&utm_content=later-38927758&utm_medium=social&utm_source=linkin.bio" target="_blank">2023 AIA COMMUNITY ALLIANCE AWARD WINNER</NuxtLink></h5>
     <h5 class="aia-banner">SBE CERTIFIED</h5>
   </div>
 </template>

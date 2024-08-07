@@ -77,7 +77,7 @@ onMounted(() => {
     // max-width: 1345px;
     height: 100%;
     position: absolute;
-    top: 0;
+    top: -1px;
     z-index: 0;
     left: 50%;
     transform: translateX(-50%);
@@ -91,8 +91,13 @@ onMounted(() => {
     position: absolute;
     bottom: 183px;
     left: 50%;
-    @media (max-width: 1480px) {
+    // @media (max-width: 1480px) {
+    //   bottom: 135px;
+    // }
+    @media (max-width: 1280px) {
+      height: 20vh;
       bottom: 135px;
+      left: 30%;
     }
     @media (max-width: 760px) {
       display: none;
@@ -109,12 +114,17 @@ onMounted(() => {
   &-inner {
     align-items: flex-end;
     margin: 0 50px;
-    @media (max-width: 760px) {
+    @media (max-width: 1280px) {
       margin: 0 20px;
+    }
+    @media (max-width: 760px) {
       display: block;
     }
   }
   &-left {
+    @media (max-width: 1280px) {
+      padding-bottom: 10px;
+    }
     @media (max-width: 760px) {
       margin-bottom: 20px;
     }
@@ -133,6 +143,9 @@ onMounted(() => {
       margin-right: 55px;
       position: relative;
       width: fit-content;
+      @media (max-width: 1280px) {
+        margin-right: 35px;
+      }
       @media (max-width: 760px) {
         margin-right: 30px;
       }
