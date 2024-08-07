@@ -95,6 +95,9 @@ onMounted(() => {
       font-size: 3.6vw;
       line-height: 1.21;
       margin-bottom: 75px;
+      @media (max-width: 1480px) {
+        margin-bottom: 60px;
+      }
       @media (max-width: 1600px) {
         font-size: 3.5vw;
       }
@@ -116,6 +119,9 @@ onMounted(() => {
 .text-inner {
   color: #FFFFFF;
   font-size: 2.3vw;
+  @media (max-width: 1480px) {
+    font-size: 28px;
+  }
   @media (max-width: 760px) {
     font-size: 16px;
   }
@@ -126,6 +132,9 @@ onMounted(() => {
     margin-top: 38px;
     margin-left: 26px;
     font-size: 2vw;
+    @media (max-width: 1480px) {
+      font-size: 26px;
+    }
     @media (max-width: 760px) {
     font-size: 16px;
   }

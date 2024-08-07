@@ -91,9 +91,10 @@ onMounted(() => {
     position: absolute;
     bottom: 183px;
     left: 50%;
-    // @media (max-width: 1480px) {
-    //   bottom: 135px;
-    // }
+    @media (max-width: 1480px) {
+      bottom: 145px;
+      height: 23vh;
+    }
     @media (max-width: 1280px) {
       height: 20vh;
       bottom: 135px;
