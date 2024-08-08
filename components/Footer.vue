@@ -24,26 +24,6 @@ function showForm() {
   isShown.value = true;
 }
 
-const initAnimations = () => {
-  const mm = gsap.matchMedia();
-
-  mm.add('(min-width: 768px)', () => {
-    gsap.timeline({
-      scrollTrigger: {
-        trigger: '.footer',
-        start: 'top top',
-        end: 'bottom top',
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.2,
-      }
-    })
-  });
-}
-
-onMounted(() => {
-  initAnimations();
-});
 </script>
 
 <template>
