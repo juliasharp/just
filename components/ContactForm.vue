@@ -63,7 +63,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
 
 <template>
   <transition name="slide">
-  <form action="https://formspree.io/f/xjvnonvd" method="POST" class="contact-form">
+  <form action="https://formspree.io/f/xblrgkle" method="POST" class="contact-form">
     <div class="contact-form__inner">
       <div class="contact-form__header">
         <h3>Let's Collaborate</h3>
