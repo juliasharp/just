@@ -64,7 +64,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .philosophy {
   position: relative;
-  height: 100vh;
+  min-height: 100vh;
   background: #400A82;
   @media (min-width: 1601px) {
     padding-top: 85px;
@@ -83,7 +83,7 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      height: calc(100vh - 150px);
+      min-height: calc(100vh - 150px);
     }
     @media (min-width: 1601px) {
       height: calc(100vh - 200px);
