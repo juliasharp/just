@@ -50,7 +50,7 @@ const initAnimations = () => {
         }
       }
     );
-    animationTimeline.call(() => {}, null, '+=2');
+    // animationTimeline.call(() => {}, null, '+=1');
   });
 };
 
