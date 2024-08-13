@@ -67,7 +67,7 @@ onMounted(() => {
       </div>
     </div>
     <div v-show="showVideo" class="header__video">
-      <video muted loop autoplay playsinline="" src="https://just.julia-sharp.com/wp-content/uploads/2024/08/Just-Video.mp4" data-object-fit="contain"></video>
+      <video muted loop autoplay playsinline="" src="http://wp.just.design/wp-content/uploads/2024/08/JustWebpage-FINAL.mp4" data-object-fit="contain"></video>
     </div>
   </div>
 </template>
@@ -120,6 +120,9 @@ onMounted(() => {
       }
       @media (max-width: 1180px) {
         transform: scale(0.5);
+      }
+      @media (max-width: 760px) {
+        transform: scale(0.25);
       }
     }
   }
