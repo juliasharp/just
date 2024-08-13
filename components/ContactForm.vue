@@ -223,12 +223,17 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
 }
 
 .contact-form-button {
+  color: #FFFFFF;
   &[disabled] {
     cursor: not-allowed;
     opacity: 0.5;
     background: transparent;
     color: rgb(240, 240, 238);
     border-color: rgb(240, 240, 238);
+  }
+  &:hover {
+    background: rgb(240, 240, 238);
+    color: #390F7D;
   }
 }
 
@@ -238,21 +243,33 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   align-items: center;
   height: 48px;
   padding: 0px;
-  width: 48px;
+  width: 100%;
   min-width: 48px;
   border-radius: 50%;
   transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-  color: #FFFFFF;
-  &:hover {
-    color: #390F7D;
-    background: #ffffff;
-  }
+  font-size: 16px;
 }
 
 .button-close {
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 48px;
+  width: 48px;
+  border-radius: 50%;
+  svg {
+    fill: white;
+    transition: transform 0.3s ease-in-out;
+  }
+  &:hover {
+    background: rgb(240, 240, 238);
+    svg {
+      fill: #390F7D;
+      @media (min-width: 760px) {
+        transform: scale(0.666);
+      }
+    }
+  }
 }
 
 .form-input__field {
