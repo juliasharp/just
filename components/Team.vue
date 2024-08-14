@@ -217,6 +217,7 @@ const settings = {
   //   max-width: calc(100% - 80px);
   // }
   @media (max-width: 760px) {
+    max-width: calc(100% - 80px);
     padding: 45px 0 40px;
   }
 }
