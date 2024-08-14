@@ -2,8 +2,27 @@
 import { ref } from 'vue';
 
 const partners = ref([]);
+const visibleCount = ref(12);
 
 const config = useRuntimeConfig();
+
+const updateVisibleCount = () => {
+  if (window.innerWidth <= 768) {
+    visibleCount.value = 6; // Mobile: Show 6 partners
+  } else {
+    visibleCount.value = 12; // Desktop: Show 12 partners
+  }
+}
+
+onMounted(() => {
+  updateVisibleCount();
+  window.addEventListener('resize', updateVisibleCount);
+});
+
+// Clean up the event listener when the component is unmounted
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateVisibleCount);
+});
 
 // Encode the GraphQL query for inclusion in the URL
 const encodedQuery = encodeURIComponent(`
@@ -45,6 +64,14 @@ if (error.value) {
 } else {
   partners.value = data.value;
 }
+
+const visiblePartners = computed(() => {
+  return partners.value.slice(0, visibleCount.value);
+});
+
+const loadMorePartners = () => {
+  visibleCount.value += 4;
+};
 </script>
 
 <template>
@@ -52,7 +79,7 @@ if (error.value) {
     <div class="section-container">
       <SectionTitle title="collaborators" color="brown"></SectionTitle>
       <ul class="partners">
-        <li v-for="(partner, index) in partners" :key="index">
+        <li v-for="(partner, index) in visiblePartners" :key="index">
           <PartnerLogo 
             :link="partner.link" 
             :image-url="partner.imageUrl" 
@@ -60,7 +87,15 @@ if (error.value) {
           </PartnerLogo>
         </li>
       </ul>
-      <a href="#" data-partners-see-more="" class="btn-more">See more</a>
+      <a 
+        v-if="visibleCount < partners.length"
+        href="#" 
+        data-partners-see-more="" 
+        class="btn-more"
+        @click.prevent="loadMorePartners"
+      >
+        See more +
+      </a>
     </div>
     <h5 class="aia-banner"><NuxtLink to="https://centersf.org/community-alliance-awards/?utm_campaign=later-linkinbio-centerarchdesignsf&utm_content=later-38927758&utm_medium=social&utm_source=linkin.bio" target="_blank">2023 AIA COMMUNITY ALLIANCE AWARD WINNER</NuxtLink></h5>
     <h5 class="aia-banner">SBE CERTIFIED</h5>
@@ -81,6 +116,7 @@ if (error.value) {
   &-container {
     max-width: calc(100% - 240px);
     margin: 0 auto;
+    margin-bottom: 40px;
     @media (max-width: 760px) {
       max-width: calc(100% - 80px);
     }
@@ -92,8 +128,11 @@ if (error.value) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  @media (max-width: 1480px) {
+    margin-top: 65pxl
+  }
   @media (max-width: 1280px) {
-    margin-top: 90px;
+    margin-top: 75px;
   }
   @media (max-width: 760px) {
     margin-top: 60px;
@@ -120,6 +159,31 @@ if (error.value) {
   padding: 50px 0;
   @media (max-width: 760px) {
     padding: 20px 0;
+  }
+}
+
+.btn-more {
+  color: #FFFFFF;
+  position: relative;
+  &:after {
+    transform: scaleX(0);
+    transform-origin: bottom left;
+    transition: transform 0.6s ease;
+    content: "";
+    width: calc(100% + 10px);
+    height: 3px;
+    position: absolute;
+    bottom: -4px;
+    left: -5px;
+    z-index: 8;
+    background: #E838BB;
+  }
+  &:hover {
+    &:after {
+      transform: scaleX(1);
+      transition: ease 0.3s all;
+      transition-delay: 0.2s;
+    }
   }
 }
 </style>
