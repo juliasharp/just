@@ -9,8 +9,10 @@ const config = useRuntimeConfig();
 const updateVisibleCount = () => {
   if (window.innerWidth <= 768) {
     visibleCount.value = 6; // Mobile: Show 6 partners
-  } else {
+  } else if (window.innerWidth < 1401) {
     visibleCount.value = 12; // Desktop: Show 12 partners
+  } else {
+    visibleCount.value = 15;
   }
 }
 
