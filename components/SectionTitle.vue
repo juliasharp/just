@@ -35,6 +35,9 @@ const props = defineProps({
     left: -5px;
     z-index: -1;
     bottom: 1px;
+    @media (max-width: 760px) {
+      height: 11px;
+    }
   }
   &.acid {
     &:after {

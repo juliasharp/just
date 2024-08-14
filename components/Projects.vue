@@ -306,6 +306,9 @@ onBeforeUnmount(() => {
       @media (max-width: 760px) {
         font-size: 18px;
       }
+      @media (max-width: 414px) {
+        font-size: 17px;
+      }
       &.active {
         // &:before {
         //   content: '';
