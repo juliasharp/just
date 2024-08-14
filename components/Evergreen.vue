@@ -12,9 +12,9 @@ const currentTextHeader = ref('');
 const headers = ['ACT ', ' COLLABORATE ', ' DESIGN'];
 const dataHeaders = ['DETERMINE YOUR ACTION', 'BUILD YOUR TEAM', 'CREATE AND REALIZE'];
 const data = [
-  `<p><span style="font-family: 'Inter-Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project. <span style="font-family: 'Inter-Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</p>`, 
-  `JUST is your access to engage diverse expertise and perspectives to inform and guide your project. Drawing on decades of experience from designers, creatives, subject matter experts, leaders, and activists, <span style="font-family: 'Inter-Bold'">JUST Collaborate</span> is your platform to imagine, innovate, and implement!`, 
-  `With a project specific approach, <span style="font-family: 'Inter-Bold'">JUST Design</span> will integrate our expertise in creating and guiding equitable processes to work with you to develop your project through key phases of design, and bring it to life!`
+  `<p><span style="font-family: 'Inter Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project. <span style="font-family: 'Inter Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</p>`, 
+  `JUST is your access to engage diverse expertise and perspectives to inform and guide your project. Drawing on decades of experience from designers, creatives, subject matter experts, leaders, and activists, <span style="font-family: 'Inter Bold'">JUST Collaborate</span> is your platform to imagine, innovate, and implement!`, 
+  `With a project specific approach, <span style="font-family: 'Inter Bold'">JUST Design</span> will integrate our expertise in creating and guiding equitable processes to work with you to develop your project through key phases of design, and bring it to life!`
 ];
 const currentIndex = ref(0);
 
