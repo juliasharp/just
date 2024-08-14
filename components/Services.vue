@@ -3,6 +3,7 @@ import { ref } from 'vue';
 
 const services = ref([]);
 const selectedService = ref(null);
+const lastSelectedService = ref(null);
 
 const config = useRuntimeConfig();
 
@@ -46,9 +47,19 @@ if (error.value) {
   }
 }
 
-const selectService = (serviceName) => {
-  console.log("service selected");
+const onServiceHover = (serviceName) => {
   selectedService.value = serviceName;
+  lastSelectedService.value = serviceName;
+};
+
+// Function to handle mouse leaving the service list
+const onMouseLeave = () => {
+  console.log("mouseleave");
+  selectedService.value = lastSelectedService.value;
+};
+
+const selectService = (serviceName) => {
+  lastSelectedService.value = serviceName;
 };
 
 </script>
@@ -59,36 +70,28 @@ const selectService = (serviceName) => {
       <SectionTitle title="what we do" color="sage"></SectionTitle>
       <div class="flex services">
         <div class="services-left">
-          <ul>
-            <li class="service-name" :class="{ active: selectedService === 'DESIGN' }">
+          <ul @mouseleave="onMouseLeave">
+            <li 
+              v-for="service in services" 
+              :key="service.serviceName" 
+              class="service-name" 
+              :class="{ active: selectedService === service.serviceName }"
+              @mouseover="onServiceHover(service.serviceName)"
+              @click="selectService(service.serviceName)"
+            >
               <h4>
-                <a @click="selectService('DESIGN')"><span>DESIGN</span></a>
-              </h4>
-            </li>
-            <li class="service-name" :class="{ active: selectedService === 'ENGAGEMENT' }">
-              <h4>
-                <a @click="selectService('ENGAGEMENT')"><span>ENGAGEMENT</span></a>
-              </h4>
-            </li>
-            <li class="service-name" :class="{ active: selectedService === 'CONSULTING' }">
-              <h4>
-                <a @click="selectService('CONSULTING')"><span>CONSULTING</span></a>
-              </h4>
-            </li>
-            <li class="service-name" :class="{ active: selectedService === 'EDUCATION & TRAINING' }">
-              <h4>
-                <a @click="selectService('EDUCATION & TRAINING')"><span>EDUCATION &</span><span class="delay">TRAINING</span></a>
-              </h4>
-            </li>
-            <li class="service-name" :class="{ active: selectedService === 'ACTIVATION' }">
-              <h4>
-                <a @click="selectService('ACTIVATION')"><span>ACTIVATION</span></a>
+                <a href="javascript:void(0)"><span>{{ service.serviceName }}</span></a>
               </h4>
             </li>
           </ul>
         </div>
         <div class="services-right">
-          <ul v-for="service in services" :key="service.serviceName" class="service-breakdown" v-show="selectedService === service.serviceName">
+          <ul 
+            v-for="service in services" 
+            :key="service.serviceName" 
+            class="service-breakdown" 
+            v-show="selectedService === service.serviceName"
+          >
             <li v-for="area in service.serviceAreas" :key="area">{{ area }}</li>
           </ul>
         </div>
