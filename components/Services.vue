@@ -54,7 +54,6 @@ const onServiceHover = (serviceName) => {
 
 // Function to handle mouse leaving the service list
 const onMouseLeave = () => {
-  console.log("mouseleave");
   selectedService.value = lastSelectedService.value;
 };
 
@@ -72,26 +71,59 @@ const selectService = (serviceName) => {
         <div class="services-left">
           <ul @mouseleave="onMouseLeave">
             <li 
-              v-for="service in services" 
-              :key="service.serviceName" 
               class="service-name" 
-              :class="{ active: selectedService === service.serviceName }"
-              @mouseover="onServiceHover(service.serviceName)"
-              @click="selectService(service.serviceName)"
+              :class="{ active: selectedService === 'DESIGN' }" 
+              @mouseover="onServiceHover('DESIGN')"
+              @click="selectService('DESIGN')"
             >
               <h4>
-                <a href="javascript:void(0)"><span>{{ service.serviceName }}</span></a>
+                <a><span>DESIGN</span></a>
+              </h4>
+            </li>
+            <li 
+              class="service-name" 
+              :class="{ active: selectedService === 'ENGAGEMENT' }"
+              @mouseover="onServiceHover('ENGAGEMENT')"
+              @click="selectService('ENGAGEMENT')"
+            >
+              <h4>
+                <a><span>ENGAGEMENT</span></a>
+              </h4>
+            </li>
+            <li 
+              class="service-name" 
+              :class="{ active: selectedService === 'CONSULTING' }"
+              @mouseover="onServiceHover('CONSULTING')"
+              @click="selectService('CONSULTING')"
+            >
+              <h4>
+                <a><span>CONSULTING</span></a>
+              </h4>
+            </li>
+            <li 
+              class="service-name" 
+              :class="{ active: selectedService === 'EDUCATION & TRAINING' }"
+              @mouseover="onServiceHover('EDUCATION & TRAINING')"
+              @click="selectService('EDUCATION & TRAINING')"
+            >
+              <h4>
+                <a><span>EDUCATION &</span><span class="delay">TRAINING</span></a>
+              </h4>
+            </li>
+            <li 
+              class="service-name" 
+              :class="{ active: selectedService === 'ACTIVATION' }"
+              @mouseover="onServiceHover('ACTIVATION')"
+              @click="selectService('ACTIVATION')"
+            >
+              <h4>
+                <a><span>ACTIVATION</span></a>
               </h4>
             </li>
           </ul>
         </div>
         <div class="services-right">
-          <ul 
-            v-for="service in services" 
-            :key="service.serviceName" 
-            class="service-breakdown" 
-            v-show="selectedService === service.serviceName"
-          >
+          <ul v-for="service in services" :key="service.serviceName" class="service-breakdown" v-show="selectedService === service.serviceName">
             <li v-for="area in service.serviceAreas" :key="area">{{ area }}</li>
           </ul>
         </div>
