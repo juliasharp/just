@@ -199,7 +199,7 @@ const selectService = (serviceName) => {
           bottom: 0px;
         }
         @media (max-width: 760px) {
-          bottom: 2px;
+          bottom: -2px;
           height: 3px;
         }
       }
@@ -233,7 +233,8 @@ const selectService = (serviceName) => {
         padding-bottom: 36px;
       }
       @media (max-width: 760px) {
-        font-size: 4.7vw;
+        font-size: 27px;
+        padding-bottom: 42px;
       }
     }
   }

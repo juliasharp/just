@@ -33,7 +33,7 @@ const route = useRoute();
          padding: 65px 0;
       }
       @media (max-width: 760px) {
-         padding: 40px 0;
+         padding: 55px 0;
       }
    }
    &-container {
