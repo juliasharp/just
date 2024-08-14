@@ -116,7 +116,7 @@ onBeforeUnmount(() => {
               </Carousel>
             </template>
             <template v-else>
-              <li v-for="(project, index) in projects" :key="projects.name" :class="activeProject === project.name ? 'active' : ''">
+              <li v-for="(project, index) in projects" :key="projects.name" :class="{ active: activeProject === project.name }">
                 <a @click="selectProject(project.name)">{{ project.name }}</a>
               </li>
             </template>
@@ -221,6 +221,10 @@ onBeforeUnmount(() => {
         height: 1px;
         left: -30px;
       }
+      @media (max-width: 760px) {
+        width: calc(100% + 20px);
+        left: -10px;
+      }
     }
     h3 {
       font-family: "Neumatic Compressed";
@@ -246,6 +250,7 @@ onBeforeUnmount(() => {
     @media (min-width: 1181px) {
       flex-basis: 320px;
       padding-right: 75px;
+      padding-left: 12px;
       flex-shrink: 0;
     }
     @media (min-width: 1601px) {
@@ -253,6 +258,9 @@ onBeforeUnmount(() => {
     }
     @media (max-width: 1180px) {
       margin-top: 50px;
+    }
+    @media (max-width: 760px) {
+      margin-bottom: 24px;
     }
     &:before {
       content: '';
@@ -272,6 +280,10 @@ onBeforeUnmount(() => {
         width: calc(100% + 60px);
         left: -30px;
       }
+      @media (max-width: 760px) {
+        width: calc(100% + 20px);
+        left: -10px;
+      }
     }
   }
   &-names {
@@ -279,16 +291,31 @@ onBeforeUnmount(() => {
     li {
       font-family: 'Inter Bold';
       color: #C6F250;
-      font-size: 35px;
+      font-size: 32px;
       padding-bottom: 90px;
       @media (max-width: 1600px) {
         font-size: 2vw;
         padding-bottom: 6vw;
       }
       @media (max-width: 1280px) {
+        font-size: 25px;
+      }
+      @media (max-width: 900px) {
+        font-size: 20px;
       }
       @media (max-width: 760px) {
-        font-size: 3.3vw;
+        font-size: 18px;
+      }
+      &.active {
+        // &:before {
+        //   content: '';
+        //   background: url('/src/asterisk.svg');
+        //   width: 23px;
+        //   height: 23px;
+        //   position: absolute;
+        //   top: 3px;
+        //   left: -21px;
+        // }
       }
     }
   }
