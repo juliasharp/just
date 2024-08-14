@@ -34,8 +34,8 @@ function showForm() {
           <p>GET IN TOUCH</p>
         </div>
         <div class="footer-right flex">
-          <NuxtLink to="https://www.instagram.com/__justdesign/">@__justdesign</NuxtLink>
-          <NuxtLink to="https://www.linkedin.com/company/just-design-inc/"><LinkedinSVG class="linkedin" /></NuxtLink>
+          <NuxtLink to="https://www.instagram.com/__justdesign/" target="_blank">@__justdesign</NuxtLink>
+          <NuxtLink to="https://www.linkedin.com/company/just-design-inc/" target="_blank"><LinkedinSVG class="linkedin" /></NuxtLink>
           <a @click="showForm">CONTACT</a>
         </div>
       </div>
