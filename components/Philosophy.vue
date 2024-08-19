@@ -68,7 +68,7 @@ onMounted(() => {
   &-container {
     padding-left: 80px;
     padding-right: 80px;
-    max-width: 1825px;
+    max-width: 1925px;
     margin: 0 auto;
     @media (max-width: 767px) {
       padding-left: 30px;

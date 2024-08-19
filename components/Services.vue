@@ -140,8 +140,11 @@ const selectService = (serviceName) => {
   &-container {
     max-width: calc(100% - 240px);
     margin: 0 auto;
+    padding: 0 80px;
+    max-width: 1925px;
     @media (max-width: 760px) {
-      max-width: calc(100% - 40px);
+      max-width: 100%;
+      padding: 0 20px;
     }
   }
 }

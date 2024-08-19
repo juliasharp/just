@@ -135,7 +135,7 @@ onBeforeUnmount(() => {
   &-text {
     color: #C6F250;
     font-size: 32px;
-    line-height: 1.3;
+    line-height: 1.35;
     height: 120px;
     @media (max-width: 1600px) {
       font-size: 30px;
@@ -152,7 +152,7 @@ onBeforeUnmount(() => {
     &Header {
       font-family: 'Inter Bold';
       font-size: 40px;
-      padding-bottom: 12px;
+      padding-bottom: 24px;
       color: #C6F250;
       @media (max-width: 760px) {
         font-size: 22px;
@@ -199,11 +199,11 @@ h2 {
 
 .header-item {
   font-family: 'Inter Bold';
-  font-size: 4.68vw;
+  font-size: 90px;
   color: #C6F250;
-  // @media (max-width: 1600px) {
-  //   font-size: 78px;
-  // }
+  @media (max-width: 1600px) {
+    font-size: 4.5vw;
+  }
   // @media (max-width: 1380px) {
   //   font-size: 65px;
   // }
