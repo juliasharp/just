@@ -47,8 +47,8 @@ function onFocus(fieldName: string) {
 }
 
 function onBlur(fieldName: string) {
-  if (!fieldName || !eval(fieldName).value) {
-    focusedField.value = '';
+  if (!eval(fieldName).value) {
+    focusedField.value[fieldName] = false;
   }
 }
 
