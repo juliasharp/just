@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import IconClose from '/src/icon-close.svg?component';
 
-defineProps({
+const props = defineProps({
 	showForm: {
 		type: Boolean,
 		default: true
@@ -59,11 +59,12 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   console.log('Message:', newMessage);
 });
 
+
+
 </script>
 
 <template>
-  <transition name="slide">
-  <form action="https://formspree.io/f/xblrgkle" method="POST" class="contact-form">
+  <form :class="{'is-shown': isShown}" action="https://formspree.io/f/xblrgkle" method="POST" class="contact-form">
     <div class="contact-form__inner">
       <div class="contact-form__header">
         <h3>Let's Collaborate</h3>
@@ -140,7 +141,6 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
       </div>
     </div>
   </form>
-  </transition>
 </template>
 
 <style lang="scss" scoped>
@@ -154,8 +154,18 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   bottom: 0;
   background: #390F7D;
   color: white;
+  overflow: auto;
   width: calc(340px + 17vw);
-  //transform: translate3d(100%, 0, 0);
+  transition: transform 700ms cubic-bezier(0.44, 0.24, 0.16, 1);
+  transform: translate3d(110%, 0, 0); // Default state when closed
+  will-change: transform;
+  transition-delay: 0.5s;
+  &.is-shown {
+    transition-delay: 0.5s;
+    transition: transform 1s cubic-bezier(0.44, 0.24, 0.16, 1);
+    transform: none; // When the form is shown
+    will-change: transform;
+  }
   @media (min-width: 1024px) {
     width: calc(340px + 17vw);
   }
@@ -180,11 +190,19 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
+    @media (max-width: 767px) {
+      padding-right: calc(13.62px + 3.4398vw);
+      padding-left: calc(13.62px + 3.4398vw);
+      padding-top: calc(21.15px + 2.457vw);
+    }
     h3 {
       flex-grow: 1;
       font-size: 45px;
       padding-right: 20px;
       font-family: 'Inter Bold';
+      @media (max-width: 767px) {
+        font-size: calc(26.62px + 3.4398vw);
+      }
     }
   }
   &__footer {

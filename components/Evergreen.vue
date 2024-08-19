@@ -87,21 +87,19 @@ onBeforeUnmount(() => {
 <div class="evergreen">
   <div class="section-bg">
     <div class="evergreen-inner">
-      <!-- <h2>JUST is a creative agency of activists and experts, designing equitable futures NOW !</h2> -->
       <div class="section-scroller js-section-scroller">
-        <!--<script id="section-scroller-data">-->
          <div class="section-scroller__inner">
           <div class="section-scroller__header">
-            <div class="header-item" :ref="'headerContainer'">
-              {{ currentHeader }}
-            </div>
+            <div class="evergreen-textHeader" ref="textHeader">{{ currentTextHeader }}</div>
+            <div class="evergreen-text" ref="textContainer" v-html="currentText"></div>
           </div>
           <div class="evergreen__visual">
             <div class="js-lottie-container" ref="lottieContainer"></div>
           </div>
           <div class="evergreen__footer">
-            <div class="evergreen-textHeader" ref="textHeader">{{ currentTextHeader }}</div>
-            <div class="evergreen-text" ref="textContainer" v-html="currentText"></div>
+            <div class="header-item" :ref="'headerContainer'">
+              {{ currentHeader }}
+            </div>
           </div>
         </div> 
       </div>
@@ -139,6 +137,9 @@ onBeforeUnmount(() => {
     font-size: 32px;
     line-height: 1.3;
     height: 120px;
+    @media (max-width: 1600px) {
+      font-size: 30px;
+    } 
     @media (max-width: 1480px) {
       font-size: 28px;
     } 
@@ -225,8 +226,7 @@ h2 {
   -ms-flex-align: center;
   align-items: center;
   justify-content: center;
-  @media (max-width: 1600px) {
-    top: -120px;
+  @media (max-width: 1280px) {
     transform: scale(0.75);
   }
   // svg path {
