@@ -39,7 +39,7 @@ const currentYear = computed(() => new Date().getFullYear());
   background-size: cover;
   background-position: center center;
   @media (max-width: 1100px) {
-    background-image: url('/public/just-team-mobile.jpg');
+    background-image: url('/public/JUST-team-mobile.jpg');
   }
 }
 
