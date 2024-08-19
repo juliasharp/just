@@ -69,6 +69,7 @@ onMounted(() => {
     padding-left: 80px;
     padding-right: 80px;
     max-width: 1825px;
+    margin: 0 auto;
     @media (max-width: 767px) {
       padding-left: 30px;
       padding-right: 30px;
@@ -79,18 +80,17 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: calc(100vh - 150px);
-    }
-    @media (min-width: 1601px) {
-      height: calc(100vh - 200px);
     }
     h2 {
       opacity: 1; /* Ensure it starts fully visible post-animation */
       transform: translateY(0);
       color: #ffffff;
-      font-size: 3.6vw;
+      font-size: 70px;
       line-height: 1.21;
       margin-bottom: 75px;
+      @media (max-width: 1600px) {
+        font-size: 3.6vw;
+      }
       @media (max-width: 1480px) {
         margin-bottom: 60px;
       }
@@ -114,7 +114,10 @@ onMounted(() => {
 
 .text-inner {
   color: #FFFFFF;
-  font-size: 2.3vw;
+  font-size: 44px;
+  @media (max-width: 1600px) {
+    font-size: 2.3vw;
+  }
   @media (max-width: 1480px) {
     font-size: 28px;
   }
