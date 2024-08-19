@@ -141,19 +141,22 @@ onBeforeUnmount(() => {
       font-size: 30px;
     } 
     @media (max-width: 1480px) {
-      font-size: 28px;
+      font-size: 25px;
     } 
-    @media (max-width: 760px) {
-      font-size: 16px;
+    @media (max-width: 767px) {
+      font-size: 18px;
     }
     span {
       font-family: 'Inter Bold';
     }
     &Header {
       font-family: 'Inter Bold';
-      font-size: 40px;
+      font-size: 48px;
       padding-bottom: 24px;
       color: #C6F250;
+      @media (max-width: 1600px) {
+        font-size: 40px;
+      }
       @media (max-width: 760px) {
         font-size: 22px;
       }
@@ -192,7 +195,7 @@ h2 {
       padding-top: 35px;
     }
     @media (max-width: 760px) {
-      padding-bottom: 40px;
+      padding-bottom: 70px;
     }
   }
 }
@@ -204,14 +207,11 @@ h2 {
   @media (max-width: 1600px) {
     font-size: 4.5vw;
   }
-  // @media (max-width: 1380px) {
-  //   font-size: 65px;
-  // }
   @media (max-width: 1180px) {
-    font-size: 55px;
+    font-size: 42px;
   }
   @media (max-width: 760px) {
-    font-size: 24px;
+    font-size: 22px;
   }
 }
 
