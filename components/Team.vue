@@ -210,9 +210,11 @@ const settings = {
   padding: 100px 0;
   max-width: calc(100% - 240px);
   margin: 0 auto;
-  max-width: 1760px;
+  max-width: 1925px;
+  padding-left: 80px;
+  padding-right: 80px;
   @media (max-width: 1600px) {
-    padding: 75px 0;
+    padding: 75px 80px;
   }
   // @media (max-width: 1180px) {
   //   max-width: calc(100% - 80px);

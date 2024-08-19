@@ -119,9 +119,10 @@ const loadMorePartners = () => {
     max-width: calc(100% - 240px);
     margin: 0 auto;
     margin-bottom: 40px;
-    max-width: 1825px;
+    max-width: 1925px;
+    padding: 0 80px;
     @media (max-width: 760px) {
-      max-width: calc(100% - 80px);
+      padding: 0 40px;
     }
   }
 }
