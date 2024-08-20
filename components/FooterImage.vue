@@ -13,7 +13,10 @@ const currentYear = computed(() => new Date().getFullYear());
     </div>
     <div class="footer-bottom-content">
       <hr class="footer-divider">
-      <p class="copyright">copyright &copy; just {{ currentYear }}</p>
+      <div class="flex footer-copy">
+        <p class="copyright">copyright &copy; just {{ currentYear }}</p>
+        <p class="author">site by <NuxtLink to="https://julia-sharp.com/" target="_blank">JULIA SHARP</NuxtLink></p>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +55,7 @@ const currentYear = computed(() => new Date().getFullYear());
   width: 100%;
   text-align: center;
   padding: 0 50px;
+  letter-spacing: 0.015em;
   @media (max-width: 1000px) {
     font-size: 25px;
   }
@@ -76,9 +80,52 @@ const currentYear = computed(() => new Date().getFullYear());
   font-size: 14px;
   padding: 14px 0;
   color: #C6F250;
+  display: flex;
+  flex-basis: 50%;
   @media (max-width: 767px) {
     margin: 0 20px;
     font-size: 12px;
+  }
+}
+
+.footer-copy {
+  align-items: center;
+  width: 100%;
+}
+
+.author {
+  color: #C6F250;
+  font-family: 'Inter Bold';
+  margin-right: 50px;
+  display: flex;
+  font-size: 14px;
+  text-transform: uppercase;
+  justify-content: flex-end;
+  flex-basis: 50%;
+  @media (max-width: 767px) {
+    margin-right: 20px;
+    font-size: 12px;
+  }
+  a {
+    position: relative;
+    &:before {
+      transform: scaleX(0);
+      transform-origin: bottom left;
+      transition: transform 0.6s ease;
+      content: "";
+      width: calc(100% + 2px);
+      height: 2px;
+      position: absolute;
+      bottom: -4px;
+      left: -1px;
+      z-index: 8;
+      background: #E838BB;
+    }
+    &:hover {
+      &:before {
+        transform: scale(1);
+      }
+    }
   }
 }
 </style>
