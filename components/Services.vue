@@ -162,17 +162,24 @@ const selectService = (serviceName) => {
       list-style: none;
     }
     &-left {
-      flex-basis: 50%;
-      margin-right: 25%;
+      flex-basis: 45%;
+      margin-right: 12%;
       @media (max-width: 1600px) {
-        margin-right: 15%;
+        flex-basis: 40%;
+        margin-right: 10%;
+      }
+      @media (max-width: 767px) {
+        flex-basis: 50%;
       }
     }
     &-right {
-      flex-basis: 40%;
+      flex-basis: 45%;
       flex-shrink: 0;
       @media (max-width: 1600px) {
-        flex-basis: 35%;
+        flex-basis: 50%;
+      }
+      @media (max-width: 767px) {
+        flex-basis: 45%;
       }
     }
   }
@@ -236,7 +243,7 @@ const selectService = (serviceName) => {
         padding-bottom: 36px;
       }
       @media (max-width: 760px) {
-        font-size: 27px;
+        font-size: 25px;
         padding-bottom: 42px;
       }
     }
@@ -245,10 +252,14 @@ const selectService = (serviceName) => {
     color: #ffffff;
     list-style: none;
     li {
-      font-size: 2.5vw;
-      line-height: 1.5;
+      font-size: 2.4vw;
+      line-height: 1.3;
+      padding-bottom: 30px;
+      @media (max-width: 1600px) {
+        padding-bottom: 20px;
+      }
       @media (max-width: 760px) {
-        font-size: 3.5vw;
+        font-size: 16px;
       }
     }
   }

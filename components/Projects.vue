@@ -241,6 +241,10 @@ onBeforeUnmount(() => {
       @media (max-width: 1180px) {
         text-align: center;
       }
+      @media (max-width: 767px) {
+        text-align: center;
+        font-size: 85px;
+      }
     }
   }
   &-center {
