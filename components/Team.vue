@@ -2,12 +2,12 @@
 import IconClose from '/src/icon-close.svg?component';
 import { ref, computed } from 'vue';
 
+const componentRef = ref(null);
 const team = ref([]);
 const selectedTeamMember = ref(null);
 
 const config = useRuntimeConfig();
 
-//TODO: implement click outside to close team bio.
 const encodedQuery = encodeURIComponent(`
   query NewQuery {
     page(id: "6", idType: DATABASE_ID) {
@@ -52,17 +52,28 @@ if (error.value) {
   team.value = data.value;
 }
 
+
 const selectMember = (member) => {
-  selectedTeamMember.value = member;
-  const index = team.value.findIndex((m) => m.name === member.name);
-  if (index > 0) {
-    team.value.unshift(team.value.splice(index, 1)[0]);
+  if (selectedTeamMember.value === member) {
+    selectedTeamMember.value = null;
+  } else {
+    selectedTeamMember.value = member;
+    const index = team.value.findIndex((m) => m.name === member.name);
+    if (index > 0) {
+      team.value.unshift(team.value.splice(index, 1)[0]);
+    }
   }
 };
 
 const closeMember = () => {
   selectedTeamMember.value = null;
 };
+
+watchEffect(() => {
+  useClickOutside(componentRef, () => {
+    selectedTeamMember.value = null;
+  })
+});
 
 const orderedTeam = computed(() => {
   if (selectedTeamMember.value) {
@@ -101,10 +112,11 @@ const settings = {
       <SectionTitle title="our team" color="sage"></SectionTitle>
     </div>
     <div class="team-container">
-      <div class="team-container-inner flex">
+      <div ref="componentRef" class="team-container-inner flex">
           <Carousel v-bind="settings">
             <Slide v-for="(member, index) in orderedTeam" :key="index" class="team-slide" :class="{ 'expanded': selectedTeamMember && selectedTeamMember.name === member.name }">
             <div class="team-slide-content">
+              <!-- toggle open/close when photo is clicked -->
               <a class="team-item" @click="selectMember(member)">
                 <div class="team-photo">
                   <img :src="member.bioPicLink" :alt="member.bioPicAlt" />
@@ -160,6 +172,7 @@ const settings = {
       max-width: calc(100vw / 3);
     }
     img {
+      //transition: transform 0.3s ease-in-out;
       // height: 100%;
     }
   }
@@ -169,7 +182,7 @@ const settings = {
     &-content {
       width: 760px;
       color: #000000;
-      padding: 100px 80px 60px;
+      padding: 90px 80px 60px;
       text-align: left;
       @media (max-width: 1280px) {
         padding: 65px 50px 50px;
@@ -230,6 +243,15 @@ const settings = {
   top: 25px;
   right: 30px;
   cursor: pointer;
+  width: 30px;
+  height: 30px;
+  transition: background 0.3s ease-in-out, color 0.3s;
+  &:hover {
+    background: #000000;
+    svg {
+      color: #ffffff;
+    }
+  }
 }
 
 .aia-banner {

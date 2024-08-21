@@ -80,6 +80,7 @@ onMounted(() => {
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      min-height: calc(100vh - 150px);
     }
     h2 {
       opacity: 1; /* Ensure it starts fully visible post-animation */
