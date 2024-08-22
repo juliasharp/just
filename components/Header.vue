@@ -8,6 +8,43 @@ const lottieContainer = ref(null);
 const showAnimation = ref(true);
 const showVideo = ref(false);
 
+const videoUrl = ref('');
+
+const config = useRuntimeConfig();
+const encodedQuery = encodeURIComponent(`
+  query NewQuery {
+    page(id: "6", idType: DATABASE_ID) {
+      landingPage {
+        headerVideo {
+          node {
+            link
+          }
+        }
+      }
+    }
+  }
+  `
+)
+
+const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${encodedQuery}`, {
+  method: 'get',
+  transform: (data) => {
+    if (data?.data?.page?.landingPage?.headerVideo?.node?.link) {
+      return data.data.page.landingPage.headerVideo.node.link;
+    } else {
+      console.error("Unexpected response structure for headerVideo", data);
+      return '';
+    }
+  }
+});
+
+if (error.value) {
+  console.error('Error fetching video data:', error.value);
+} else {
+  videoUrl.value = data.value;
+  console.log("videoURL: ", videoUrl.value);
+}
+
 const initAnimations = () => {
   const lottieInstance = lottie.loadAnimation({
     container: lottieContainer.value,
@@ -67,7 +104,7 @@ onMounted(() => {
       </div>
     </div>
     <div v-show="showVideo" class="header__video">
-      <video muted loop autoplay playsinline="" src="https://wp.just.design/wp-content/uploads/2024/08/JustWebpage-FINAL.mp4" data-object-fit="contain"></video>
+      <video muted loop autoplay playsinline="" :src="videoUrl" data-object-fit="contain"></video>
     </div>
   </div>
 </template>

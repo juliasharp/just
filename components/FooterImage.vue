@@ -1,13 +1,9 @@
 <script setup lang="ts">
-import LogoSVG from '/src/alt-logo-white.svg?component';
 const currentYear = computed(() => new Date().getFullYear());
 </script>
 
 <template>
   <div class="footer-bottom">
-    <div class="footer-logo">
-      <!-- <LogoSVG /> -->
-    </div>
     <p class="footer-cta">THE FUTURE CAN BE JUST - DESIGN IT !</p>
     <div class="footer-img">
     </div>
