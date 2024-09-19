@@ -2,6 +2,7 @@
 import { gsap } from 'gsap';
 import lottie from 'lottie-web';
 import LogoShapes from '@/assets/just-shapes-NEWNEW.json';
+import LogoShapesMobile from '@/assets/header-shapes-mobile.json';
 
 const lottieContainer = ref(null);
 
@@ -42,23 +43,23 @@ if (error.value) {
   console.error('Error fetching video data:', error.value);
 } else {
   videoUrl.value = data.value;
-  console.log("videoURL: ", videoUrl.value);
 }
 
-const initAnimations = () => {
+const loadAnimation = () => {
+  const isMobile = window.innerWidth < 761;
+  const animationData = isMobile ? LogoShapesMobile : LogoShapes;
+
   const lottieInstance = lottie.loadAnimation({
     container: lottieContainer.value,
     renderer: 'svg',
     loop: false,
     autoplay: false,
-    animationData: LogoShapes
+    animationData: animationData,
   });
 
-  // Ensure the lottie instance is properly initialized
   lottieInstance.addEventListener('DOMLoaded', () => {
     const totalFrames = lottieInstance.totalFrames;
 
-    // Create GSAP timeline after Lottie is loaded
     const animationTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: '.header-container',
@@ -67,11 +68,9 @@ const initAnimations = () => {
         pin: true,
         pinSpacing: true,
         scrub: 0.2,
-        // markers: true, // Uncomment for debugging scroll positions
       },
     });
 
-    // Animate Lottie frames
     animationTimeline.to(
       { frame: 0 },
       {
@@ -87,7 +86,20 @@ const initAnimations = () => {
         }
       }
     );
-    // animationTimeline.call(() => {}, null, '+=1');
+  });
+};
+
+const initAnimations = () => {
+  loadAnimation();
+  
+  const handleResize = () => {
+    loadAnimation();
+  };
+
+  window.addEventListener('resize', handleResize);
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize);
   });
 };
 
@@ -159,7 +171,7 @@ onMounted(() => {
         transform: scale(0.5);
       }
       @media (max-width: 760px) {
-        transform: scale(0.25);
+        transform: scale(0.45);
       }
     }
   }

@@ -77,6 +77,10 @@ function showContact() {
   cursor: pointer;
 	color: #fff;
 	mix-blend-mode: difference;
+	@media (max-width: 760px) {
+		margin-top: 20px;
+		margin-right: 20px;
+	}
 	svg * {
     fill: currentColor;
 	}
