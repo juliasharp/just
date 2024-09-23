@@ -8,7 +8,7 @@ const encodedQuery = encodeURIComponent(`
     page(id: "6", idType: DATABASE_ID) {
       landingPage {
         testimonials {
-          author
+          authorName
           quote
           authorTitlw
         }
