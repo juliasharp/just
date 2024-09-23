@@ -23,7 +23,7 @@ const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${en
     if (data?.data?.page?.landingPage?.testimonials) {
       return data.data.page.landingPage.testimonials.map((testimonial) => ({
         quote: testimonial.quote,
-        authorName: testimonial.author,
+        author: testimonial.authorName,
         authorTitle: testimonial.authorTitlw,
       }));
     } else {
