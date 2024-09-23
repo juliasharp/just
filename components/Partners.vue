@@ -80,7 +80,7 @@ const loadMorePartners = () => {
   <div class="partners-outer section-bg section-with-title">
     <Testimonials />
     <div class="section-container">
-      <SectionTitle title="collaborators" color="acid"></SectionTitle>
+      <SectionTitle title="collaborators" color="brown"></SectionTitle>
       <ul class="partners">
         <li v-for="(partner, index) in visiblePartners" :key="index">
           <PartnerLogo 

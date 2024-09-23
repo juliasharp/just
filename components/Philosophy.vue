@@ -17,14 +17,13 @@ const initAnimations = () => {
   gsap.from('.philosophy-text h2', {
     opacity: 0,
     y: 5, // Slight upward motion for a more dynamic effect
-    duration: 2,
+    duration: 3,
     ease: 'ease-in-out',
     delay: 1,
     scrollTrigger: {
       trigger: '.philosophy-text h2',
-      start: 'top 60%', // Adjust this value based on when you want the fade to star
-      toggleActions: 'play none none none', // Play the animation once when the trigger is hit
-      // markers: true,
+      start: 'top 60%',
+      toggleActions: 'play none none none',
     }
   });
 
@@ -40,7 +39,11 @@ onMounted(() => {
   <div class="philosophy section-with-title">
     <div class="philosophy-container">
       <div class="philosophy-text">
-        <h2><span>JUST</span> is a creative agency of activists and experts, designing equitable futures <span>NOW</span> !</h2>
+        <div class="philosophy-text-heading-outer">
+          <div class="philosophy-text-heading">
+            <h2><span>JUST</span> is a creative agency of activists and experts, designing equitable futures <span>NOW</span> !</h2>
+          </div>
+        </div>
         <div class="text-inner">
           <SectionTitle title="philosophy // approach" color="pink"></SectionTitle>
           <p>Unjust systems have been by design - they can and must be redesigned!</p>
@@ -88,22 +91,87 @@ onMounted(() => {
       color: #ffffff;
       font-size: 70px;
       line-height: 1.21;
-      margin-bottom: 75px;
+      position: relative;
+      padding: 70px 80px;
       @media (max-width: 1600px) {
-        font-size: 3.6vw;
-      }
-      @media (max-width: 1480px) {
-        margin-bottom: 60px;
+        font-size: 3.8vw;
       }
       @media (max-width: 1600px) {
-        font-size: 3.5vw;
+        font-size: 3.7vw;
+      }
+      @media (max-width: 1280px) {
+        padding: 50px 60px;
       }
       @media (max-width: 760px) {
         font-size: 22px;
-        margin-bottom: 35px;
+        padding: 30px 20px 30px 40px;
       }
       span {
         font-family: 'Inter Bold';
+      }
+    }
+    &-heading {
+      position: relative;
+      &:before {
+        content: '';
+        width: 55px;
+        height: 10px;
+        background: #E838BB;
+        position: absolute;
+        @media (max-width: 760px) {
+          width: 40px;
+          height: 8px;
+        }
+      }
+      &:after {
+        content: '';
+        width: 10px;
+        height: 55px;
+        background: #E838BB;
+        position: absolute;
+        top: 10px;
+        @media (max-width: 760px) {
+          width: 8px;
+          height: 40px;
+          top: 8px;
+        }
+      }
+      &-outer {
+        position: relative;
+        margin-bottom: 75px;
+        @media (max-width: 1480px) {
+          margin-bottom: 60px;
+        }
+        @media (max-width: 760px) {
+          margin-bottom: 35px;
+        }
+        &:before {
+          content: '';
+          width: 55px;
+          height: 10px;
+          background: #E838BB;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          @media (max-width: 760px) {
+            width: 40px;
+            height: 8px;
+          }
+        }
+        &:after {
+          content: '';
+          width: 10px;
+          height: 55px;
+          background: #E838BB;
+          position: absolute;
+          right: 0;
+          bottom: 10px;
+          @media (max-width: 760px) {
+            width: 8px;
+            height: 40px;
+            bottom: 8px;
+          }
+        }
       }
     }
   }
@@ -117,10 +185,14 @@ onMounted(() => {
   color: #FFFFFF;
   font-size: 39px;
   line-height: 1.3;
+  font-family: 'Inter Medium';
   @media (max-width: 1600px) {
     font-size: 2.3vw;
   }
   @media (max-width: 1480px) {
+    font-size: 32px;
+  }
+  @media (max-width: 1180px) {
     font-size: 28px;
   }
   @media (max-width: 760px) {

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
 import lottie from 'lottie-web';
+import type { AnimationItem } from 'lottie-web';
 import LogoShapes from '@/assets/just-shapes-NEWNEW.json';
 import LogoShapesMobile from '@/assets/header-shapes-mobile.json';
 
-const lottieContainer = ref(null);
+const lottieContainer = ref<HTMLElement | null>(null);
 
 const showAnimation = ref(true);
 const showVideo = ref(false);
@@ -45,20 +46,28 @@ if (error.value) {
   videoUrl.value = data.value;
 }
 
-const loadAnimation = () => {
-  const isMobile = window.innerWidth < 761;
+let currentLottieInstance: AnimationItem | null = null;
+const isMobileView = ref(false); // Initial check for mobile view
+
+const loadAnimation = (isMobile: boolean) => {
+  // Destroy the previous Lottie instance if it exists
+  if (currentLottieInstance) {
+    currentLottieInstance.destroy();
+  }
+
   const animationData = isMobile ? LogoShapesMobile : LogoShapes;
 
-  const lottieInstance = lottie.loadAnimation({
-    container: lottieContainer.value,
+  // Load the appropriate animation based on the current view
+  currentLottieInstance = lottie.loadAnimation({
+    container: lottieContainer.value as HTMLElement,
     renderer: 'svg',
     loop: false,
     autoplay: false,
     animationData: animationData,
   });
 
-  lottieInstance.addEventListener('DOMLoaded', () => {
-    const totalFrames = lottieInstance.totalFrames;
+  currentLottieInstance.addEventListener('DOMLoaded', () => {
+    const totalFrames = currentLottieInstance?.totalFrames || 0;
 
     const animationTimeline = gsap.timeline({
       scrollTrigger: {
@@ -78,33 +87,43 @@ const loadAnimation = () => {
         duration: 1.2,
         ease: 'power1.inOut',
         onUpdate: function () {
-          lottieInstance.goToAndStop(Math.round(this.targets()[0].frame), true);
+          if (currentLottieInstance) {
+            currentLottieInstance.goToAndStop(Math.round((this.targets() as any)[0].frame), true);
+          }
         },
         onComplete: () => {
           showAnimation.value = false;
           showVideo.value = true;
-        }
+        },
       }
     );
   });
 };
 
-const initAnimations = () => {
-  loadAnimation();
-  
-  const handleResize = () => {
-    loadAnimation();
-  };
+const handleResize = () => {
+  if (typeof window !== 'undefined') {
+    const isNowMobile = window.innerWidth < 761;
 
-  window.addEventListener('resize', handleResize);
-
-  onBeforeUnmount(() => {
-    window.removeEventListener('resize', handleResize);
-  });
+    // Only reload the animation if the mobile/desktop view has changed
+    if (isNowMobile !== isMobileView.value) {
+      isMobileView.value = isNowMobile;
+      loadAnimation(isMobileView.value); // Load the correct animation for the current view
+    }
+  }
 };
 
 onMounted(() => {
-  initAnimations();
+  if (typeof window !== 'undefined') {
+    // Initial check for mobile view after the component has mounted (client-side only)
+    isMobileView.value = window.innerWidth < 761;
+    loadAnimation(isMobileView.value); // Initialize the animation on mount
+
+    window.addEventListener('resize', handleResize); // Add the resize event listener
+  }
+
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize); // Cleanup event listener on unmount
+  });
 });
 </script>
 

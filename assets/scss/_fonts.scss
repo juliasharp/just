@@ -6,6 +6,13 @@
 }
 
 @font-face {
+  font-family: "Inter Medium";
+  src: url('@/assets/fonts/Inter-Medium.ttf');
+  font-display: swap;
+  font-weight: 500;
+}
+
+@font-face {
   font-family: "Inter Bold";
   src: url('@/assets/fonts/Inter-Bold.ttf');
   font-display: swap;
