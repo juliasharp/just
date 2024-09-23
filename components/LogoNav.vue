@@ -65,7 +65,8 @@ function showContact() {
 }
 
 .mail-button {
-	margin-top: 35px;
+	margin-top: 25px;
+	margin-right: 25px;
 	width: 48px;
 	height: 48px;
 	border-radius: 50%;
