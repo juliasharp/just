@@ -147,7 +147,7 @@ onMounted(() => {
     justify-content: center;
     align-items: center;
     @media (max-width: 760px) {
-      padding: 7px;
+      padding: 5px;
     }
     video {
       position: absolute;
@@ -171,7 +171,7 @@ onMounted(() => {
         transform: scale(0.5);
       }
       @media (max-width: 760px) {
-        transform: scale(0.45);
+        transform: scale(0.35);
       }
     }
   }

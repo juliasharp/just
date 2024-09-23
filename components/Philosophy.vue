@@ -68,7 +68,7 @@ onMounted(() => {
   &-container {
     padding-left: 80px;
     padding-right: 80px;
-    max-width: 1925px;
+    max-width: 1825px;
     margin: 0 auto;
     @media (max-width: 767px) {
       padding-left: 30px;
@@ -115,7 +115,8 @@ onMounted(() => {
 
 .text-inner {
   color: #FFFFFF;
-  font-size: 44px;
+  font-size: 39px;
+  line-height: 1.3;
   @media (max-width: 1600px) {
     font-size: 2.3vw;
   }
@@ -131,9 +132,12 @@ onMounted(() => {
   ul {
     margin-top: 38px;
     margin-left: 26px;
-    font-size: 2vw;
+    font-size: 39px;
+    @media (max-width: 1600px) {
+      font-size: 2.3vw;
+    }
     @media (max-width: 1480px) {
-      font-size: 26px;
+      font-size: 28px;
     }
     @media (max-width: 760px) {
     font-size: 16px;

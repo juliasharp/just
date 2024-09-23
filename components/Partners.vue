@@ -78,8 +78,9 @@ const loadMorePartners = () => {
 
 <template>
   <div class="partners-outer section-bg section-with-title">
+    <Testimonials />
     <div class="section-container">
-      <SectionTitle title="collaborators" color="brown"></SectionTitle>
+      <SectionTitle title="collaborators" color="acid"></SectionTitle>
       <ul class="partners">
         <li v-for="(partner, index) in visiblePartners" :key="index">
           <PartnerLogo 
@@ -119,7 +120,7 @@ const loadMorePartners = () => {
     max-width: calc(100% - 240px);
     margin: 0 auto;
     margin-bottom: 40px;
-    max-width: 1925px;
+    max-width: 1825px;
     padding: 0 80px;
     @media (max-width: 760px) {
       padding: 0 40px;

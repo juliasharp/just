@@ -29,6 +29,7 @@ defineProps({
     }
     @media (max-width: 1280px) {
       max-width: 100px;
+      max-height: 45px;
     }
   }
 }
