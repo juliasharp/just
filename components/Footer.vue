@@ -88,6 +88,9 @@ function showForm() {
 
 .footer {
   height: 100vh;
+  @media (max-width: 767px) {
+    height: 400px;
+  }
   &-container {
     flex-direction: column;
     justify-content: flex-end;

@@ -21,11 +21,17 @@ const currentYear = computed(() => new Date().getFullYear());
 .footer-bottom {
   position: relative;
   height: 100vh;
+  @media (max-width: 767px) {
+    height: 400px;
+  }
   &-content {
     display: flex;
     flex-direction: column;
     height: 100vh;
     justify-content: end;
+    @media (max-width: 767px) {
+      height: 400px;
+    }
   }
 }
 
@@ -39,6 +45,9 @@ const currentYear = computed(() => new Date().getFullYear());
   background-position: center center;
   @media (max-width: 1100px) {
     background-image: url('/public/JUST-team-mobile.jpg');
+  }
+  @media (max-width: 767px) {
+    height: 400px;
   }
 }
 
@@ -56,8 +65,8 @@ const currentYear = computed(() => new Date().getFullYear());
     font-size: 25px;
   }
   @media (max-width: 767px) {
-    font-size: 18px;
-    padding: 0 20px;
+    font-size: 17px;
+    padding: 0 10px;
   }
 }
 
