@@ -8,7 +8,6 @@ const encodedQuery = encodeURIComponent(`
     page(id: "6", idType: DATABASE_ID) {
       landingPage {
         testimonials {
-          authorName
           quote
           authorTitlw
         }
@@ -23,7 +22,7 @@ const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${en
     if (data?.data?.page?.landingPage?.testimonials) {
       return data.data.page.landingPage.testimonials.map((testimonial) => ({
         quote: testimonial.quote,
-        author: testimonial.authorName,
+        // author: testimonial.authorName,
         authorTitle: testimonial.authorTitlw,
       }));
     } else {
@@ -61,7 +60,7 @@ const settings = {
               <div class="testimonial-slide">
                 <p class="quote">{{ testimonial.quote }}</p>
                 <div class="author">
-                  <span class="author-name">{{ testimonial.author }}</span>
+                  <!-- <span class="author-name">{{ testimonial.author }}</span> -->
                   <span class="author-title">{{ testimonial.authorTitle }}</span>
                 </div>
               </div>
@@ -103,6 +102,7 @@ const settings = {
     margin: 20px auto 80px;
     position: relative;
     @media (max-width: 760px) {
+      margin-top: 0;
       padding: 0 40px;
     }
     &:before {
@@ -114,9 +114,9 @@ const settings = {
       bottom: 0;
       right: 50px;
       @media (max-width: 760px) {
-        right: 40px;
-        width: 40px;
-        height: 8px;
+        right: 30px;
+        width: 30px;
+        height: 4px;
       }
     }
     &:after {
@@ -128,10 +128,10 @@ const settings = {
       right: 50px;
       bottom: 10px;
       @media (max-width: 760px) {
-        right: 40px;
-        width: 8px;
-        height: 40px;
-        bottom: 8px;
+        right: 30px;
+        width: 4px;
+        height: 30px;
+        bottom: 0px;
       }
     }
   }
@@ -146,8 +146,8 @@ const settings = {
       background: #E838BB;
       position: absolute;
       @media (max-width: 760px) {
-        width: 40px;
-        height: 8px;
+        width: 30px;
+        height: 4px;
       }
     }
     &:after {
@@ -158,9 +158,9 @@ const settings = {
       position: absolute;
       top: 10px;
       @media (max-width: 760px) {
-        width: 8px;
-        height: 40px;
-        top: 8px;
+        width: 4px;
+        height: 30px;
+        top: 4px;
       }
     }
   }
@@ -172,7 +172,7 @@ const settings = {
       padding: 50px 60px;
     }
     @media (max-width: 760px) {
-      padding: 20px 20px 20px 40px;
+      padding: 30px;
     }
   }
 }
@@ -205,8 +205,8 @@ const settings = {
       width: 90px;
     }
     @media (max-width: 760px) {
-      width: 70px;
-      height: 7px;
+      width: 40px;
+      height: 4px;
       bottom: 22px;
     }
   }

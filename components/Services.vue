@@ -232,9 +232,9 @@ const selectService = (serviceName) => {
       text-transform: uppercase;
       font-size: 3.9vw;
       line-height: 1.1;
-      padding-bottom: 60px;
+      padding-bottom: 52px;
       @media (max-width: 1800px) {
-        padding-bottom: 30px;
+        padding-bottom: 50px;
       }
       @media (max-width: 1600px) {
         padding-bottom: 50px;

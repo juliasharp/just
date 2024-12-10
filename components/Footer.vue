@@ -29,14 +29,16 @@ function showForm() {
 <template>
   <div class="footer">
     <div class="section-bg footer-container flex">
-      <div class="flex space-between footer-inner">
-        <div class="footer-left">
-          <p>GET IN TOUCH</p>
-        </div>
-        <div class="footer-right flex">
-          <NuxtLink to="https://www.instagram.com/__justdesign/" target="_blank">@__justdesign</NuxtLink>
-          <NuxtLink to="https://www.linkedin.com/company/just-design-inc/" target="_blank"><LinkedinSVG class="linkedin" /></NuxtLink>
-          <a @click="showForm">CONTACT</a>
+      <div class="noise">
+        <div class="flex space-between footer-inner">
+          <div class="footer-left">
+            <p>GET IN TOUCH</p>
+          </div>
+          <div class="footer-right flex">
+            <NuxtLink to="https://www.instagram.com/__justdesign/" target="_blank">@__justdesign</NuxtLink>
+            <NuxtLink to="https://www.linkedin.com/company/just-design-inc/" target="_blank"><LinkedinSVG class="linkedin" /></NuxtLink>
+            <a @click="showForm">CONTACT</a>
+          </div>
         </div>
       </div>
     </div>
@@ -45,10 +47,11 @@ function showForm() {
 
 <style lang="scss" scoped>
 .section-bg {
-  position: absolute;
-  width: 100%;
+  // position: absolute;
+  // width: 100%;
   height: 100%;
-  background: url('/src/yellow-grain.jpg');
+  //background: url('/src/yellow-grain.jpg');
+  background: #c6f250;
   &:before {
     content: '';
     display: block;
@@ -98,11 +101,15 @@ function showForm() {
   &-inner {
     align-items: flex-end;
     margin: 0 50px;
+    height: 100%;
+    z-index: 9;
     @media (max-width: 1280px) {
       margin: 0 20px;
     }
     @media (max-width: 760px) {
-      display: block;
+      flex-direction: column;
+      justify-content: end;
+      align-items: flex-start;
     }
   }
   &-left {
@@ -163,5 +170,24 @@ function showForm() {
 .linkedin {
   width: 15px;
   height: 17px;
+}
+
+.noise {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  &:after {
+    position: absolute;
+    top: -10rem;
+    left: -10rem;
+    width: calc(100% + 20rem);
+    height: calc(100% + 20rem);
+    animation: noise 1s steps(2) infinite;
+    background-image: url('/public/noise.png');
+    background-position: 50%;
+    content: '';
+    will-change: transform;
+  }
 }
 </style>

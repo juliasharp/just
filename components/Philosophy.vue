@@ -103,8 +103,8 @@ onMounted(() => {
         padding: 50px 60px;
       }
       @media (max-width: 760px) {
-        font-size: 22px;
-        padding: 30px 20px 30px 40px;
+        font-size: 20px;
+        padding: 25px;
       }
       span {
         font-family: 'Inter Bold';
@@ -119,8 +119,8 @@ onMounted(() => {
         background: #E838BB;
         position: absolute;
         @media (max-width: 760px) {
-          width: 40px;
-          height: 8px;
+          width: 30px;
+          height: 4px;
         }
       }
       &:after {
@@ -131,9 +131,9 @@ onMounted(() => {
         position: absolute;
         top: 10px;
         @media (max-width: 760px) {
-          width: 8px;
-          height: 40px;
-          top: 8px;
+          width: 4px;
+          height: 30px;
+          top: 0px;
         }
       }
       &-outer {
@@ -154,8 +154,8 @@ onMounted(() => {
           bottom: 0;
           right: 0;
           @media (max-width: 760px) {
-            width: 40px;
-            height: 8px;
+            width: 30px;
+            height: 4px;
           }
         }
         &:after {
@@ -167,9 +167,9 @@ onMounted(() => {
           right: 0;
           bottom: 10px;
           @media (max-width: 760px) {
-            width: 8px;
-            height: 40px;
-            bottom: 8px;
+            width: 4px;
+            height: 30px;
+            bottom: 0px;
           }
         }
       }
