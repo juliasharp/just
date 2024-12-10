@@ -5,6 +5,8 @@ import type { AnimationItem } from 'lottie-web';
 import LogoShapes from '@/assets/just-shapes-NEWNEW.json';
 import LogoShapesMobile from '@/assets/header-shapes-mobile.json';
 
+gsap.registerPlugin(ScrollTrigger);
+
 const lottieContainer = ref<HTMLElement | null>(null);
 
 const showAnimation = ref(true);
@@ -53,6 +55,7 @@ const loadAnimation = (isMobile: boolean) => {
   // Destroy the previous Lottie instance if it exists
   if (currentLottieInstance) {
     currentLottieInstance.destroy();
+    currentLottieInstance = null; //clear reference
   }
 
   const animationData = isMobile ? LogoShapesMobile : LogoShapes;
@@ -62,68 +65,98 @@ const loadAnimation = (isMobile: boolean) => {
     container: lottieContainer.value as HTMLElement,
     renderer: 'svg',
     loop: false,
-    autoplay: false,
-    animationData: animationData,
+    autoplay: isMobile, //autoplay mobile animation
+    animationData,
   });
 
+  // Clean up the specific ScrollTrigger for this section
+  const lottieTrigger = ScrollTrigger.getById('lottieScrollTrigger');
+  if (lottieTrigger) {
+    lottieTrigger.kill();
+  }
+
   currentLottieInstance.addEventListener('DOMLoaded', () => {
-    const totalFrames = currentLottieInstance?.totalFrames || 0;
+    if (isMobile) {
+      // Start the animation immediately if on mobile
+      currentLottieInstance?.play();
 
-    const animationTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: '.header-container',
-        start: 'top top',
-        end: window.innerHeight + ' top',
-        pin: true,
-        pinSpacing: true,
-        scrub: 0.2,
-      },
-    });
+      currentLottieInstance?.addEventListener('complete', () => {
+        showAnimation.value = false; // Hide the animation
+        showVideo.value = true; // Show the video
+      });
+    } else {
+      const totalFrames = currentLottieInstance?.totalFrames || 0;
 
-    animationTimeline.to(
-      { frame: 0 },
-      {
-        frame: totalFrames - 1,
-        duration: 1.2,
-        ease: 'power1.inOut',
-        onUpdate: function () {
-          if (currentLottieInstance) {
-            currentLottieInstance.goToAndStop(Math.round((this.targets() as any)[0].frame), true);
-          }
+      const animationTimeline = gsap.timeline({
+        scrollTrigger: {
+          id: 'lottieScrollTrigger',
+          trigger: '.header-container',
+          start: 'top top',
+          end: `${window.innerHeight} top`,
+          pin: true,
+          pinSpacing: true,
+          scrub: 0.2,
         },
-        onComplete: () => {
-          showAnimation.value = false;
-          showVideo.value = true;
-        },
+      });
+
+      animationTimeline.to(
+        { frame: 0 },
+        {
+          frame: totalFrames - 1,
+          duration: 1.2,
+          ease: 'power1.inOut',
+          onUpdate: function () {
+            if (currentLottieInstance) {
+              currentLottieInstance.goToAndStop(Math.round((this.targets() as any)[0].frame), true);
+            }
+          },
+          onComplete: () => {
+            showAnimation.value = false;
+            showVideo.value = true;
+          },
+        }
+      );
       }
-    );
   });
 };
 
 const handleResize = () => {
-  if (typeof window !== 'undefined') {
-    const isNowMobile = window.innerWidth < 761;
+  const isNowMobile = window.innerWidth < 761;
 
-    // Only reload the animation if the mobile/desktop view has changed
-    if (isNowMobile !== isMobileView.value) {
-      isMobileView.value = isNowMobile;
-      loadAnimation(isMobileView.value); // Load the correct animation for the current view
-    }
+  if (isNowMobile !== isMobileView.value) {
+    isMobileView.value = isNowMobile;
+    loadAnimation(isMobileView.value);
+  }
+
+  // Adjust Lottie container dimensions
+  if (lottieContainer.value) {
+    lottieContainer.value.style.height = `${window.innerHeight}px`;
+    lottieContainer.value.style.width = '100%';
   }
 };
 
-onMounted(() => {
-  if (typeof window !== 'undefined') {
-    // Initial check for mobile view after the component has mounted (client-side only)
-    isMobileView.value = window.innerWidth < 761;
-    loadAnimation(isMobileView.value); // Initialize the animation on mount
+// Debounce resize handler
+const debounce = (fn: () => void, delay: number) => {
+  let timeout: NodeJS.Timeout;
+  return () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(fn, delay);
+  };
+};
 
-    window.addEventListener('resize', handleResize); // Add the resize event listener
+onMounted(() => {
+  isMobileView.value = window.innerWidth < 761;
+  loadAnimation(isMobileView.value);
+
+  window.addEventListener('resize', debounce(handleResize, 150));
+});
+
+onBeforeUnmount(() => {
+  if (currentLottieInstance) {
+    currentLottieInstance.destroy();
   }
 
-  onBeforeUnmount(() => {
-    window.removeEventListener('resize', handleResize); // Cleanup event listener on unmount
-  });
+  window.removeEventListener('resize', handleResize);
 });
 </script>
 
