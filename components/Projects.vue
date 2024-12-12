@@ -373,7 +373,7 @@ onBeforeUnmount(() => {
     top: 7px;
     left: -33px;
     @media (max-width: 760px) {
-      top: 4px;
+      top: 2px;
       left: -25px;
     }
   }
