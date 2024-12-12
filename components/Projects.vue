@@ -127,8 +127,7 @@ onBeforeUnmount(() => {
         </div>
         <div class="project-right">
           <div class="project-info" v-for="(project, index) in projects" :key="carouselKey" v-show="selectedProject === project.name">
-            <!-- <Carousel :items-to-show="1" :wrap-around="true" :autoplay="2500" :key="project.name"> -->
-              <Carousel :items-to-show="1" :wrap-around="true" :key="project.name">
+            <Carousel :items-to-show="1" :wrap-around="true" :autoplay="2500" :key="project.name">
               <Slide v-for="(image, imgIndex) in project.images" :key="imgIndex">
                 <img class="project-img" :src="image.link" :alt="image.altText" />
               </Slide>
