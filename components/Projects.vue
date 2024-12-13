@@ -392,6 +392,9 @@ onBeforeUnmount(() => {
     left: 20px;
     color: black;
     padding: 5px 10px;
+    @media (max-width: 760px) {
+      font-size: 14px;
+    }
   }
   &-info {
     color: #C6F250;
@@ -404,6 +407,9 @@ onBeforeUnmount(() => {
       @media (max-width: 1600px) {
         margin: 25px 0 20px;
       }
+      @media (max-width: 760px) {
+        font-size: 12px;
+      }
     }
     h5 {
       font-family: 'Inter Bold';
@@ -415,6 +421,9 @@ onBeforeUnmount(() => {
       }
       @media (max-width: 1280px) {
         font-size: 28px;
+      }
+      @media (max-width: 760px) {
+        font-size: 24px;
       }
     }
     p {
