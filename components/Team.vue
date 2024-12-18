@@ -447,6 +447,10 @@ const settings = {
   width: 30px;
   height: 30px;
   transition: background 0.3s ease-in-out, color 0.3s;
+  @media (max-width: 760px) {
+    top: 15px;
+    right: 15px;
+  }
   &:hover {
     background: #000000;
     svg {

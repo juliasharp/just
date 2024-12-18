@@ -299,7 +299,11 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   text-transform: none;
   font-weight: normal;
   color: rgb(0, 0, 0);
-  margin-bottom: calc(13.57px + 0.446828vw)
+  margin-bottom: calc(13.57px + 0.446828vw);
+  @media (max-width: 760px) {
+    font-size: 15px;
+    margin-bottom: calc(20px + 0.446828vw);
+  }
 }
 
 .form-input__field input {
@@ -315,6 +319,10 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   border-bottom-color: rgb(240, 240, 238);
   @media (min-width: 1024px) {
     padding-top: calc(13.43px + 0.178731vw);
+  }
+  @media (max-width: 760px) {
+    font-size: 15px;
+    height: 35px;
   }
 }
 
