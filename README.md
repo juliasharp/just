@@ -1,16 +1,3 @@
-# TO DO
-- finalize intro shapes
-- finalize evergreen shapes
-- evergreen highlights
-- services highlight - make them rounded and non-perfect
-- featured projects squares
-- find space for team photo
-- footer arrow
-- header contact button colors
-- contact form button
-- add read more collapse to projects
-- see more/less for partners
-
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
