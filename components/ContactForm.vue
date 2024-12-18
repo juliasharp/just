@@ -81,7 +81,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
             label="Name"
             name="name"
             spellcheck="false"
-            class="form-input"
+            class="input-field"
             v-model="name"
             @focus="onFocus('name')"
             @blur="onBlur('name')"
@@ -94,7 +94,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
             label="Subject"
             name="subject"
             spellcheck="false"
-            class="form-input"
+            class="input-field"
             v-model="subject"
             @focus="onFocus('subject')"
             @blur="onBlur('subject')"
@@ -107,7 +107,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
             label="Email"
             name="email"
             spellcheck="false"
-            class="form-input"
+            class="input-field"
             v-model="email"
             @focus="onFocus('email')"
             @blur="onBlur('email')"
@@ -120,7 +120,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
             label="Message"
             name="message"
             spellcheck="false"
-            class="form-input"
+            class="input-field"
             v-model="message"
             @focus="onFocus('message')"
             @blur="onBlur('message')"
@@ -302,7 +302,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   margin-bottom: calc(13.57px + 0.446828vw)
 }
 
-input {
+.form-input__field input {
   padding-left: 0px;
   padding-right: 0px;
   border-top: 0px rgb(240, 240, 238);
@@ -318,7 +318,27 @@ input {
   }
 }
 
-label {
+.form-label {
+  position: absolute;
+  font-style: inherit;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  top: 0px;
+  left: 2px;
+  height: 100%;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  pointer-events: none;
+  margin: 0px 1em;
+  color: inherit;
+  transition: transform 0.3s ease-in-out, color 0.3s ease-in-out, opacity 0.3s ease-in-out;
+  transform-origin: 0% 50%;
+}
+
+.form-input__field label {
   position: absolute;
   padding: 0px 0px 8px;
   left: 0px;
