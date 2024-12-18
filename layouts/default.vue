@@ -22,9 +22,9 @@ onMounted(() => {
     <LogoNav v-model:showForm="showContactForm"/>
     <div id="smooth-wrapper">
       <div id="smooth-content">
-        <div class="page-inner m-auto">
+        <!-- <div class="page-inner m-auto"> -->
           <slot />
-        </div>
+        <!-- </div> -->
         <Footer v-model:showForm="showContactForm"></Footer>
         <FooterImage />
       </div>
