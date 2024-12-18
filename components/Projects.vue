@@ -562,4 +562,13 @@ onBeforeUnmount(() => {
     fill: #C6F250;
   }
 }
+
+.team-container {
+  .carousel__prev,
+  .carousel__next {
+    @media (min-width: 1281px) {
+      display: none;
+    }
+  }
+}
 </style>
