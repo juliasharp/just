@@ -243,7 +243,7 @@ h2 {
       padding-bottom: 70px;
     }
     @media (max-width: 450px) {
-      padding-bottom: 80px;
+      padding-bottom: 100px;
     }
   }
 }
