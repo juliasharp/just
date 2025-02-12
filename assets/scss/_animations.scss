@@ -43,3 +43,9 @@
     transform: translate3d(-7rem,0,0)
   }
 }
+
+@keyframes bounce {
+  50% {
+    transform: translateY(-15px) translateX(-50%);
+  }
+}
