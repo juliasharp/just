@@ -188,7 +188,7 @@ onBeforeUnmount(() => {
       position: relative;
       height: 100vh;
       @media (max-width: 760px) {
-        height: 100dvh;
+        height: 100svh;
       }
     }
   }
@@ -197,6 +197,9 @@ onBeforeUnmount(() => {
     position: relative;
     height: 100vh;
     overflow: hidden;
+    @media (max-width: 760px) {
+      height: 100svh;
+    }
   }
   &__video {
     position: relative;
@@ -208,6 +211,7 @@ onBeforeUnmount(() => {
     align-items: center;
     @media (max-width: 760px) {
       padding: 5px;
+      height: 100svh;
     }
     video {
       position: absolute;
