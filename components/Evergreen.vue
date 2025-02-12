@@ -259,7 +259,7 @@ h2 {
     font-size: 22px;
   }
   @media (max-width: 450px) {
-    font-size: 35px;
+    font-size: 26px;
   }
 }
 
@@ -307,7 +307,8 @@ h2 {
     transform: translateX(50%) scale(0.6);
   }
   @media (max-width: 450px) {
-    top: 19%;
+    transform: translateX(50%) scale(0.4);
+    top: 4%;
   }
   svg {
     height: auto !important;
