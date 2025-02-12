@@ -151,6 +151,10 @@ onBeforeUnmount(() => {
     } 
     @media (max-width: 1480px) {
       font-size: 25px;
+      height: 125px;
+    }
+    @media (max-width: 1280px) {
+      font-size: 25px;
       height: 145px;
     }
     @media (max-width: 1000px) {
@@ -216,7 +220,7 @@ h2 {
   &__header {
     padding-top: 100px;
     @media (max-width: 1600px) {
-      padding-top: 30px;
+      padding-top: 50px;
     }
     @media (max-width: 1280px) {
       padding-top: 60px;
@@ -246,7 +250,7 @@ h2 {
   font-size: 90px;
   color: #C6F250;
   @media (max-width: 1600px) {
-    font-size: 4.5vw;
+    font-size: 3.7vw;
   }
   @media (max-width: 1180px) {
     font-size: 36px;
