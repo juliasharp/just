@@ -242,6 +242,9 @@ h2 {
     @media (max-width: 760px) {
       padding-bottom: 70px;
     }
+    @media (max-width: 450px) {
+      padding-bottom: 80px;
+    }
   }
 }
 
