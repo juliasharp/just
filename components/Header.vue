@@ -4,6 +4,7 @@ import lottie from 'lottie-web';
 import type { AnimationItem } from 'lottie-web';
 import LogoShapes from '@/assets/just-shapes-NEWNEW.json';
 import LogoShapesMobile from '@/assets/header-shapes-mobile.json';
+import ArrowDown from '/src/arrow-down.svg?component';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -170,6 +171,7 @@ onBeforeUnmount(() => {
     <div v-show="showVideo" class="header__video">
       <video muted loop autoplay playsinline="" :src="videoUrl" data-object-fit="contain"></video>
     </div>
+    <ArrowDown v-if="!showVideo" class="arrow-down"/>
   </div>
 </template>
 
@@ -179,9 +181,15 @@ onBeforeUnmount(() => {
     display: block;
     position: relative;
     height: 100vh;
+    @media (max-width: 760px) {
+      height: 100svh;
+    }
     &-outer {
       position: relative;
       height: 100vh;
+      @media (max-width: 760px) {
+        height: 100dvh;
+      }
     }
   }
   &-container {
@@ -239,5 +247,19 @@ onBeforeUnmount(() => {
   z-index: 10;
   top: 0;
   left: 0;
+}
+
+.arrow-down {
+  width: 48px;
+  height: 26px;
+  position: absolute;
+  bottom: 50px;
+  z-index: 99;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 1600ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  @media (max-width: 760px) {
+    display: none;
+  }
 }
 </style>

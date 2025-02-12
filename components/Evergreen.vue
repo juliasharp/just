@@ -240,7 +240,7 @@ h2 {
       padding-bottom: 50px;
     }
     @media (max-width: 760px) {
-      height: 100dvh;
+      height: 100svh;
       padding-bottom: 70px;
     }
     @media (max-width: 450px) {
