@@ -169,7 +169,7 @@ onBeforeUnmount(() => {
       font-size: 16px;
     }
     @media (max-width: 450px) {
-      height: 140px;
+      height: 130px;
     }
     span {
       font-family: 'Inter Bold';
