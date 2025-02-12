@@ -290,10 +290,15 @@ h2 {
 
 .js-lottie-container {
   position: absolute;
-  right: 0;
+  right: -50px;
   top: -10px;
-  width: 525px;
-  height: 525px;
+  width: 625px;
+  height: 625px;
+  @media (max-width: 1680px) {
+    width: 525px;
+    height: 525px;
+    right: 0;
+  }
   @media (max-width: 1600px) {
     top: -75px;
   }
