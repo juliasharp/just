@@ -251,7 +251,7 @@ h2 {
 
 .header-item {
   font-family: 'Inter Bold';
-  font-size: 90px;
+  font-size: 75;
   color: #C6F250;
   @media (max-width: 1600px) {
     font-size: 3.7vw;
