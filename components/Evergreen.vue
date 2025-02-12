@@ -308,7 +308,7 @@ h2 {
   }
   @media (max-width: 450px) {
     transform: translateX(50%) scale(0.4);
-    top: 4%;
+    top: 2%;
   }
   svg {
     height: auto !important;
