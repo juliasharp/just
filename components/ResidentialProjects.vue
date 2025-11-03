@@ -1,78 +1,134 @@
 <script setup lang="ts">
-const config = useRuntimeConfig();
-const query = `
-  query NewQuery {
-    page(id: "234", idType: DATABASE_ID) {
+import { onMounted, onBeforeUnmount, computed, ref } from 'vue'
+
+const {
+  public: {
+    wordpressUrl,
+    residentialUri = '/residential',              // set per-env
+    residentialPageId = ''                        // optional fallback
+  }
+} = useRuntimeConfig()
+
+// --- GraphQL queries (same field shape you already use) ---
+const QUERY_BY_URI = /* GraphQL */ `
+  query ResidentialProjects($uri: ID!) {
+    page(id: $uri, idType: URI) {
+      id
+      uri
+      title
       residentialLp {
         projects {
-          featuredImage {
-            node {
-              altText
-              sourceUrl
-            }
-          }
+          featuredImage { node { altText sourceUrl } }
           location
           projectName
           year
-          photoGallery {
-            nodes {
-              altText
-              sourceUrl
-            }
-          }
+          photoGallery { nodes { altText sourceUrl } }
         }
       }
     }
   }
-`;
+`
 
-const { data, error } = await useFetch(config.public.wordpressUrl, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: {
-    query
-  },
-  transform: (data: any) => {
-    return {
-      projects: data.data.page.residentialLp.projects
+const QUERY_BY_ID = /* GraphQL */ `
+  query ResidentialProjectsById($id: ID!) {
+    page(id: $id, idType: DATABASE_ID) {
+      id
+      uri
+      title
+      residentialLp {
+        projects {
+          featuredImage { node { altText sourceUrl } }
+          location
+          projectName
+          year
+          photoGallery { nodes { altText sourceUrl } }
+        }
+      }
     }
   }
-})
+`
 
-if (error.value) {
-  console.error('Error fetching residential projects data:', error.value);
+type GqlImageNode = { altText?: string | null; sourceUrl?: string | null }
+type GqlProject = {
+  featuredImage?: { node?: GqlImageNode | null } | null
+  location?: string | null
+  projectName?: string | null
+  year?: string | number | null
+  photoGallery?: { nodes?: GqlImageNode[] | null } | null
 }
 
+async function fetchProjects() {
+  // Try URI first
+  try {
+    const res: any = await $fetch(wordpressUrl, {
+      method: 'POST',
+      body: { query: QUERY_BY_URI, variables: { uri: residentialUri } }
+    })
+    const page = res?.data?.page ?? null
+    if (page) {
+      return {
+        page,
+        projects: (page.residentialLp?.projects ?? []) as GqlProject[],
+      }
+    }
+  } catch (e) {
+    console.error('Residential (URI) fetch failed', e)
+  }
+
+  // Fallback to DB ID if provided (useful for local)
+  if (residentialPageId) {
+    try {
+      const res: any = await $fetch(wordpressUrl, {
+        method: 'POST',
+        body: { query: QUERY_BY_ID, variables: { id: residentialPageId } }
+      })
+      const page = res?.data?.page ?? null
+      return {
+        page,
+        projects: (page?.residentialLp?.projects ?? []) as GqlProject[],
+      }
+    } catch (e) {
+      console.error('Residential (ID) fetch failed', e)
+    }
+  }
+
+  // Final safe fallback
+  return { page: null, projects: [] as GqlProject[] }
+}
+
+const { data, error, pending } = await useAsyncData('residential-projects', fetchProjects, {
+  default: () => ({ page: null, projects: [] })   // <— prevents null on first SSR pass
+})
+
+// Convenient refs
+const page = computed(() => data.value?.page ?? null)
+const projects = computed(() => data.value?.projects ?? [])
+
+// --- Lightbox logic (unchanged) ---
 const lightboxOpen = ref(false)
 const activeProjectIndex = ref<number | null>(null)
 const activeImageIndex = ref(0)
 
 const textHoverColor = (i: number) => {
-  const colors = [
-    'group-hover:text-[#0986A6]', // teal
-    'group-hover:text-[#A55027]', // brown
-    'group-hover:text-[#390F7D]'  // violet
-  ]
+  const colors = ['group-hover:text-[#0986A6]', 'group-hover:text-[#A55027]', 'group-hover:text-[#390F7D]']
   return colors[i % colors.length]
 }
 
 const gallery = computed(() => {
   if (activeProjectIndex.value == null) return []
-  return data.value?.projects?.[activeProjectIndex.value]?.photoGallery?.nodes ?? []
+  return projects.value?.[activeProjectIndex.value]?.photoGallery?.nodes ?? []
 })
 
 function openLightbox(projectIndex: number, startIndex = 0) {
   activeProjectIndex.value = projectIndex
   activeImageIndex.value = startIndex
   lightboxOpen.value = true
-  document.documentElement.style.overflow = 'hidden' // lock scroll
+  if (process.client) document.documentElement.style.overflow = 'hidden'
 }
 
 function closeLightbox() {
   lightboxOpen.value = false
-  document.documentElement.style.overflow = '' // unlock scroll
+  if (process.client) document.documentElement.style.overflow = ''
 }
 
 function nextImg() {
@@ -103,7 +159,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     <div class="projects-container res-gutter">
       <div class="projects">
         <div
-          v-for="(project, i) in data.projects"
+          v-for="(project, i) in projects"
           :key="project.projectName"
           class="project flex items-center gap-[30px] group cursor-pointer transition-colors duration-300"
           :class="{

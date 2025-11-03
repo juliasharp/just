@@ -21,7 +21,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      wordpressUrl: process.env.WORDPRESS_URL || 'http://just.local/graphql'
+      wordpressUrl: process.env.NUXT_PUBLIC_WORDPRESS_URL,        // existing
+      residentialUri: process.env.NUXT_PUBLIC_RESIDENTIAL_URI || '/residential',
+      residentialPageId: process.env.NUXT_PUBLIC_RESIDENTIAL_PAGE_ID || '' // e.g. "234" on local
     }
   },
   modules: ["vue3-carousel-nuxt", "@nuxt/image", '@nuxtjs/tailwindcss'],

@@ -6,6 +6,17 @@ import ResidentialTestimonials from '~/components/ResidentialTestimonials.vue';
 const route = useRoute();
 
 const showContactForm = ref(false);
+
+onMounted(async () => {
+  // ✅ dynamic import on the client
+  const gsap = (await import('gsap')).default
+
+  // now it's safe to use window/document/gsap
+  const el = document.querySelector('[data-anim]')
+  if (el) {
+    gsap.to(el, { opacity: 1, duration: 0.6 })
+  }
+})
 </script>
 
 <template>
