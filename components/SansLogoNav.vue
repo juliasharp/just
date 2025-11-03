@@ -22,14 +22,21 @@ const isShown = computed({
   }
 });
 
+function showContact() {
+  isShown.value = true;
+}
+
 </script>
 
 <template>
 	<div class="header flex">
-		<div class="logo">
-			<LogoSVG></LogoSVG>
+		<div class="logo animate-in">
+			<!-- <LogoSVG></LogoSVG> -->
 		</div>
 		<div class="header-right">
+			<button class="button mail-button animate-in" shape="circle" @click="showContact">
+				<MailSVG></MailSVG>
+			</button>
 		</div>
 	</div>
 </template>

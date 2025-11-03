@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.7.0",
-    "gsap": "npm:@gsap/shockingly@^3.12.5",
+    "@nuxtjs/tailwindcss": "^6.14.0",
+    "gsap": "^3.13.0",
     "lottie-web": "^5.12.2",
     "nuxt": "^3.8.0",
     "nuxt-video-player": "^1.0.6",

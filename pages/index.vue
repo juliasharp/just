@@ -1,24 +1,27 @@
 <script setup lang="ts">
 const route = useRoute();
 
+const showContactForm = ref(false);
 </script>
 
 <template>
-   <NuxtLayout name="default" page-name="home" title="Welcome">
+   <NuxtLayout name="home" page-name="home" title="JUST Design">
       <!--Header Animation & Video -->
-      <Header></Header>
+      <ConsultingHero />
       <!-- About -->
-      <Philosophy />
-      <Evergreen />
+      <ConsultingPhilosophy />
+      <ConsultingEvergreen />
       <!-- Services -->
-      <Services />
+      <ConsultingServices />
       <!-- Projects -->
-      <Projects />
+      <ConsultingProjects />
       <!-- Team -->
-      <Team />
+      <ConsultingTeam />
       <!-- Partners -->
-      <Partners />
+      <ConsultingPartners />
       <!-- Team Photo -->
+      <ConsultingFooter v-model:showForm="showContactForm"></ConsultingFooter>
+      <ConsultingFooterImage />
   </NuxtLayout>
 </template>
 

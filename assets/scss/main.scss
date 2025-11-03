@@ -1,4 +1,41 @@
-@import "./reset";
-@import "./fonts";
-@import "./layout";
-@import "./animations";
+@use "./reset";
+@use "./fonts";
+@use "./layout";
+@use "./animations";
+
+:root {
+  --residential-background-color: #EFEFE1;
+  --body-font-medium: 'Inter Medium', sans-serif;
+  --body-font-bold: 'Inter Bold', sans-serif;
+  --font-family-accent: 'Neumatic Compressed', sans-serif;
+  --font-family-code: 'Calling Code', sans-serif;
+  --residential-gutter-width: 30px;
+}
+
+body.residential {
+  background-color: var(--residential-background-color);
+}
+
+.res-gutter {
+  padding-left: var(--residential-gutter-width);
+  padding-right: var(--residential-gutter-width);
+}
+
+.body-font-bold {
+  font-family: var(--body-font-bold);
+}
+
+.body-font-medium {
+  font-family: var(--body-font-medium);
+}
+
+.body-font-code {
+  font-family: var(--font-family-code);
+  font-weight: 700;
+}
+
+.font-family-accent {
+  font-family: var(--font-family-accent);
+  font-weight: 700;
+  letter-spacing: 0.025em;
+}

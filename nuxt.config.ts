@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   pages: true,
   css: [
 		'@/assets/scss/main.scss',
+    '@/assets/css/tailwind.css'
 	],
   vite: {
     plugins: [
@@ -23,5 +24,5 @@ export default defineNuxtConfig({
       wordpressUrl: process.env.WORDPRESS_URL || 'http://just.local/graphql'
     }
   },
-  modules: ["vue3-carousel-nuxt", "@nuxt/image"],
+  modules: ["vue3-carousel-nuxt", "@nuxt/image", '@nuxtjs/tailwindcss'],
 })

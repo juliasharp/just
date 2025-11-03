@@ -30,6 +30,13 @@
   font-family: "Neumatic Compressed";
   src: url('@/assets/fonts/Neumatic-Compressed-Medium.otf');
   font-display: swap;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Neumatic Compressed";
+  src: url('@/assets/fonts/Neumatic-Compressed-Bold.otf');
+  font-display: swap;
   font-weight: 700;
 }
 

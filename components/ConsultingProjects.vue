@@ -147,7 +147,7 @@ onBeforeUnmount(() => {
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .projects {
   background-color: #4D572D;
   position: relative;
@@ -265,7 +265,6 @@ onBeforeUnmount(() => {
     }
   }
   &-center {
-    //might need to fix when we add content
     margin-top: 25px;
     position: relative;
     @media (min-width: 1181px) {
@@ -293,7 +292,13 @@ onBeforeUnmount(() => {
       background-color: #C6F250;
       top: -85px;
       right: 80px;
-      @media (min-width: 1181px) and (max-width: 1600px) {
+      @media (min-width: 1491px) and (max-width: 1600px) {
+        top: -84px;
+        right: 80px;
+        width: 1px;
+        height: calc(100% + 144px);
+      }
+      @media (min-width: 1181px) and (max-width: 1490px) {
         top: -65px;
         right: 80px;
         width: 1px;

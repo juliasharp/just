@@ -201,7 +201,7 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
       padding-right: 20px;
       font-family: 'Inter Bold';
       @media (max-width: 767px) {
-        font-size: calc(26.62px + 3.4398vw);
+        font-size: 40px;
       }
     }
   }

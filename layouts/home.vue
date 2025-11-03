@@ -22,11 +22,7 @@ onMounted(() => {
     <SansLogoNav v-model:showForm="showContactForm"/>
     <div id="smooth-wrapper">
       <div id="smooth-content">
-        <!-- <div class="page-inner m-auto"> -->
-          <slot />
-        <!-- </div> -->
-        <Footer v-model:showForm="showContactForm"></Footer>
-        <FooterImage />
+        <slot />
       </div>
     </div>
     <ContactForm v-if="showContactForm" v-model:showForm="showContactForm"/>
@@ -39,6 +35,7 @@ onMounted(() => {
 #smooth-wrapper {
   overflow: hidden !important;
 }
+
 .overlay {
   position: fixed;
   inset: 0px;
