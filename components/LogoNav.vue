@@ -58,7 +58,6 @@ const isShown = computed({
 		margin-left: 35px;
 		width: 160px;
 	}
-	color: #fff;
 	//transform: translate3d(0 -50%, 0);
 	mix-blend-mode: difference;
 	z-index: 99;

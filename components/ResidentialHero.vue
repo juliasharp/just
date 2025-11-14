@@ -194,7 +194,7 @@ onBeforeUnmount(() => {
         ref="slide" 
         data-slide 
         class="
-          relative w-full h-[262px]
+          hero-image relative w-full h-[262px]
           md:absolute md:top-0 md:right-0 md:h-full md:w-screen">
         <!-- Big hero image -->
         <img
@@ -215,9 +215,9 @@ onBeforeUnmount(() => {
           data-overlay
           :src="data.o1.sourceUrl"
           :alt="data.o1.altText || ''"
-          class="
+          class="overlay-img-1
             absolute z-10 max-w-none
-            w-[62vw] top-[67px] right-[-13vw]
+            w-[62vw] top-[43px] right-[-13vw]
             md:w-[min(37vw,545px)] md:top-[6vh] md:right-[unset] md:left-[-10%]"
           loading="eager"
           decoding="async"
@@ -230,9 +230,9 @@ onBeforeUnmount(() => {
           data-overlay
           :src="data.o2.sourceUrl"
           :alt="data.o2.altText || ''"
-          class="
+          class="overlay-img-2
             absolute z-20 max-w-none 
-            w-[35vw] bottom-[-22vw] left-[30vw]
+            w-[35vw] bottom-[-15vw] left-[30vw]
             md:w-[min(22vw,330px)] md:bottom-[6vh] md:left-[53%]"
         />
       </div>
@@ -266,6 +266,11 @@ onBeforeUnmount(() => {
 }
 
 .hero {
+  &-image {
+    @media (max-width: 767px) {
+      height: clamp(292px, 42dvh, 331px);
+    }
+  }
   &-section {
     @media (max-width: 767px) {
       display: flex;
@@ -280,7 +285,10 @@ onBeforeUnmount(() => {
     line-height: 1.28;
     &-initial {
       color: #fff;
-      font-size: clamp(20px, 2.5vw, 41px);
+      font-size: 18px;
+      @media (min-width: 768px) {
+        font-size: clamp(20px, 2.5vw, 41px);
+      }
     }
   }
 }
@@ -313,6 +321,22 @@ img { image-rendering: auto; }
         width: 10px;
         height: 10px;
       }
+    }
+  }
+}
+
+.overlay-img {
+  &-1 {
+    @media (max-width: 767px) {
+      max-width: 335px;
+    }
+  }
+  &-2 {
+    @media (max-width: 767px) {
+      max-width: 195px;
+    }
+    @media (min-width: 591px) and (max-width: 767px) {
+      left: 44vw;
     }
   }
 }
