@@ -232,7 +232,7 @@ onBeforeUnmount(() => {
           :alt="data.o2.altText || ''"
           class="
             absolute z-20 max-w-none 
-            w-[42vw] bottom-[-37vw] left-[17vw]
+            w-[35vw] bottom-[-22vw] left-[30vw]
             md:w-[min(22vw,330px)] md:bottom-[6vh] md:left-[53%]"
         />
       </div>
@@ -289,7 +289,7 @@ img { image-rendering: auto; }
 
 .scroll-text {
   display: block;
-  margin-top: 9vh;
+  margin-top: 5vh;
   @media (min-width: 768px) {
     margin-top: 15vh;
   }
