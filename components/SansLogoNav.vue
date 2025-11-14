@@ -41,7 +41,7 @@ function showContact() {
 	</div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header {
 	&-right {
 		position: fixed;

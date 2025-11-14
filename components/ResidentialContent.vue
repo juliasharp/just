@@ -68,17 +68,17 @@ onBeforeUnmount(() => tl?.kill())
 
 
 <template>
-  <section class="content-section px-6 py-[5rem] overflow-hidden">
-    <div class="flex flex-col justify-center sm:flex-row gap-4 sm:gap-6 items-start sm:items-center">
+  <section class="content-section px-6 pt-[4rem] pb-[3rem] md:pt-[8rem] md:pb-[5rem] overflow-hidden">
+    <div class="a-just-home-is-text flex justify-center flex-row gap-4 sm:gap-6 items-start sm:items-center">
       <!-- Prefix -->
-      <h2 class="text-2xl sm:text-3xl body-font-bold whitespace-nowrap">
+      <h2 class="body-font-bold whitespace-nowrap">
         {{ data?.justHomePrefix }}
       </h2>
 
       <!-- Suffix animation -->
       <div
         ref="suffixContainer"
-        class="relative h-[1.2em] overflow-hidden leading-tight text-2xl sm:text-3xl body-font-medium suffix-container"
+        class="relative h-[1.2em] overflow-hidden leading-tight body-font-medium suffix-container"
       >
         <div
           v-for="(item, i) in extended"
@@ -94,7 +94,23 @@ onBeforeUnmount(() => tl?.kill())
 
 <style scoped lang="scss">
 .suffix-container {
-  width: 230px;
-  border-bottom: 2.5px solid black;
+  width: 155px;
+  border-bottom: 2px solid black;
+  @media (min-width: 768px) {
+    width: 310px;
+  }
+  @media (min-width: 1281px) {
+    width: 356px;
+  }
+}
+
+.a-just-home-is-text {
+  font-size: 20px;
+  @media (min-width: 768px) {
+    font-size: 40px;
+  }
+  @media (min-width: 1281px) {
+    font-size: 45px;
+  }
 }
 </style>

@@ -1,27 +1,33 @@
-import { onMounted, onBeforeUnmount, unref, Ref } from 'vue';
+// useClickOutside.ts
+import { onMounted, onBeforeUnmount, unref } from 'vue'
+import type { Ref } from 'vue'
 
-export default function useClickOutside(target: Ref, callback: () => void) {
+export default function useClickOutside(
+  target: Ref<HTMLElement | null>,
+  callback: () => void
+) {
   const listener = (e: Event) => {
-    const el = unref(target);
+    const el = unref(target)
+    if (!el) return
 
-    if (!el || e.target === el || e.composedPath().includes(el)) {
-      return;
+    // If click is inside the element, ignore
+    // composedPath fallback for older browsers
+    const path = (e as any).composedPath?.() as EventTarget[] | undefined
+    if (el === e.target || (path && path.includes(el)) || (e.target instanceof Node && el.contains(e.target as Node))) {
+      return
     }
 
-    if (typeof callback === 'function') {
-      callback();
-    }
-  };
+    callback?.()
+  }
 
   onMounted(() => {
-    window.addEventListener('click', listener);
-  });
+    window.addEventListener('pointerdown', listener, { passive: true })
+  })
 
   onBeforeUnmount(() => {
-    window.removeEventListener('click', listener);
-  });
+    window.removeEventListener('pointerdown', listener)
+  })
 
-  return () => {
-    window.removeEventListener('click', listener);
-  };
+  // optional manual cleanup
+  return () => window.removeEventListener('pointerdown', listener)
 }

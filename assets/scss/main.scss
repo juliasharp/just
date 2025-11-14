@@ -5,11 +5,13 @@
 
 :root {
   --residential-background-color: #EFEFE1;
+  --body-font-normal: 'Inter', sans-serif;
   --body-font-medium: 'Inter Medium', sans-serif;
   --body-font-bold: 'Inter Bold', sans-serif;
   --font-family-accent: 'Neumatic Compressed', sans-serif;
   --font-family-code: 'Calling Code', sans-serif;
   --residential-gutter-width: 30px;
+  --mobile-residential-gutter-width: 20px;
 }
 
 body.residential {
@@ -17,8 +19,16 @@ body.residential {
 }
 
 .res-gutter {
-  padding-left: var(--residential-gutter-width);
-  padding-right: var(--residential-gutter-width);
+  padding-left:  var(--mobile-residential-gutter-width);
+  padding-right: var(--mobile-residential-gutter-width);
+  @media (min-width: 768px) {
+    padding-left: var(--residential-gutter-width);
+    padding-right: var(--residential-gutter-width);
+  }
+}
+
+.body-font {
+  font-family: var(--body-font-normal);
 }
 
 .body-font-bold {
@@ -32,10 +42,55 @@ body.residential {
 .body-font-code {
   font-family: var(--font-family-code);
   font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .font-family-accent {
   font-family: var(--font-family-accent);
   font-weight: 700;
   letter-spacing: 0.025em;
+}
+
+.underline-animation {
+  position: relative;
+  text-decoration: none; // we'll draw our own underline
+  color: inherit;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;
+    height: 2px;
+    background-color: currentColor;
+
+    /* Start fully underlined */
+    transform-origin: 0 50%;   // grows from the left
+    transform: scaleX(1);
+  }
+
+  &:hover::after {
+    animation: underline-pulse 1.5s cubic-bezier(.77, 0, .175, 1);
+  }
+}
+
+/* underline goes in (to 0) then back out */
+@keyframes underline-pulse {
+  0% {
+    transform-origin: 0 50%;
+    transform: scaleX(1);   // full line
+  }
+  50% {
+    transform-origin: 100% 50%;
+    transform: scaleX(0);   // retract to the right
+  }
+  60% {
+    transform-origin: 0 50%;
+    transform: scaleX(0);   // switch side while hidden
+  }
+  100% {
+    transform-origin: 0 50%;
+    transform: scaleX(1);   // grow from the left
+  }
 }

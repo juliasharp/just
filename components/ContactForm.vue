@@ -1,143 +1,240 @@
 <script setup lang="ts">
 import IconClose from '/src/icon-close.svg?component';
+import { useGravityForms } from '~/composables/useGravityForms'
+
+// ---- DEBUG (safe, SSR-friendly, no Cloudflare collisions) ----
+const isClient = typeof window !== 'undefined'
+const isDev = (typeof import.meta !== 'undefined' && (import.meta as any).env?.DEV) || false
+
+type FieldType = 'text' | 'email' | 'tel' | 'textarea' | 'url'
+type FieldDef = {
+  key: string    
+  label: string
+  gfKey: string  
+  type?: FieldType
+  required?: boolean
+  autocomplete?: string
+  placeholder?: string
+}
 
 const props = defineProps({
-	showForm: {
-		type: Boolean,
-		default: true
-	}
-});
+  showForm: { type: Boolean, default: false },
+  gfFormId: { type: Number, required: true },  // Gravity Forms DB id
+  // if you want to pass fields in directly, you still can; otherwise we fetch below
+  passedFields: { type: Array as () => FieldDef[] | undefined, default: undefined },
+  title: { type: String, default: "Let's Collaborate" },
+  theme: { type: String, default: 'dark' },
+  bgColor: { type: String, default: '#390F7D' }
+})
 
-const name = ref('');
-const subject = ref('');
-const email = ref('');
-const message = ref('');
-
-const focusedField = ref({
-  name: false,
-  subject: false,
-  email: false,
-  message: false
-});
-
-const disabled = computed(() => {
-  return !name.value || !subject.value || !email.value || !message.value;
-});
-
-
-const emit = defineEmits<{
-  (e: 'update:showForm', value: boolean): void;
-}>();
+const emit = defineEmits<{ (e:'update:showForm', v:boolean):void; (e:'submitted'):void }>()
 
 const isShown = computed({
-  get() {
-    return props.showForm;
+  get: () => props.showForm,
+  set: v => emit('update:showForm', v)
+})
+function closeForm() { isShown.value = false }
+
+
+// --- Get dynamic fields from WPGraphQL (or use passedFields) ---
+const { fields: gqlFields, pending: fieldsPending, error: fieldsError } =
+  useGfFormFields(props.gfFormId)
+
+const fields = computed<FieldDef[]>(() => {
+  const pf: any = props.passedFields
+  const fromProps = (pf && (isRef(pf) ? pf.value : pf)) || undefined
+  return fromProps ?? gqlFields.value ?? []
+})
+// --- Gravity submit composable ---
+const {
+  formPending, formError, formData, success, errorMsg, submitting, handleSubmit, confirmationType, confirmationMessage,
+} = useGravityForms({ formId: props.gfFormId })
+
+// --- Local UI state keyed by our dynamic field.key ---
+const values  = reactive<Record<string, string>>({})
+const focused = reactive<Record<string, boolean>>({})
+const fieldErrors = ref<Record<string, string>>({})  // GF errors keyed by parent id ('1','3','5',...)
+
+const valuesView = computed(() => ({ ...values }))
+
+// Initialize values/focused when fields arrive (or change)
+watch(
+  fields,
+  (arr) => {
+    (arr || []).forEach(f => {
+      if (!(f.key in values))  values[f.key]  = ''
+      if (!(f.key in focused)) focused[f.key] = false
+    })
   },
-  set(value: boolean) {
-    emit('update:showForm', value);
+  { immediate: true, flush: 'sync' }
+)
+
+const disabled = computed(() => {
+  if (submitting.value) return true
+  const reqs = fields.value.filter(f => !!f.required)
+  return reqs.some(f => !(values[f.key] && String(values[f.key]).trim().length))
+})
+
+watchEffect(() => {
+  const reqs = fields.value.filter(f => !!f.required).map(f => f.key)
+  const missing = reqs.filter(k => !(values[k] && String(values[k]).trim().length))
+})
+
+function onFocus(k: string) {
+  if (!(k in focused)) focused[k] = false // guard if focus fires early
+  focused[k] = true
+}
+
+function onBlur(k: string) {
+  const v = values[k]
+  focused[k] = !!(v && String(v).trim())
+}
+
+function isActive(k: string) {
+  const v = values[k]
+  return focused[k] || !!(v && String(v).trim())
+}
+
+// --- Submit with robust GF error mapping (works with your Nuxt API shape) ---
+const attemptedSubmit = ref(false)
+
+function syncValuesIntoFormData() {
+  fields.value.forEach(f => {
+    formData.value[f.gfKey] = values[f.key] ?? ''
+  })
+}
+
+const submitWithErrors = async () => {
+  attemptedSubmit.value = true
+  fieldErrors.value = {}
+
+  syncValuesIntoFormData()
+
+  try {
+    await handleSubmit()
+    Object.keys(values).forEach(k => (values[k] = ''))
+    attemptedSubmit.value = false
+    emit('submitted')
+  } catch (e: any) {
+    const messages =
+      e?.data?.messages ??
+      e?.response?._data?.messages ??
+      ((): any => { try {
+        const parsed = JSON.parse(errorMsg.value || '{}')
+        return parsed?.validation_messages
+      } catch { return null } })()
+
+    if (messages && typeof messages === 'object') {
+      fieldErrors.value = messages
+    }
   }
-});
-
-function closeForm() {
-  isShown.value = false;
 }
 
-function onFocus(fieldName: string) {
-  focusedField.value[fieldName] = true;
+// --- Per-field GF error via gfKey → parent id
+function errorFor(f: FieldDef) {
+  const pid = (f.gfKey.split('_')[1] || '').split('.')[0] || ''
+  return fieldErrors.value[pid] || ''
 }
 
-function onBlur(fieldName: string) {
-  if (!eval(fieldName).value) {
-    focusedField.value[fieldName] = false;
+watch(fieldErrors, (fe) => {
+  if (!attemptedSubmit.value) return
+  const has = fe && Object.keys(fe).length
+}, { deep: true })
+
+
+watch(values, (v) => {
+  const reqs = fields.value.filter(f => !!f.required)
+  const missing = reqs.filter(f => !(values[f.key] && String(values[f.key]).trim()))
+                      .map(f => f.key)
+}, { deep: true })
+
+// expose in window for quick inspection from DevTools
+if (isClient && isDev) {
+  (window as any).__CONTACT_FORM_DEBUG__ = {
+    fields, values, submitting, errorMsg, fieldErrors
   }
 }
-
-watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessage]) => {
-  console.log('Name:', newName);
-  console.log('Subject:', newSubject);
-  console.log('Email:', newEmail);
-  console.log('Message:', newMessage);
-});
-
-
-
 </script>
 
 <template>
-  <form :class="{'is-shown': isShown}" action="https://formspree.io/f/xblrgkle" method="POST" class="contact-form">
+  <div v-if="fieldsError">Error loading fields: {{ fieldsError.message }}</div>
+
+  <form
+    v-else
+    class="contact-form relative"
+    :class="{ 'is-shown': isShown, [theme]: true }"
+    :style="{ backgroundColor: bgColor }"
+    @submit.prevent="submitWithErrors"
+    novalidate
+  >
     <div class="contact-form__inner">
       <div class="contact-form__header">
-        <h3>Let's Collaborate</h3>
-        <button class="button button-close" @click="closeForm">
-          <div class="button-close">
-            <IconClose></IconClose>
-          </div>
+        <h3>{{ title }}</h3>
+        <button type="button" class="button button-close" @click="closeForm">
+          <div class="button-close"><IconClose /></div>
         </button>
       </div>
+
       <div class="contact-form__body">
-        <div class="form-input__field">
-          <input
-            type="text"
-            label="Name"
-            name="name"
-            spellcheck="false"
+        <div
+          v-for="f in fields"
+          :key="f.key"
+          class="form-input__field"
+        >
+          <component
+            :key="f.key"
+            :is="f.type === 'textarea' ? 'textarea' : 'input'"
+            :value="values[f.key] ?? ''"
+            @input="(e:any) => {
+              values[f.key] = e?.target?.value ?? ''
+            }"
             class="input-field"
-            v-model="name"
-            @focus="onFocus('name')"
-            @blur="onBlur('name')"
+            :type="f.type && f.type !== 'textarea' ? f.type : undefined"
+            :placeholder="f.placeholder"
+            :autocomplete="f.autocomplete"
+            @focus="onFocus(f.key)"
+            @blur="onBlur(f.key)"
+            :rows="f.type === 'textarea' ? 4 : undefined"
+            :aria-invalid="!!errorFor(f)"
+            :aria-describedby="errorFor(f) ? `${f.key}-err` : undefined"
+            :class="[{ 'is-invalid': !!errorFor(f) }, theme]"
           />
-          <label :class="{ focused: focusedField.name || name }" for="name" class="form-label">Name</label>
-        </div>
-        <div class="form-input__field">
-          <input
-            type="text"
-            label="Subject"
-            name="subject"
-            spellcheck="false"
-            class="input-field"
-            v-model="subject"
-            @focus="onFocus('subject')"
-            @blur="onBlur('subject')"
-          />
-          <label :class="{ focused: focusedField.subject || subject }" for="subject" class="form-label">Subject</label>
-        </div>
-        <div class="form-input__field">
-          <input
-            type="text"
-            label="Email"
-            name="email"
-            spellcheck="false"
-            class="input-field"
-            v-model="email"
-            @focus="onFocus('email')"
-            @blur="onBlur('email')"
-          />
-          <label :class="{ focused: focusedField.email || email }" for="email" class="form-label">Email</label>
-        </div>
-        <div class="form-input__field">
-          <input
-            type="text"
-            label="Message"
-            name="message"
-            spellcheck="false"
-            class="input-field"
-            v-model="message"
-            @focus="onFocus('message')"
-            @blur="onBlur('message')"
-          />
-          <label :class="{ focused: focusedField.message || message }" for="message" class="form-label">Message</label>
+          <label class="form-label" :class="{ focused: isActive(f.key) }">
+            {{ f.label }}<span v-if="f.required" class="required">*</span>
+          </label>
+          <p v-if="errorFor(f)" :id="`${f.key}-err`" class="field-error">
+            {{ errorFor(f) }}
+          </p>
         </div>
       </div>
+
       <div class="contact-form__footer">
         <div class="contact-form-button-container">
-          <button class="contact-form-button" :disabled="disabled">
-            <div class="button">Send
-              <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24" height="24px" width="24px" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"></path>
+          <button type="submit" class="contact-form-button" :disabled="disabled">
+            <div class="button">
+              {{ submitting ? 'Sending…' : 'Send' }}
+              <svg viewBox="0 0 24 24" height="24" width="24">
+                <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/>
               </svg>
             </div>
           </button>
         </div>
+
+        <p v-if="formPending || fieldsPending" style="margin-top:12px; opacity:.8;">Submitting…</p>
+        <p v-if="errorMsg && Object.keys(fieldErrors).length === 0" style="margin-top:12px;">
+          {{ errorMsg }}
+        </p>
+        <p v-if="success" style="margin-top:12px; color:#bfffbf;">
+          <!-- If GF confirmation is a "text" message, show it -->
+          <span
+            v-if="confirmationType === 'message' && confirmationMessage"
+            v-html="confirmationMessage"
+          />
+          <!-- Otherwise, show fallback -->
+          <span v-else>
+            Thanks! We’ll be in touch shortly.
+          </span>
+        </p>
       </div>
     </div>
   </form>
@@ -154,17 +251,13 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   bottom: 0;
   background: #390F7D;
   color: white;
-  overflow: auto;
   width: calc(340px + 17vw);
-  transition: transform 700ms cubic-bezier(0.44, 0.24, 0.16, 1);
-  transform: translate3d(110%, 0, 0); // Default state when closed
+
+  transform: translate3d(110%,0,0);
+  transition: transform .7s cubic-bezier(.44, .24, .16, 1);
   will-change: transform;
-  transition-delay: 0.5s;
   &.is-shown {
-    transition-delay: 0.5s;
-    transition: transform 1s cubic-bezier(0.44, 0.24, 0.16, 1);
-    transform: none; // When the form is shown
-    will-change: transform;
+    transform: translate3d(0, 0, 0);
   }
   @media (min-width: 1024px) {
     width: calc(340px + 17vw);
@@ -306,7 +399,8 @@ watch([name, subject, email, message], ([newName, newSubject, newEmail, newMessa
   }
 }
 
-.form-input__field input {
+.form-input__field input,
+.form-input__field textarea {
   padding-left: 0px;
   padding-right: 0px;
   border-top: 0px rgb(240, 240, 238);

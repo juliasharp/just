@@ -91,7 +91,7 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .testimonial {
   display: block;
-  font-size: clamp(22px, 3.5vw, 52px);
+  font-size: clamp(24px, 3.5vw, 52px);
   line-height: 1.2;
   &-container {
     width: 70vw;
@@ -99,6 +99,9 @@ onBeforeUnmount(() => {
   &-author {
     padding-top: 52px;
     letter-spacing: 0.02em;
+    @media (max-width: 767px) {
+      font-size: 16px;
+    }
   }
 }
 .fade-enter-active,

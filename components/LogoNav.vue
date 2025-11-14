@@ -1,13 +1,18 @@
 <script setup lang="ts">
-import LogoSVG from '/src/logo.svg?component';
-import MailSVG from '/src/mail.svg?component';
+import LogoSVG from '/src/just-logo-res.svg?component';
 
+import type { PropType } from 'vue';
 const props = defineProps({
 	showForm: {
 		type: Boolean,
 		default: false
+	},
+	variant: {
+		type: String as PropType<'default' | 'custom'>,
+		default: 'default'
 	}
 });
+
 
 const emit = defineEmits<{
   (e: 'update:showForm', value: boolean): void;
@@ -34,7 +39,7 @@ const isShown = computed({
 	</div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .header {
 	&-right {
 		position: fixed;
@@ -44,13 +49,18 @@ const isShown = computed({
 }
 
 .logo {
-	position: fixed;
-	margin-top: 35px;
-	padding: 0 20px;
+	position: absolute;
+	margin-top: 20px;
+	margin-left: 20px;
+	width: 125px;
+	@media (min-width: 768px) {
+		margin-top: 35px;
+		margin-left: 35px;
+		width: 160px;
+	}
 	color: #fff;
 	//transform: translate3d(0 -50%, 0);
 	mix-blend-mode: difference;
-	width: 140px;
 	z-index: 99;
 	svg * {
 		fill: currentColor;

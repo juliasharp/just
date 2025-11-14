@@ -9,26 +9,6 @@ const {
   }
 } = useRuntimeConfig()
 
-// --- GraphQL queries (same field shape you already use) ---
-const QUERY_BY_URI = /* GraphQL */ `
-  query ResidentialProjects($uri: ID!) {
-    page(id: $uri, idType: URI) {
-      id
-      uri
-      title
-      residentialLp {
-        projects {
-          featuredImage { node { altText sourceUrl } }
-          location
-          projectName
-          year
-          photoGallery { nodes { altText sourceUrl } }
-        }
-      }
-    }
-  }
-`
-
 const QUERY_BY_ID = /* GraphQL */ `
   query ResidentialProjectsById($id: ID!) {
     page(id: $id, idType: DATABASE_ID) {
@@ -150,6 +130,21 @@ function onKey(e: KeyboardEvent) {
   if (e.key === 'ArrowLeft') prevImg()
 }
 
+const visibleCount = ref(3)
+
+const visibleProjects = computed(() => {
+  return projects.value.slice(0, visibleCount.value)
+})
+
+const canShowMore = computed(() => visibleCount.value < projects.value.length)
+
+function showMore() {
+  visibleCount.value = Math.min(
+    visibleCount.value + 3,
+    projects.value.length
+  )
+}
+
 onMounted(() => window.addEventListener('keydown', onKey))
 onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 </script>
@@ -159,9 +154,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     <div class="projects-container res-gutter">
       <div class="projects">
         <div
-          v-for="(project, i) in projects"
-          :key="project.projectName"
-          class="project flex items-center gap-[30px] group cursor-pointer transition-colors duration-300"
+          v-for="(project, i) in visibleProjects"
+          :key="project.projectName ?? i"
+          class="project flex group cursor-pointer transition-colors duration-300"
           :class="{
             'flex-row-reverse project--rev': i % 2 === 1,
             'flex-row': i % 2 === 0
@@ -185,7 +180,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
               <img
                 :src="project.featuredImage?.node?.sourceUrl"
                 :alt="project.featuredImage?.node?.altText || project.projectName"
-                class="absolute inset-0 h-full w-full object-cover"
+                class="inset-0 h-full w-full object-cover"
               />
             </div>
 
@@ -198,6 +193,15 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             </div>
           </div>
         </div>
+      </div>
+      <div class="mt-8 show-more-btn relative" v-if="canShowMore">
+        <button
+          type="button"
+          class="inline-flex body-font-code uppercase underline-animation"
+          @click="showMore"
+        >
+          Show more projects
+        </button>
       </div>
     </div>
 
@@ -261,13 +265,22 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 <style lang="scss" scoped>
 .project {
-  gap: 30px;
+  @media (min-width: 769px) {
+    gap: 30px;
+  }
   &-meta {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     position: relative;
-    top: 35px;
+    top: 45px;
+    margin-bottom: 32px;
+    @media (min-width: 769px)  and (max-width: 1499px) {
+      top: clamp(31px, calc(31px + 35 * ((100vw - 769px) / (1500 - 769))), 66px);
+    }
+    @media (min-width: 1500px) {
+      top: 66px;
+    }
   }
   &-name {
     font-size: clamp(100px, 31vw, 464px);
@@ -275,9 +288,26 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     line-height: 1.05;
   }
   &-image {
-    height: 353px;
     position: relative;
-    top: 8px;
+    @media (max-width: 767px) {
+      width: 100%;
+      height: auto;
+    }
+    @media (min-width: 769px) {
+      top: 8px;
+      height: calc(180px + (98 * ((100vw - 769px) / (1175 - 769))));
+    }
+    @media (min-width: 1175px) {
+      height: calc(278px + (75 * ((100vw - 1175px) / (1500 - 1175))));
+    }
+    @media (min-width: 1500px) {
+      height: 353px;
+    }
+    img {
+      @media (min-width: 769px) {
+        position: absolute;
+      }
+    }
   }
   &-info {
     display: flex;
@@ -285,20 +315,34 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     margin-top: 0.75rem;
   }
   &-location {
-    font-size: 22px;
+    font-size: 18px;
+    @media (min-width: 769px) {
+      font-size: clamp(19px, 2.45vw, 22px)
+    }
   }
   &-year {
     text-transform: uppercase;
+    font-size: 16px;
+    @media (min-width: 769px) {
+      font-size: clamp(16px, 2vw, 18px)
+    }
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .project {
-    flex-direction: column !important;
-    text-align: left !important;
-    .project-image { top: 0; height: 260px; }
-    .project-name { font-size: clamp(56px, 20vw, 120px); }
+    flex-direction: column;
+    align-items: flex-start;
+    .project-name { 
+      font-size: clamp(140px, 20vw, 260px); 
+      position: relative;
+      top: 42px;
+    }
   }
+}
+
+.show-more-btn {
+  font-size: 24px;
 }
 
 </style>

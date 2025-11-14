@@ -5,7 +5,11 @@ const props = defineProps({
   pageName: String
 });
 
-const showContactForm = ref(false);
+const gfFormId = 2
+
+const showContactForm = useContactForm()
+
+const { fields, pending, error } = useGfFormFields(gfFormId)
 
 onMounted(() => {
   ScrollSmoother.create({
@@ -25,8 +29,22 @@ onMounted(() => {
         <slot />
       </div>
     </div>
-    <ContactForm v-if="showContactForm" v-model:showForm="showContactForm"/>
-    <div v-if="showContactForm" class="overlay"></div>
+    <Teleport to="body">
+      <!-- Keep mounted; panel slides via its own .is-shown class -->
+      <ContactForm 
+        v-model:showForm="showContactForm" 
+        :gfFormId="gfFormId"
+        :passed-fields="fields || []"
+      />
+      <!-- Overlay fades in/out -->
+      <Transition name="fade-fast">
+        <div
+          v-show="showContactForm"
+          class="overlay"
+          @click="showContactForm = false"
+        />
+      </Transition>
+    </Teleport>
   </div>
 </template>
 

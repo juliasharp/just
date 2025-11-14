@@ -5,7 +5,11 @@ const props = defineProps({
   pageName: String
 });
 
-const showContactForm = ref(false);
+const gfFormId = 2
+
+const showContactForm = useContactForm()
+
+const { fields, pending, error } = useGfFormFields(gfFormId)
 
 onMounted(() => {
   ScrollSmoother.create({
@@ -29,7 +33,10 @@ onMounted(() => {
         <FooterImage />
       </div>
     </div>
-    <ContactForm v-if="showContactForm" v-model:showForm="showContactForm"/>
+    <ContactForm 
+      v-if="showContactForm" 
+      v-model:showForm="showContactForm"
+    />
     <div v-if="showContactForm" class="overlay"></div>
   </div>
 </template>
