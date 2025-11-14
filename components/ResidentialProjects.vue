@@ -343,6 +343,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 .show-more-btn {
   font-size: 24px;
+  @media (max-width: 767px) {
+    font-size: 18px;
+  }
 }
 
 </style>

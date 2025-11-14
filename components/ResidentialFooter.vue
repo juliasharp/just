@@ -71,7 +71,7 @@ onBeforeUnmount(() => {
       <img v-if=!isMobile :src="footerImage?.sourceUrl" :alt="footerImage?.altText">
       <img v-else :src="footerImageMobile?.sourceUrl" :alt="footerImageMobile?.altText">
     </div>
-    <div class="footer-contact-text res-gutter py-[4rem]">
+    <div class="footer-contact-text res-gutter py-[2rem] md:py-[4rem]">
       <p class="body-font-medium text-center relative">For more in depth information about our design phases and process, <button @click = "showContact" class="underline-animation">download your free design guide now!</button></p>
     </div>
     <div class="footer-links flex justify-between res-gutter">
@@ -91,12 +91,29 @@ onBeforeUnmount(() => {
 
 .footer {
   &-contact-text {
-    font-size: 24px;
+    font-size: 18px;
     line-height: 1.22;
     @media (min-width: 768px) {
       max-width: 70vw;
       margin: 0 auto;
       font-size: clamp(25px, 2.6vw, 40px);
+    }
+    button {
+      @media (max-width: 760px) {
+        text-decoration: underline;     /* use browser underline (multi-line) */
+        text-decoration-thickness: 1.5px;
+        text-underline-offset: 3px;
+
+        &::after {
+          display: none;                /* hide pseudo-element underline */
+        }
+
+        &:hover {
+          /* subtle micro interaction for mobile (optional) */
+          text-underline-offset: 5px;
+          text-decoration-thickness: 2px;
+        }
+      }
     }
   }
   &-links {
@@ -105,12 +122,17 @@ onBeforeUnmount(() => {
     @media (max-width: 767px) {
       flex-direction: column;
       align-items: center;
+      font-size: 16px;
     }
     &-left {
       @media (max-width: 767px) {
         margin-bottom: 8px;
       }
       a {
+        position: relative;
+        &:before {
+
+        }
         &:not(:last-child) {
           margin-right: 30px;
         }
