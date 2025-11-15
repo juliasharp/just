@@ -59,7 +59,7 @@ const isShown = computed({
 		width: 160px;
 	}
 	//transform: translate3d(0 -50%, 0);
-	mix-blend-mode: difference;
+	//mix-blend-mode: difference;
 	z-index: 99;
 	svg * {
 		fill: currentColor;
@@ -79,7 +79,7 @@ const isShown = computed({
   border: none;
   cursor: pointer;
 	color: #fff;
-	mix-blend-mode: difference;
+	//mix-blend-mode: difference;
 	@media (max-width: 760px) {
 		margin-top: 20px;
 		margin-right: 20px;
@@ -89,7 +89,7 @@ const isShown = computed({
 	}
 	&:hover {
 		background: black;
-		mix-blend-mode: difference;
+		//mix-blend-mode: difference;
 		svg {
 			transform: scale(0.666);
 			z-index: 1;
