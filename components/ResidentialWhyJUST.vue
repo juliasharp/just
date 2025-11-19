@@ -44,85 +44,25 @@ if (error.value) {
   console.error('Error fetching residential projects data:', error.value)
 }
 
-// ✅ Default open first section
-const openIndex = ref<number>(0)
-
-const contentRefs = ref<Array<HTMLElement | null>>([])
-
-function toggleAccordion(index: number) {
-  const isCurrentlyOpen = openIndex.value === index
-  const newIndex = isCurrentlyOpen ? -1 : index
-
-  // Close current
-  if (isCurrentlyOpen) {
-    const el = contentRefs.value[index]
-    if (el) {
-      const startHeight = el.scrollHeight
-      el.style.height = startHeight + 'px'
-      el.offsetHeight
-      el.style.height = '0px'
-    }
-    openIndex.value = -1
-    return
-  }
-
-  // Close previously open
-  if (openIndex.value !== -1) {
-    const prevEl = contentRefs.value[openIndex.value]
-    if (prevEl) {
-      const prevStartHeight = prevEl.scrollHeight
-      prevEl.style.height = prevStartHeight + 'px'
-      prevEl.offsetHeight
-      prevEl.style.height = '0px'
-    }
-  }
-
-  // Open new one
-  openIndex.value = newIndex
-
-  const el = contentRefs.value[newIndex]
-  if (!el) return
-
-  el.style.height = 'auto'
-  const targetHeight = el.scrollHeight
-  el.style.height = '0px'
-
-  nextTick(() => {
-    el.style.height = targetHeight + 'px'
-  })
-
-  const onEnd = (e: TransitionEvent) => {
-    if (e.propertyName !== 'height') return
-    if (openIndex.value === newIndex) {
-      el.style.height = 'auto'
-    }
-    el.removeEventListener('transitionend', onEnd)
-  }
-  el.addEventListener('transitionend', onEnd)
-}
+const openStates = ref<boolean[]>([])
 
 watch(
   () => data.value?.whyJust,
   (list) => {
     if (!list) return
-    contentRefs.value = list.map((_, i) => contentRefs.value[i] || null)
-
-    nextTick(() => {
-      contentRefs.value.forEach((el, i) => {
-        if (!el) return
-        el.style.transition = 'height 400ms'
-
-        // ✅ Collapse all, but open the first
-        if (i === 0) {
-          el.style.height = 'auto' // keep first one open
-        } else {
-          el.style.height = '0px'
-        }
-      })
-    })
+    openStates.value = list.map((_, i) => i === 0) // first open
   },
   { immediate: true }
 )
+
+function isOpen(index: number) {
+  return !!openStates.value[index]
+}
+
+function toggleAccordion(index: number) {
+  openStates.value[index] = !openStates.value[index]
+}
+
 </script>
 
 <template>
@@ -143,10 +83,10 @@ watch(
             <!-- TOGGLE HEADER -->
             <div
               class="why-just-item accordion-toggle flex align-center"
-              :class="{ 'is-open': openIndex === i }"
+              :class="{ 'is-open': isOpen(i) }"
               @click="toggleAccordion(i)"
             >
-              <h3 class="why-just-item-header body-font">
+              <h3 class="why-just-item-header body-font-medium">
                 {{ item.heading }}
               </h3>
 
@@ -155,7 +95,7 @@ watch(
                 <div
                   class="accordion-minus is-vertical"
                   :style="{
-                    transform: openIndex === i ? 'rotate(0deg)' : 'rotate(-90deg)'
+                    transform: isOpen(i) ? 'rotate(0deg)' : 'rotate(-90deg)'
                   }"
                 >
                   <AccordionMinus />
@@ -171,10 +111,8 @@ watch(
             <!-- CONTENT PANEL -->
             <div
               class="accordion-content overflow-hidden"
-              ref="contentRefs"
               :style="{
-                // openIndex controls if this one is expanded
-                height: openIndex === i ? 'auto' : '0px',
+                height: isOpen(i) ? 'auto' : '0px',
                 transition: 'height 400ms'
               }"
             >
@@ -209,12 +147,6 @@ watch(
 <style scoped lang="scss">
 
 .why-just {
-  @media (min-width: 769px) {
-    font-size: 17px;
-  }
-  @media (min-width: 1181px) {
-    font-size: 18px;
-  }
   &-container {
     @media (max-width: 767px) {
       flex-direction: column-reverse;
@@ -231,7 +163,6 @@ watch(
         margin-top: 50px;
       }
     }
-
     .right {
       @media (min-width: 769px) {
         max-width: 36vw;
@@ -248,21 +179,48 @@ watch(
   &-item {
     justify-content: space-between;
     border-top: 1px solid #272520b3;
+    cursor: pointer;
     &-header {
       text-transform: none;
       width: 100%;
       padding-top: 1em;
       padding-bottom: 1em;
       padding-right: 1.5em;
+      font-size: 17px;
+      @media (min-width: 769px) {
+        font-size: 19px;
+      }
+      @media (min-width: 1181px) {
+        font-size: 22px;
+      }
+      @media (min-width: 1801px) {
+        font-size: 23px;
+      }
     }
   }
   &-item {
     &-list {
       margin-top: 0;
       margin-bottom: 0;
-      padding-left: 2.25em;
+      padding-left: 1.5em;
+      @media (min-width: 769px) {
+        padding-left: 1.75em;
+      }
+      @media (min-width: 1181px) {
+        padding-left: 2.25em;
+      }
       li {
         margin-bottom: 0.25em;
+        font-size: 17px;
+        @media (min-width: 769px) {
+          font-size: 18px;
+        }
+        @media (min-width: 1181px) {
+          font-size: 20px;
+        }
+        @media (min-width: 1801px) {
+          font-size: 22px;
+        }
         &:before {
           content: '\2022';
           color: #000;
@@ -280,7 +238,10 @@ watch(
   &-wrap {
     border-bottom: 1px solid #272520b3;
     width: 100%;
-    margin-top: 50px;
+    margin-top: 25px;
+    @media (min-width: 999px) {
+      margin-top: 50px;
+    }
   }
   &-content-inner {
     padding-top: 0.5em;
@@ -290,7 +251,7 @@ watch(
       padding-right: 2em;
     }
     @media (min-width: 1181px) {
-      padding-right: 5em;
+      padding-right: 3em;
     }
   }
   &-icon {

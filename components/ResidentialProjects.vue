@@ -217,7 +217,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         <div class="absolute inset-0" @click="closeLightbox"></div>
 
         <!-- Image -->
-        <div class="relative z-10 w-full max-w-6xl">
+        <div class="relative z-10 image-container">
           <!-- Close button -->
           <button
             class="absolute -top-12 right-0 text-white/90 hover:text-white transition"
@@ -236,14 +236,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
           <!-- Prev / Next Controls -->
           <button
-            class="absolute left-4 top-1/2 -translate-y-1/2 px-4 py-3 text-white/80 hover:text-white text-4xl"
+            class="carousel-arrow absolute left-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
             aria-label="Previous image"
             @click.stop="prevImg"
           >
             ‹
           </button>
           <button
-            class="absolute right-4 top-1/2 -translate-y-1/2 px-4 py-3 text-white/80 hover:text-white text-4xl"
+            class="carousel-arrow absolute right-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
             aria-label="Next image"
             @click.stop="nextImg"
           >
@@ -346,6 +346,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   @media (max-width: 767px) {
     font-size: 18px;
   }
+}
+
+.image-container {
+  width: calc(100% - 24px);
+}
+
+.carousel-arrow {
+  color: var(--accent-color-pink);
 }
 
 </style>

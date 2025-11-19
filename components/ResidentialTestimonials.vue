@@ -33,25 +33,17 @@ if (error.value) {
   console.error('Error fetching residential projects data:', error.value);
 }
 
-// --- FADER LOGIC ---
-const current = ref(0)
-let timer: ReturnType<typeof setInterval> | null = null
-
 const testimonials = computed(() => data.value?.testimonials || [])
-const total = computed(() => testimonials.value.length)
 
-const next = () => {
-  if (!total.value) return
-  current.value = (current.value + 1) % total.value
+const settings = {
+  itemsToShow: 1,
+  autoplay: 8000,
+  wrapAround: true,
+  easing: "linear",
+  transition: 400,
+  mouseDrag: false,
+  touchDrag: true,
 }
-
-onMounted(() => {
-  timer = setInterval(next, 5000) // every 5s
-})
-
-onBeforeUnmount(() => {
-  if (timer) clearInterval(timer)
-})
 </script>
 
 <template>
@@ -61,28 +53,29 @@ onBeforeUnmount(() => {
       <!-- Stage: controls max width + horizontal padding -->
       <div class="res-gutter max-w-[1100px] w-full mx-auto text-center relative">
         <!-- Transition group sits inside the stage -->
-        <transition-group
-          name="fade"
-          tag="div"
-          class="relative w-full"
-        >
-          <div
+        <Carousel v-bind="settings">
+          <Slide
             v-for="(item, i) in testimonials"
             :key="i"
-            v-show="i === current"
-            class="absolute left-1/2 top-1/2 w-full -translate-x-1/2 -translate-y-1/2 flex flex-col items-center text-center"
+            class="testimonial-slide"
           >
-            <blockquote
-              class="testimonial body-font-medium max-w-[70ch] mx-auto transition-all"
-            >
-              {{ item.quote }}
-            </blockquote>
+            <transition name="fade"  mode="out-in">
+              <div
+                class="flex flex-col items-center text-center"
+              >
+                <blockquote
+                  class="testimonial body-font-medium max-w-[70ch] mx-auto transition-all"
+                >
+                  {{ item.quote }}
+                </blockquote>
 
-            <p class="testimonial-author uppercase body-font-bold">
-              — {{ item.author }}
-            </p>
-          </div>
-        </transition-group>
+                <p class="testimonial-author uppercase body-font-bold">
+                  — {{ item.author }}
+                </p>
+              </div>
+            </transition>
+          </Slide>
+        </Carousel>
       </div>
     </div>
   </section>
@@ -103,13 +96,5 @@ onBeforeUnmount(() => {
       font-size: 16px;
     }
   }
-}
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 1s ease-in-out;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
