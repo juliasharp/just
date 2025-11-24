@@ -220,7 +220,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         <div class="relative z-10 image-container">
           <!-- Close button -->
           <button
-            class="absolute -top-12 right-0 text-white/90 hover:text-white transition"
+            class="lightbox-close absolute text-white/90 hover:text-white transition"
             aria-label="Close"
             @click.stop="closeLightbox"
           >
@@ -354,6 +354,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 .carousel-arrow {
   color: var(--accent-color-pink);
+}
+
+.lightbox-close {
+  @media (min-width: 768px) {
+    font-size: 30px;
+    right: 2rem;
+    top: -2rem;
+  }
 }
 
 </style>

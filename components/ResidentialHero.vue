@@ -314,7 +314,7 @@ onBeforeUnmount(() => {
       <!-- Left: hero copy + scroll cue -->
       <div 
         ref="heroLeft"
-        class="hero-left md:max-w-[44ch] flex flex-col justify-between h-full pb-[45px] md:pb-[15px]"
+        class="hero-left md:max-w-[30ch] lg:max-w-[44ch] flex flex-col justify-between h-full pb-[45px] md:pb-[15px]"
       >
         <div>
           <p class="hero-text body-font-medium">
@@ -419,6 +419,9 @@ body.is-locked {
     @media (min-width: 1181px) {
       height: 46vh;
     }
+    @media (min-width: 768px) {
+      height: 30vh;
+    }
   }
   &-text {
     font-size: clamp(20px, 2.4vw, 36px);
@@ -481,6 +484,9 @@ img {
   margin: 0 auto;
   display: flex;
   justify-content: flex-end;
+  @media (min-width: 768px) {
+    bottom: 16%;
+  }
   @media (min-width: 1181px) {
     bottom: clamp(40px, 4vw, 91px)
   }
@@ -500,6 +506,9 @@ img {
     object-fit: cover;
     left: 0;
     top: -47%;
+    @media (min-width: 768px) {
+      width: 80%;
+    }
     @media (min-width: 1181px) {
       width: clamp(250px, 38vw, 494px);
     }
