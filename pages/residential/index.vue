@@ -12,7 +12,6 @@ const showContactForm = ref(false);
 
 <template>
   <NuxtLayout name="residential" page-name="gateway" title="Residential| JUST Design">
-    <LogoNav/>
     <ResidentialHero />
     <ResidentialContent />
     <ResidentialProjects />

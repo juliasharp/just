@@ -1,8 +1,14 @@
 <script setup lang="ts">
+import gsap from 'gsap'
+import LogoNav from './LogoNav.vue'
+import LogoSVG from '/src/just-logo-res.svg?component';
+import ScrollTrigger from 'gsap/ScrollTrigger'
 
-import gsap from 'gsap';
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
 
-const config = useRuntimeConfig();
+const config = useRuntimeConfig()
 const query = `
   query NewQuery {
     page(id: "234", idType: DATABASE_ID) {
@@ -28,16 +34,14 @@ const query = `
       }
     }
   }
-`;
+`
 
 const { data, error } = await useFetch(config.public.wordpressUrl, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
-  body: {
-    query
-  },
+  body: { query },
   transform: (d: any) => {
     const lp = d?.data?.page?.residentialLp
     return {
@@ -48,155 +52,230 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
   }
 })
 
-if (error.value) console.error('Error fetching residential hero data:', error.value);
+if (error.value) console.error('Error fetching residential hero data:', error.value)
 
 // --- Refs for layout/animation ---
 const root = ref<HTMLElement | null>(null)
-const stage = ref<HTMLElement | null>(null)
-const slide = ref<HTMLElement | null>(null)       // big image + overlays (moves as a group)
-const intro = ref<HTMLElement | null>(null)       // intro text (shows first, then hides)
-const staticPane = ref<HTMLElement | null>(null)  // revealed left text
-const o1Ref = ref<HTMLElement | null>(null)       // top overlay
-const o2Ref = ref<HTMLElement | null>(null)       // bottom overlay
+const stage = ref<HTMLElement | null>(null)       // full-height hero image section
+const slide = ref<HTMLElement | null>(null)       // big image wrapper (no longer slides)
+const intro = ref<HTMLElement | null>(null)       // intro text overlay
+const staticPane = ref<HTMLElement | null>(null)  // second section (hero text + overlays)
+const o1Ref = ref<HTMLElement | null>(null)       // overlay image #1
+const o2Ref = ref<HTMLElement | null>(null)       // overlay image #2
+const heroLeft = ref<HTMLElement | null>(null)
+const logoEl = ref<HTMLElement | null>(null)
+
+
 let tl: gsap.core.Timeline | null = null
 
-const isReady = ref(false); // false on SSR -> hides overlays/intro/aside
-
-function onHeroLoaded() {
-  // If the hero image is already cached, this will run immediately.
-  requestAnimationFrame(() => {
-    runAnimation();
-    isReady.value = true; // remove inert state AFTER GSAP has set initial states
-  });
-}
-
-function computeGap() {
-  if (!root.value || !staticPane.value) return 0
-  return staticPane.value.offsetWidth
-}
+const isReady = ref(false) // hide intro / static / overlays until animation sets them
+let hasPlayedSection2 = false
+let section2Trigger: ScrollTrigger | null = null
 
 const prefersReduced =
   typeof window !== 'undefined' &&
   window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
+const isDesktop =
+  typeof window !== 'undefined'
+    ? window.matchMedia?.('(min-width: 768px)').matches
+    : true // SSR fallback
+
+function onHeroLoaded() {
+  requestAnimationFrame(() => {
+    runAnimation()
+    isReady.value = true
+  })
+}
+
+function lockScroll() {
+  if (typeof document === 'undefined') return
+  document.documentElement.classList.add('is-locked')
+  document.body.classList.add('is-locked')
+}
+
+function unlockScroll() {
+  if (typeof document === 'undefined') return
+  document.documentElement.classList.remove('is-locked')
+  document.body.classList.remove('is-locked')
+}
+
+function anchorLogoToDetails() {
+  if (!logoEl.value || !root.value || !staticPane.value) return
+
+  const heroRect = root.value.getBoundingClientRect()
+  const staticRect = staticPane.value.getBoundingClientRect()
+
+  // Distance from top of hero-section to top of hero-details
+  const offsetTop = staticRect.top - heroRect.top
+
+  logoEl.value.classList.add('logo--anchored')
+  logoEl.value.style.top = `${offsetTop + 30}px`  // 30px = same offset you were using
+  logoEl.value.style.left = '30px'
+}
+
+
 function runAnimation() {
-  if (!stage.value || !slide.value || !intro.value || !staticPane.value) return
-
-  const isMobile = window.matchMedia('(max-width: 767.98px)').matches
-  const gap = computeGap()
-
-  // Reduced motion → jump to end
-  if (prefersReduced) {
-    gsap.set(intro.value, { autoAlpha: 0 })
-    gsap.set(staticPane.value, { autoAlpha: 1 })
-    if (!isMobile) gsap.set(slide.value, { x: gap })
-    if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 1, y: 0 })
-    if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 1, y: 0 })
-    return
-  }
+  if (!stage.value || !intro.value) return
 
   tl?.kill()
   tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
-  // Initial states
-  gsap.set([stage.value, slide.value, staticPane.value, intro.value], { willChange: 'transform, opacity' })
-  gsap.set(staticPane.value, { autoAlpha: 0 })
-  gsap.set(intro.value, { autoAlpha: 0, y: 16 })
-  if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 0, y: 12 })
-  if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 0, y: 12 })
-
-  // 1) Stage fade in (hero visible)
-  tl.fromTo(stage.value, { autoAlpha: 0, scale: 1.02 }, { autoAlpha: 1, scale: 1, duration: 0.6 })
-
-  // 2) Intro in → hold → out (mobile & desktop)
-  tl.to(intro.value, { autoAlpha: 1, y: 0, duration: 0.45 }, '-=0.1')
-    .to({}, { duration: 1.6 })
-    .to(intro.value, { autoAlpha: 0, y: 8, duration: 0.35 })
-
-  // 3) Reveal text pane
-  tl.to(staticPane.value, { autoAlpha: 1, duration: 0.35 }, '-=0.1')
-
-  // 4) Desktop: slide the hero to target width; Mobile: no width change
-  if (!isMobile) {
-    const isLg = window.matchMedia('(min-width: 1280px)').matches
-    const targetWidth = isLg ? '50vw' : `calc(100vw - ${gap}px)`
-    tl.to(slide.value, { width: targetWidth, duration: 0.9, ease: 'power4.out' }, '<')
-  } else {
-    gsap.set(slide.value, { clearProps: 'width,x' }) // keep CSS-driven full width, 262px tall
+  if (prefersReduced) {
+    gsap.set(stage.value, { autoAlpha: 1, scale: 1 })
+    gsap.set(intro.value, { autoAlpha: 0 })
+    // section 2 will be handled separately
+    return
   }
 
-  // 5) Overlays in
-  tl.add(() => {
-    if (o1Ref.value) gsap.to(o1Ref.value, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out' })
-    if (o2Ref.value) gsap.to(o2Ref.value, { autoAlpha: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.4 })
+  gsap.set([stage.value, slide.value, intro.value], {
+    willChange: 'transform, opacity',
+  })
+
+  // initial state
+  gsap.set(intro.value, { autoAlpha: 0, y: 16 })
+
+  // 1) Stage fade in
+  tl.fromTo(
+    stage.value,
+    { autoAlpha: 0, scale: 1.02 },
+    { autoAlpha: 1, scale: 1, duration: 0.6 }
+  )
+
+  // 2) Intro in → hold → out
+  tl.to(intro.value, { autoAlpha: 1, y: 0, duration: 0.45 }, '-=0.1')
+    .to({}, { duration: 1.6 }) // hold
+    .to(intro.value, { autoAlpha: 0, y: 8, duration: 0.35 })
+}
+
+function setupSection2ScrollTrigger() {
+  if (!staticPane.value) return
+
+  // Reduced motion: just show everything, no lock, no animation
+  if (prefersReduced || !isDesktop) {
+    gsap.set(staticPane.value, { autoAlpha: 1, y: 0 })
+    if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 1, y: 0 })
+    if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 1, y: 0 })
+    if (heroLeft.value) gsap.set(heroLeft.value, { autoAlpha: 1, y: 0 })
+    return
+  }
+
+  // Initial hidden states for section 2 elements
+  gsap.set(staticPane.value, { autoAlpha: 0, y: 24 })
+  if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 0, y: 24 })
+  if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 0, y: 24 })
+  if (heroLeft.value) gsap.set(heroLeft.value, { autoAlpha: 0, y: 24 })
+
+  // Timeline for section 2 (plays once when triggered)
+  const tl2 = gsap.timeline({
+    paused: true,
+    defaults: { ease: 'power3.out' },
+    onComplete() {
+      // when stagger is done, unlock scroll and kill lock trigger
+      unlockScroll()
+      section2Trigger?.kill()
+      section2Trigger = null
+
+      anchorLogoToDetails()
+    },
+  })
+
+  // Fade in whole section
+  tl2.to(staticPane.value, { autoAlpha: 1, y: 0, duration: 0.9 }, 0)
+
+  // 1) bottom image first (o2)
+  if (o2Ref.value) {
+    tl2.to(
+      o2Ref.value,
+      { autoAlpha: 1, y: 0, duration: 1.0 },
+    )
+  }
+
+  // 2) then top image (o1)
+  if (o1Ref.value) {
+    tl2.to(
+      o1Ref.value,
+      { autoAlpha: 1, y: 0, duration: 0.5 },
+    )
+  }
+
+  // 3) then text block
+  if (heroLeft.value) {
+    tl2.to(
+      heroLeft.value,
+      { autoAlpha: 1, y: 0, duration: 0.7 },
+      '+=0.05'
+    )
+  }
+
+  // tiny hold at the end
+  tl2.to({}, { duration: 0.7 })
+
+  // --- Trigger 1: start animation early (top 70%) ---
+  ScrollTrigger.create({
+    trigger: staticPane.value,
+    start: 'top 70%',            // 👈 animation starts when hero-details reaches 70% viewport height
+    onEnter(self) {
+      if (self.direction !== 1) return
+      if (tl2.progress() === 0) tl2.play()  // play only once
+    },
+    // markers: true,
+  })
+
+  // --- Trigger 2: lock scroll at top top ---
+  section2Trigger = ScrollTrigger.create({
+    trigger: staticPane.value,
+    start: 'top top',            // 👈 lock happens when hero-details top hits viewport top
+    // no pin, no pinSpacing, no scrub
+    onEnter(self) {
+      if (self.direction === 1) {
+        lockScroll()
+      }
+    },
+    markers: true,
   })
 }
 
-function handleResize() {
-  if (!slide.value || !staticPane.value) return
-  const isMobile = window.matchMedia('(max-width: 767.98px)').matches
-  if (isMobile) {
-    gsap.set(slide.value, { clearProps: 'width,x' })
-    return
-  }
-  const gap = computeGap()
-  //const targetWidth = `calc(100vw - ${gap}px)`
-  const targetWidth = `50%`
-  gsap.set(slide.value, { width: targetWidth })
-}
-
 onMounted(() => {
-  const heroEl = slide.value?.querySelector('img[data-role="hero"]') as HTMLImageElement | null;
-  if (heroEl?.complete) onHeroLoaded();
+  const heroEl = slide.value?.querySelector('img[data-role="hero"]') as HTMLImageElement | null
+  if (heroEl?.complete) onHeroLoaded()
 
-  window.addEventListener('resize', handleResize, { passive: true })
+  setupSection2ScrollTrigger()
 })
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', handleResize)
   tl?.kill()
+  ScrollTrigger.killAll()
 })
+
 </script>
 
 <template>
-  <section 
-    ref="root" 
+  <section
+    ref="root"
     :class="[
-      'hero-section relative h-auto md:h-[100dvh] overflow-hidden', 
+      'hero-section relative h-auto',
       { 'hero--inert': !isReady }
     ]"
   >
-    <!-- Left static text pane (revealed after intro) -->
-    <aside
-      ref="staticPane"
-      data-static
-      class="
-        pb-[15px] res-gutter pointer-events-none 
-        relative
-        md:absolute md:left-0 md:bottom-0 md:h-[50vh] md:w-[min(39vw,580px)] 
-        flex flex-col justify-end"
-    >
-      <div>
-        <p class="hero-text body-font-medium">
-          <span class="body-font-bold">JUST Design</span> is a minority-owned architecture and design studio specializing in thoughtful, modern residential homes that balance form, function, and feeling.
-        </p>
+    <div class="header flex">
+      <div ref="logoEl" class="logo animate-in">
+        <LogoSVG></LogoSVG>
       </div>
-      <div class="scroll-text body-font-medium">
-        <p>scroll for more</p>
+      <div class="header-right">
       </div>
-    </aside>
-
-    <!-- The group that slides to the right (big hero + overlays) -->
-    <div 
+    </div>
+    <!-- SECTION 1: Full-height hero image with intro text -->
+    <div
       ref="stage"
-      class="relative w-full h-[262px] md:absolute md:top-0 md:right-0 md:h-full md:w-screen">
-      <div 
-        ref="slide" 
-        data-slide 
-        class="
-          hero-image relative w-full h-[262px]
-          md:absolute md:top-0 md:right-0 md:h-full md:w-screen">
-        <!-- Big hero image -->
+      class="hero-stage relative w-full sm::h-[calc(100dvh-78px)] md:h-[100dvh]"
+    >
+      <div
+        ref="slide"
+        data-slide
+        class="hero-image relative w-full h-full"
+      >
+        <!-- Big hero image (full width) -->
         <img
           v-if="data?.hero"
           data-role="hero"
@@ -207,52 +286,82 @@ onBeforeUnmount(() => {
           decoding="async"
           @load="onHeroLoaded"
         />
+        <div
+          ref="intro"
+          data-intro
+          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[24px] md:pb-[35px] px-6 md:px-10"
+        >
+          <div class="w-full md:flex justify-between gap-6">
+            <p class="body-font-bold">a JUST home is</p>
+            <p>built with care, dignity, and transparency.</p>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        <!-- Overlay image #1 (TOP) — appears after slide -->
-        <img
-          v-if="data?.o1"
-          ref="o1Ref"
-          data-overlay
-          :src="data.o1.sourceUrl"
-          :alt="data.o1.altText || ''"
-          class="overlay-img-1
-            absolute z-10 max-w-none
-            w-[62vw] top-[43px] right-[-13vw]
-            md:w-[min(37vw,545px)] md:top-[6vh] md:right-[unset] md:left-[-10%]"
-          loading="eager"
-          decoding="async"
-        />
+    <!-- SECTION 2: Hero text + overlay images (second 100vh section) -->
+    <section
+      ref="staticPane"
+      data-static
+      class="
+        hero-details
+        res-gutter
+        md:h-[100dvh]
+        flex flex-col md:flex-row items-end justify-between gap-10
+        pt-10 md:pt-0
+      "
+    >
+      <!-- Left: hero copy + scroll cue -->
+      <div 
+        ref="heroLeft"
+        class="hero-left md:max-w-[44ch] flex flex-col justify-between h-full pb-[45px] md:pb-[15px]"
+      >
+        <div>
+          <p class="hero-text body-font-medium">
+            <span class="body-font-bold">JUST Design</span> is a minority-owned
+            architecture and design studio specializing in thoughtful, modern
+            residential homes that balance form, function, and feeling.
+          </p>
+        </div>
+      </div>
 
-        <!-- Overlay image #2 (BOTTOM) — appears after slide, slightly later -->
+      <!-- Right: overlay images (collaged) -->
+      <div class="hero-overlays">
+        <!-- Bottom / main image -->
         <img
           v-if="data?.o2"
           ref="o2Ref"
           data-overlay
           :src="data.o2.sourceUrl"
           :alt="data.o2.altText || ''"
-          class="overlay-img-2
-            absolute z-20 max-w-none 
-            w-[35vw] bottom-[-15vw] left-[30vw]
-            md:w-[min(22vw,330px)] md:bottom-[6vh] md:left-[53%]"
+          class="overlay-img-2"
+          loading="eager"
+          decoding="async"
+        />
+
+        <!-- Top / smaller image -->
+        <img
+          v-if="data?.o1"
+          ref="o1Ref"
+          data-overlay
+          :src="data.o1.sourceUrl"
+          :alt="data.o1.altText || ''"
+          class="overlay-img-1"
+          loading="eager"
+          decoding="async"
         />
       </div>
-
-      <!-- Intro text that shows first, then disappears -->
-      <div
-        ref="intro"
-        data-intro
-        class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[35px] px-6 md:px-10"
-      >
-        <div class="w-full md:flex justify-between">
-          <p class="body-font-bold">a JUST home is</p>
-          <p>built with care, dignity, and transparency.</p>
-        </div>
-      </div>
-    </div>
+    </section>
   </section>
 </template>
 
 <style lang="scss">
+html.is-locked,
+body.is-locked {
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
 .hero--inert [data-intro],
 .hero--inert [data-static],
 .hero--inert [data-overlay] {
@@ -265,27 +374,60 @@ onBeforeUnmount(() => {
   visibility: visible;
 }
 
-.hero {
-  &-image {
+.header {
+	position: absolute;
+  display: flex;
+}
+
+.logo {
+	top: 30px;
+	left: 30px;
+	color: #fff;
+	width: 140px;
+	width: 135px;
+	z-index: 99;
+	@media (min-width: 768px) {
+		top: 35px;
+		left: 35px;
+		width: 160px;
+    mix-blend-mode: difference;
+    position: fixed;
+	}
+	svg * {
+		fill: currentColor;
+	}
+}
+
+.logo--anchored {
+  position: absolute;  // overrides fixed
+}
+
+.hero-stage {
+  .hero-image {
     @media (max-width: 767px) {
       height: clamp(292px, 42dvh, 331px);
     }
   }
+}
+
+.hero {
   &-section {
-    @media (max-width: 767px) {
-      display: flex;
-      flex-direction: column-reverse;
-      justify-content: space-between;
-      margin-top: 77px;
-      height: calc(100dvh - 78px);
+    display: flex;
+    flex-direction: column;
+  }
+  &-left {
+    @media (min-width: 1181px) {
+      height: 46vh;
     }
   }
   &-text {
     font-size: clamp(20px, 2.4vw, 36px);
     line-height: 1.28;
+
     &-initial {
       color: #fff;
       font-size: 18px;
+
       @media (min-width: 768px) {
         font-size: clamp(20px, 2.5vw, 41px);
       }
@@ -293,21 +435,27 @@ onBeforeUnmount(() => {
   }
 }
 
-img { image-rendering: auto; }
+img {
+  image-rendering: auto;
+}
 
 .scroll-text {
   display: block;
   margin-top: 5vh;
+
   @media (min-width: 768px) {
     margin-top: 15vh;
   }
+
   p {
     padding-left: 20px;
     position: relative;
     font-size: 20px;
-      @media (max-width: 767px) {
+
+    @media (max-width: 767px) {
       font-size: 18px;
     }
+
     &:before {
       content: '';
       width: 8px;
@@ -317,6 +465,7 @@ img { image-rendering: auto; }
       position: absolute;
       left: 1px;
       top: 11px;
+
       @media (min-width: 768px) {
         width: 10px;
         height: 10px;
@@ -325,18 +474,56 @@ img { image-rendering: auto; }
   }
 }
 
+.hero-overlays {
+  position: relative;
+  width: min(43rem, 50vw);
+  bottom: 40px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  @media (min-width: 1181px) {
+    bottom: clamp(40px, 4vw, 91px)
+  }
+  @media (max-width: 767px) {
+    width: min(335px, 80vw);
+    margin: 40px auto 70px;
+  }
+  @media (max-width: 400px) {
+    margin: 40px auto 85px;
+  }
+}
+
 .overlay-img {
   &-1 {
+    position: absolute;
+    display: block;
+    object-fit: cover;
+    left: 0;
+    top: -47%;
+    @media (min-width: 1181px) {
+      width: clamp(250px, 38vw, 494px);
+    }
     @media (max-width: 767px) {
-      max-width: 335px;
+      width: 65%;
+      min-width: 270px;
+      left: -4%;
+      top: -14%;
+    }
+    @media (max-width: 400px) {
+      min-width: 245px;
     }
   }
   &-2 {
+    width: clamp(180px, 23vw, 340px);
+    display: block;
+    object-fit: cover;
     @media (max-width: 767px) {
       max-width: 195px;
+      position: relative;
+      top: 85px;
     }
-    @media (min-width: 591px) and (max-width: 767px) {
-      left: 44vw;
+    @media (max-width: 400px) {
+      top: 80px;
     }
   }
 }
