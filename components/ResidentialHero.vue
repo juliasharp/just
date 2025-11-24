@@ -416,11 +416,11 @@ body.is-locked {
     flex-direction: column;
   }
   &-left {
-    @media (min-width: 1181px) {
-      height: 46vh;
-    }
     @media (min-width: 768px) {
       height: 30vh;
+    }
+    @media (min-width: 1181px) {
+      height: 46vh;
     }
   }
   &-text {
