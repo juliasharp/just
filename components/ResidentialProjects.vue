@@ -101,14 +101,6 @@ const textHoverColor = (i: number) => {
   return PROJECT_COLOR_CLASSES[i % PROJECT_COLOR_CLASSES.length]
 }
 
-const arrowColor = computed(() => {
-  if (activeProjectIndex.value == null) {
-    // fallback
-    return 'var(--accent-color-pink)'
-  }
-  return PROJECT_COLOR_HEX[activeProjectIndex.value % PROJECT_COLOR_HEX.length]
-})
-
 const gallery = computed(() => {
   if (activeProjectIndex.value == null) return []
   return projects.value?.[activeProjectIndex.value]?.photoGallery?.nodes ?? []
@@ -255,7 +247,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             class="carousel-arrow absolute left-0 md:left-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
             aria-label="Previous image"
             @click.stop="prevImg"
-            :style="{ color: arrowColor }"
           >
             ‹
           </button>
@@ -263,7 +254,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             class="carousel-arrow absolute right-0 md:right-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
             aria-label="Next image"
             @click.stop="nextImg"
-            :style="{ color: arrowColor }"
           >
             ›
           </button>
@@ -378,6 +368,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 }
 
 .carousel-arrow {
+  color: var(--accent-color-pink);
   @media (max-width: 767px) {
     font-size: 2.5rem;
   }
