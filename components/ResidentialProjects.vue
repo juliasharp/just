@@ -282,7 +282,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 <style lang="scss" scoped>
 .project {
-  @media (min-width: 769px) {
+  @media (min-width: 768px) {
     gap: 30px;
   }
   &-meta {
@@ -292,8 +292,8 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     position: relative;
     top: 45px;
     margin-bottom: 32px;
-    @media (min-width: 769px)  and (max-width: 1499px) {
-      top: clamp(31px, calc(31px + 35 * ((100vw - 769px) / (1500 - 769))), 66px);
+    @media (min-width: 768px)  and (max-width: 1499px) {
+      top: clamp(31px, calc(31px + 35 * ((100vw - 768px) / (1500 - 768))), 66px);
     }
     @media (min-width: 1500px) {
       top: 66px;
@@ -310,9 +310,9 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       width: 100%;
       height: auto;
     }
-    @media (min-width: 769px) {
+    @media (min-width: 768px) {
       top: 8px;
-      height: calc(180px + (98 * ((100vw - 769px) / (1175 - 769))));
+      height: calc(180px + (98 * ((100vw - 768px) / (1175 - 768))));
     }
     @media (min-width: 1175px) {
       height: calc(278px + (75 * ((100vw - 1175px) / (1500 - 1175))));
@@ -321,8 +321,11 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
       height: 353px;
     }
     img {
-      @media (min-width: 769px) {
+      @media (min-width: 768px) {
         position: absolute;
+        transform-origin: center center;
+        transition: transform 220ms ease-out; // subtle & snappy
+        will-change: transform;
       }
     }
   }
@@ -333,15 +336,20 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   }
   &-location {
     font-size: 18px;
-    @media (min-width: 769px) {
+    @media (min-width: 768px) {
       font-size: clamp(19px, 2.45vw, 22px)
     }
   }
   &-year {
     text-transform: uppercase;
     font-size: 16px;
-    @media (min-width: 769px) {
+    @media (min-width: 768px) {
       font-size: clamp(16px, 2vw, 18px)
+    }
+  }
+  &:hover {
+    .project-image img {
+      transform: scale(1.05);
     }
   }
 }

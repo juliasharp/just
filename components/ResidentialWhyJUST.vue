@@ -151,7 +151,7 @@ function toggleAccordion(index: number) {
     @media (max-width: 767px) {
       flex-direction: column-reverse;
     }
-    @media (min-width: 769px) {
+    @media (min-width: 768px) {
       margin-bottom: 80px;
     }
     @media (min-width: 1181px) {
@@ -164,7 +164,7 @@ function toggleAccordion(index: number) {
       }
     }
     .right {
-      @media (min-width: 769px) {
+      @media (min-width: 768px) {
         max-width: 36vw;
       }
       @media (min-width: 1181px) {
@@ -187,7 +187,7 @@ function toggleAccordion(index: number) {
       padding-bottom: 1em;
       padding-right: 1.5em;
       font-size: 17px;
-      @media (min-width: 769px) {
+      @media (min-width: 768px) {
         font-size: 19px;
       }
       @media (min-width: 1181px) {
@@ -203,7 +203,7 @@ function toggleAccordion(index: number) {
       margin-top: 0;
       margin-bottom: 0;
       padding-left: 1.5em;
-      @media (min-width: 769px) {
+      @media (min-width: 768px) {
         padding-left: 1.75em;
       }
       @media (min-width: 1181px) {
@@ -212,7 +212,7 @@ function toggleAccordion(index: number) {
       li {
         margin-bottom: 0.25em;
         font-size: 17px;
-        @media (min-width: 769px) {
+        @media (min-width: 768px) {
           font-size: 18px;
         }
         @media (min-width: 1181px) {
@@ -247,7 +247,7 @@ function toggleAccordion(index: number) {
     padding-top: 0.5em;
     padding-bottom: 1.5em;
     padding-right: 1em;
-    @media (min-width: 769px) {
+    @media (min-width: 768px) {
       padding-right: 2em;
     }
     @media (min-width: 1181px) {
