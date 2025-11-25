@@ -268,7 +268,8 @@ function toggleAccordion(index: number) {
     &.is-vertical {
       transition: transform .2s ease-out;
       position: absolute;
-      transform: rotate(-90deg);
+      transform: rotate(-90deg) translateZ(0);
+      will-change: transform;
     }
   }
 }
