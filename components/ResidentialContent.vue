@@ -68,7 +68,7 @@ onBeforeUnmount(() => tl?.kill())
 
 
 <template>
-  <section class="content-section px-6 pt-[5rem] pb-[5rem] md:pt-[8rem] md:pb-[5rem] xl:pt-[17rem] xl:pb-[20rem] overflow-hidden">
+  <section class="content-section px-6 pt-[5rem] pb-[5rem] md:pt-[11rem] md:pb-[13rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden">
     <div class="a-just-home-is-text flex justify-center flex-row gap-4 sm:gap-6 items-start sm:items-center">
       <!-- Prefix -->
       <h2 class="whitespace-nowrap">
@@ -99,7 +99,10 @@ onBeforeUnmount(() => tl?.kill())
   position: relative;
   bottom: 1px;
   @media (min-width: 768px) {
-    width: 310px;
+    width: 346px;
+  }
+  @media (min-width: 1021px) {
+    width: 400px;
   }
   @media (min-width: 1281px) {
     width: 632px;
@@ -110,6 +113,9 @@ onBeforeUnmount(() => tl?.kill())
   font-size: 20px;
   @media (min-width: 768px) {
     font-size: 40px;
+  }
+  @media (min-width: 1021px) {
+    font-size: 50px;
   }
   @media (min-width: 1281px) {
     font-size: 76px;

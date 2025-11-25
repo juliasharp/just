@@ -212,12 +212,13 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
         class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/90"
         aria-modal="true"
         role="dialog"
+        @click.self="closeLightbox"
       >
-        <!-- Click to close area -->
-        <div class="absolute inset-0" @click="closeLightbox"></div>
-
-        <!-- Image -->
-        <div class="relative z-10 image-container">
+        <!-- Image container (clicks inside here should NOT close) -->
+        <div
+          class="relative z-10 image-container"
+          @click.stop
+        >
           <!-- Close button -->
           <button
             class="lightbox-close absolute text-white/90 hover:text-white transition"
@@ -231,7 +232,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             v-if="gallery.length"
             :src="gallery[activeImageIndex]?.sourceUrl"
             :alt="gallery[activeImageIndex]?.altText || 'Project image'"
-            class="w-full h-auto max-h-[90vh] object-contain select-none"
+            class="w-full h-auto max-h-[100vh] object-contain select-none"
           />
 
           <!-- Prev / Next Controls -->
@@ -250,7 +251,6 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
             ›
           </button>
 
-          <!-- Counter -->
           <div
             v-if="gallery.length"
             class="absolute bottom-4 right-4 text-sm text-white/80"
@@ -360,7 +360,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   @media (min-width: 768px) {
     font-size: 30px;
     right: 2rem;
-    top: -2rem;
+    top: 1rem;
   }
 }
 

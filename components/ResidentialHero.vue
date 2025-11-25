@@ -113,6 +113,25 @@ function anchorLogoToDetails() {
   logoEl.value.style.left = '30px'
 }
 
+function handleResize() {
+  if (typeof window === 'undefined') return
+  if (!logoEl.value) return
+
+  const isNowDesktop = window.innerWidth >= 768
+
+  // If we’re not on desktop, reset and let mobile CSS handle it
+  if (!isNowDesktop) {
+    logoEl.value.classList.remove('logo--anchored')
+    logoEl.value.style.top = ''
+    logoEl.value.style.left = ''
+    return
+  }
+
+  // If the logo is currently anchored, recompute its offset
+  if (logoEl.value.classList.contains('logo--anchored')) {
+    anchorLogoToDetails()
+  }
+}
 
 function runAnimation() {
   if (!stage.value || !intro.value) return
@@ -241,12 +260,23 @@ onMounted(() => {
   if (heroEl?.complete) onHeroLoaded()
 
   setupSection2ScrollTrigger()
+
+  if (typeof window !== 'undefined') {
+    window.addEventListener('resize', handleResize)
+    // Run once in case we load on a weird breakpoint
+    handleResize()
+  }
 })
 
 onBeforeUnmount(() => {
   tl?.kill()
   ScrollTrigger.killAll()
+
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', handleResize)
+  }
 })
+
 
 </script>
 
@@ -421,6 +451,9 @@ body.is-locked {
     }
     @media (min-width: 1181px) {
       height: 46vh;
+    }
+    @media (min-width: 1301px) {
+      height: 37vh;
     }
   }
   &-text {
