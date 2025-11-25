@@ -410,11 +410,11 @@ body.is-locked {
 }
 
 .logo {
-	top: 30px;
-	left: 30px;
+	top: 20px;
+	left: 20px;
 	color: #fff;
 	width: 140px;
-	width: 135px;
+	width: 95px;
 	z-index: 99;
 	@media (min-width: 768px) {
 		top: 35px;
@@ -454,6 +454,9 @@ body.is-locked {
     }
     @media (min-width: 1301px) {
       height: 37vh;
+    }
+    @media (min-width: 1601px) {
+      height: 45vh;
     }
   }
   &-text {
@@ -547,7 +550,7 @@ img {
     }
     @media (min-width: 1601px) {
       width: clamp(494px, 24vw, 640px);
-      top: -59%;
+      top: -46%;
     }
     @media (max-width: 767px) {
       width: 65%;
