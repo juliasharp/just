@@ -68,7 +68,7 @@ onBeforeUnmount(() => tl?.kill())
 
 
 <template>
-  <section class="content-section px-6 pt-[5rem] pb-[5rem] md:pt-[11rem] md:pb-[13rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden">
+  <section class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[11rem] md:pb-[13rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden">
     <div class="a-just-home-is-text flex justify-center flex-row gap-4 sm:gap-6 items-start sm:items-center">
       <!-- Prefix -->
       <h2 class="whitespace-nowrap">
@@ -94,12 +94,13 @@ onBeforeUnmount(() => tl?.kill())
 
 <style scoped lang="scss">
 .suffix-container {
-  width: 155px;
+  width: 168px;
   border-bottom: 2px solid black;
   position: relative;
-  bottom: 1px;
+  bottom: -2.5px;
   @media (min-width: 768px) {
     width: 346px;
+    bottom: 1px;
   }
   @media (min-width: 1021px) {
     width: 400px;
@@ -110,7 +111,7 @@ onBeforeUnmount(() => tl?.kill())
 }
 
 .a-just-home-is-text {
-  font-size: 20px;
+  font-size: 21px;
   @media (min-width: 768px) {
     font-size: 40px;
   }
