@@ -62,7 +62,6 @@ const staticPane = ref<HTMLElement | null>(null)  // second section (hero text +
 const o1Ref = ref<HTMLElement | null>(null)       // overlay image #1
 const o2Ref = ref<HTMLElement | null>(null)       // overlay image #2
 const heroLeft = ref<HTMLElement | null>(null)
-const logoEl = ref<HTMLElement | null>(null)
 
 
 let tl: gsap.core.Timeline | null = null
@@ -97,40 +96,6 @@ function unlockScroll() {
   if (typeof document === 'undefined') return
   document.documentElement.classList.remove('is-locked')
   document.body.classList.remove('is-locked')
-}
-
-function anchorLogoToDetails() {
-  if (!logoEl.value || !root.value || !staticPane.value) return
-
-  const heroRect = root.value.getBoundingClientRect()
-  const staticRect = staticPane.value.getBoundingClientRect()
-
-  // Distance from top of hero-section to top of hero-details
-  const offsetTop = staticRect.top - heroRect.top
-
-  logoEl.value.classList.add('logo--anchored')
-  logoEl.value.style.top = `${offsetTop + 30}px`  // 30px = same offset you were using
-  logoEl.value.style.left = '30px'
-}
-
-function handleResize() {
-  if (typeof window === 'undefined') return
-  if (!logoEl.value) return
-
-  const isNowDesktop = window.innerWidth >= 768
-
-  // If we’re not on desktop, reset and let mobile CSS handle it
-  if (!isNowDesktop) {
-    logoEl.value.classList.remove('logo--anchored')
-    logoEl.value.style.top = ''
-    logoEl.value.style.left = ''
-    return
-  }
-
-  // If the logo is currently anchored, recompute its offset
-  if (logoEl.value.classList.contains('logo--anchored')) {
-    anchorLogoToDetails()
-  }
 }
 
 function runAnimation() {
@@ -193,8 +158,6 @@ function setupSection2ScrollTrigger() {
       unlockScroll()
       section2Trigger?.kill()
       section2Trigger = null
-
-      anchorLogoToDetails()
     },
   })
 
@@ -260,21 +223,11 @@ onMounted(() => {
   if (heroEl?.complete) onHeroLoaded()
 
   setupSection2ScrollTrigger()
-
-  if (typeof window !== 'undefined') {
-    window.addEventListener('resize', handleResize)
-    // Run once in case we load on a weird breakpoint
-    handleResize()
-  }
 })
 
 onBeforeUnmount(() => {
   tl?.kill()
   ScrollTrigger.killAll()
-
-  if (typeof window !== 'undefined') {
-    window.removeEventListener('resize', handleResize)
-  }
 })
 
 
@@ -289,7 +242,7 @@ onBeforeUnmount(() => {
     ]"
   >
     <div class="header flex">
-      <div ref="logoEl" class="logo animate-in">
+      <div class="logo animate-in">
         <LogoSVG></LogoSVG>
       </div>
       <div class="header-right">
@@ -426,10 +379,6 @@ body.is-locked {
 	svg * {
 		fill: currentColor;
 	}
-}
-
-.logo--anchored {
-  position: absolute;  // overrides fixed
 }
 
 .hero-stage {
