@@ -237,14 +237,14 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
           <!-- Prev / Next Controls -->
           <button
-            class="carousel-arrow absolute left-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
+            class="carousel-arrow absolute left-0 md:left-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
             aria-label="Previous image"
             @click.stop="prevImg"
           >
             ‹
           </button>
           <button
-            class="carousel-arrow absolute right-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
+            class="carousel-arrow absolute right-0 md:right-4 top-1/2 -translate-y-1/2 px-4 py-3 text-7xl"
             aria-label="Next image"
             @click.stop="nextImg"
           >
@@ -354,13 +354,17 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 .carousel-arrow {
   color: var(--accent-color-pink);
+  @media (max-width: 767px) {
+    font-size: 2.5rem;
+  }
 }
 
 .lightbox-close {
+  right: 0.75rem;
+  top: 0.25rem;
+  font-size: 22px;
   @media (min-width: 768px) {
     font-size: 30px;
-    right: 2rem;
-    top: 1rem;
   }
 }
 

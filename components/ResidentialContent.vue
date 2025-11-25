@@ -68,7 +68,7 @@ onBeforeUnmount(() => tl?.kill())
 
 
 <template>
-  <section class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[11rem] md:pb-[13rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden">
+  <section class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden">
     <div class="a-just-home-is-text flex justify-center flex-row gap-4 sm:gap-6 items-start sm:items-center">
       <!-- Prefix -->
       <h2 class="whitespace-nowrap">
