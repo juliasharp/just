@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import LogoNav from './LogoNav.vue'
 import LogoSVG from '/src/just-logo-res.svg?component';
 import ScrollTrigger from 'gsap/ScrollTrigger'
 
@@ -184,27 +183,28 @@ function setupSection2ScrollTrigger() {
   tl2.to(staticPane.value, { autoAlpha: 1, y: 0, duration: 0.9 }, 0)
 
   // 1) bottom image first (o2)
-  if (o2Ref.value) {
-    tl2.to(
-      o2Ref.value,
-      { autoAlpha: 1, y: 0, duration: 1.0 },
-    )
-  }
+if (o2Ref.value) {
+  tl2.to(
+    o2Ref.value,
+    { autoAlpha: 1, y: 0, duration: 1.0 },
+  )
+}
 
-  // 2) then top image (o1)
-  if (o1Ref.value) {
-    tl2.to(
-      o1Ref.value,
-      { autoAlpha: 1, y: 0, duration: 0.5 },
-    )
-  }
+// 2) then top image (o1) – starts halfway through o2
+if (o1Ref.value) {
+  tl2.to(
+    o1Ref.value,
+    { autoAlpha: 1, y: 0, duration: 0.75 },
+    '-=0.5' // 👈 overlap: start 0.5s before the previous tween ends
+  )
+}
 
   // 3) then text block
   if (heroLeft.value) {
     tl2.to(
       heroLeft.value,
-      { autoAlpha: 1, y: 0, duration: 0.7 },
-      '+=0.05'
+      { autoAlpha: 1, y: 0, duration: 0.75 },
+      '-=0.05'
     )
   }
 
@@ -512,6 +512,10 @@ img {
     @media (min-width: 1181px) {
       width: clamp(250px, 38vw, 494px);
     }
+    @media (min-width: 1601px) {
+      width: clamp(494px, 24vw, 640px);
+      top: -59%;
+    }
     @media (max-width: 767px) {
       width: 65%;
       min-width: 270px;
@@ -533,6 +537,12 @@ img {
     }
     @media (max-width: 400px) {
       top: 80px;
+    }
+    @media (min-width: 1181px) {
+      //width: clamp(250px, 38vw, 494px);
+    }
+    @media (min-width: 1601px) {
+      width: clamp(340px, 17vw, 420px);
     }
   }
 }
