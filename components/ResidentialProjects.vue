@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, computed, ref } from 'vue'
+import { onMounted, onBeforeUnmount, computed, ref, nextTick } from 'vue'
 
 let gsap: any
 let ScrollTrigger: any
+let prefersReduced = false 
 
 const projectsSection = ref<HTMLElement | null>(null)
 
@@ -150,15 +151,48 @@ const visibleProjects = computed(() => {
 
 const canShowMore = computed(() => visibleCount.value < projects.value.length)
 
-function showMore() {
+async function showMore() {
   visibleCount.value = Math.min(
     visibleCount.value + 3,
     projects.value.length
   )
+
+  // wait for DOM to render new projects, then attach parallax
+  await nextTick()
+  initParallax()
+}
+
+function initParallax() {
+  if (!projectsSection.value || !gsap || !ScrollTrigger || prefersReduced) return
+
+  const thumbs = projectsSection.value.querySelectorAll<HTMLElement>('.project-image img')
+
+  thumbs.forEach((img) => {
+    // Avoid creating multiple ScrollTriggers on the same image
+    if ((img as any).dataset.parallaxInit === 'true') return
+    ;(img as any).dataset.parallaxInit = 'true'
+
+    const triggerEl = img.closest('.project') ?? img
+
+    gsap.fromTo(
+      img,
+      { yPercent: -10 },
+      {
+        yPercent: 10,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: triggerEl,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+          // markers: true,
+        },
+      }
+    )
+  })
 }
 
 onMounted(async () => {
-  // existing keyboard listener
   window.addEventListener('keydown', onKey)
 
   if (!process.client) return
@@ -170,36 +204,13 @@ onMounted(async () => {
   ScrollTrigger = st.ScrollTrigger
   gsap.registerPlugin(ScrollTrigger)
 
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const isDesktop = window.matchMedia('(min-width: 768px)').matches
+  prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-  //if (!projectsSection.value || prefersReduced || !isDesktop) return
-  if (!projectsSection.value || prefersReduced ) return
+  if (!projectsSection.value || prefersReduced) return
 
-  // Grab all thumbnail images inside the projects section
-  const thumbs = projectsSection.value.querySelectorAll<HTMLElement>('.project-image img')
-
-  thumbs.forEach((img) => {
-    const triggerEl = img.closest('.project') ?? img
-
-    // Subtle vertical parallax as the row scrolls through
-    gsap.fromTo(
-      img,
-      { yPercent: -10 },          // start slightly up
-      {
-        yPercent: 10,            // end slightly down
-        ease: 'none',
-        scrollTrigger: {
-          trigger: triggerEl,
-          start: 'top bottom',   // when project enters viewport
-          end: 'bottom top',     // when project leaves viewport
-          scrub: true,           // link motion to scroll position
-          // markers: true,      // uncomment to debug
-        },
-      }
-    )
-  })
+  initParallax()
 })
+
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKey)
@@ -402,12 +413,6 @@ onBeforeUnmount(() => {
     font-size: 16px;
     @media (min-width: 768px) {
       font-size: clamp(16px, 2vw, 18px);
-    }
-  }
-
-  &:hover {
-    .project-image img {
-      transform: scale(1.05);
     }
   }
 }

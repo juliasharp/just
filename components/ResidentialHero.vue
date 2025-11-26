@@ -68,7 +68,6 @@ const heroImg = ref<HTMLImageElement | null>(null)
 let tl: gsap.core.Timeline | null = null
 
 const isReady = ref(false) // hide intro / static / overlays until animation sets them
-let hasPlayedSection2 = false
 let section2Trigger: ScrollTrigger | null = null
 
 const prefersReduced =
@@ -125,7 +124,7 @@ function runAnimation() {
   tl.to(heroImg.value, {
     autoAlpha: 1,
     scale: 1,
-    duration: 2,
+    duration: 2.5,
   })
 
   // 2) Intro text in and stay (same vibe as before)
@@ -142,17 +141,34 @@ function setupSection2ScrollTrigger() {
   // Reduced motion: just show everything, no lock, no animation
   if (prefersReduced || !isDesktop) {
     gsap.set(staticPane.value, { autoAlpha: 1, y: 0 })
-    if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 1, y: 0 })
-    if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 1, y: 0 })
+    if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 1, y: 0, scale: 1 })
+    if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 1, y: 0, scale: 1 })
     if (heroLeft.value) gsap.set(heroLeft.value, { autoAlpha: 1, y: 0 })
     return
   }
 
   // Initial hidden states for section 2 elements
   gsap.set(staticPane.value, { autoAlpha: 0, y: 24 })
-  if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 0, y: 24 })
-  if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 0, y: 24 })
-  if (heroLeft.value) gsap.set(heroLeft.value, { autoAlpha: 0, y: 24 })
+
+  if (o2Ref.value) {
+    gsap.set(o2Ref.value, {
+      autoAlpha: 0,
+      y: 24,
+      scale: 1.02, // match hero starting scale
+    })
+  }
+
+  if (o1Ref.value) {
+    gsap.set(o1Ref.value, {
+      autoAlpha: 0,
+      y: 24,
+      scale: 1.02, // match hero starting scale
+    })
+  }
+
+  if (heroLeft.value) {
+    gsap.set(heroLeft.value, { autoAlpha: 0, y: 24 })
+  }
 
   // Timeline for section 2 (plays once when triggered)
   const tl2 = gsap.timeline({
@@ -166,32 +182,43 @@ function setupSection2ScrollTrigger() {
     },
   })
 
-  // Fade in whole section
+  // Fade in whole section wrapper
   tl2.to(staticPane.value, { autoAlpha: 1, y: 0, duration: 0.9 }, 0)
 
-  // 1) bottom image first (o2)
-if (o2Ref.value) {
-  tl2.to(
-    o2Ref.value,
-    { autoAlpha: 1, y: 0, duration: 1.0 },
-  )
-}
+  // 1) bottom image first (o2) – fade + scale match hero
+  if (o2Ref.value) {
+    tl2.to(
+      o2Ref.value,
+      {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,    // match hero end scale
+        duration: 2, // match hero fade duration
+      },
+      0.1
+    )
+  }
 
-// 2) then top image (o1) – starts halfway through o2
-if (o1Ref.value) {
-  tl2.to(
-    o1Ref.value,
-    { autoAlpha: 1, y: 0, duration: 0.75 },
-    '-=0.5' // 👈 overlap: start 0.5s before the previous tween ends
-  )
-}
+  // 2) then top image (o1) – starts partway through o2
+  if (o1Ref.value) {
+    tl2.to(
+      o1Ref.value,
+      {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 2, // same feel as hero
+      },
+      '-=1.2'        // overlap so they feel connected, tweak as desired
+    )
+  }
 
   // 3) then text block
   if (heroLeft.value) {
     tl2.to(
       heroLeft.value,
       { autoAlpha: 1, y: 0, duration: 0.75 },
-      '-=0.05'
+      '-=0.4'
     )
   }
 
@@ -201,19 +228,17 @@ if (o1Ref.value) {
   // --- Trigger 1: start animation early (top 70%) ---
   ScrollTrigger.create({
     trigger: staticPane.value,
-    start: 'top 70%',            // 👈 animation starts when hero-details reaches 70% viewport height
+    start: 'top 70%',
     onEnter(self) {
       if (self.direction !== 1) return
-      if (tl2.progress() === 0) tl2.play()  // play only once
+      if (tl2.progress() === 0) tl2.play() // play only once
     },
-    // markers: true,
   })
 
   // --- Trigger 2: lock scroll at top top ---
   section2Trigger = ScrollTrigger.create({
     trigger: staticPane.value,
-    start: 'top top',            // 👈 lock happens when hero-details top hits viewport top
-    // no pin, no pinSpacing, no scrub
+    start: 'top top',
     onEnter(self) {
       if (self.direction === 1) {
         lockScroll()
@@ -301,7 +326,7 @@ onBeforeUnmount(() => {
         >
           <div class="w-full md:flex justify-between gap-6">
             <p class="body-font-bold">a JUST home is</p>
-            <p>built with care, dignity, and transparency.</p>
+            <p>a place where everything that’s important to you thrives!</p>
           </div>
         </div>
       </div>
@@ -328,7 +353,7 @@ onBeforeUnmount(() => {
           <p class="hero-text body-font-medium">
             <span class="body-font-bold">JUST Design</span> is a minority-owned
             architecture and design studio specializing in thoughtful, modern
-            residential homes that balance form, function, and feeling.
+            residential projects that balance craft, function, and feeling.
           </p>
         </div>
       </div>
