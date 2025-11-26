@@ -365,7 +365,7 @@ onBeforeUnmount(() => {
 
   &-image {
     position: relative;
-    overflow: hidden; // 👈 make sure everything is clipped on ALL viewports
+    overflow: hidden;
 
     @media (max-width: 767px) {
       width: 100%;

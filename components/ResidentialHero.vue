@@ -423,12 +423,12 @@ body.is-locked {
 	width: 140px;
 	width: 95px;
 	z-index: 99;
+  mix-blend-mode: difference;
+  position: fixed;
 	@media (min-width: 768px) {
 		top: 35px;
 		left: 35px;
 		width: 160px;
-    mix-blend-mode: difference;
-    position: fixed;
 	}
 	svg * {
 		fill: currentColor;
