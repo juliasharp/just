@@ -81,7 +81,7 @@ onMounted(async () => {
         pinSpacing: true,
         // Controls how long it stays pinned. Increase/decrease this value
         // for a longer/shorter "few seconds" feel.
-        end: '+=500', // ~900px of scroll
+        end: '+=700', // ~900px of scroll
       })
     }
   }
@@ -155,11 +155,9 @@ onBeforeUnmount(() => {
 }
 
 .content-section {
-  @media (min-width: 768px) {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

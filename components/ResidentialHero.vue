@@ -62,6 +62,7 @@ const staticPane = ref<HTMLElement | null>(null)  // second section (hero text +
 const o1Ref = ref<HTMLElement | null>(null)       // overlay image #1
 const o2Ref = ref<HTMLElement | null>(null)       // overlay image #2
 const heroLeft = ref<HTMLElement | null>(null)
+const heroImg = ref<HTMLImageElement | null>(null)
 
 
 let tl: gsap.core.Timeline | null = null
@@ -99,36 +100,40 @@ function unlockScroll() {
 }
 
 function runAnimation() {
-  if (!stage.value || !intro.value) return
+  if (!stage.value || !intro.value || !heroImg.value) return
 
   tl?.kill()
   tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
 
   if (prefersReduced) {
     gsap.set(stage.value, { autoAlpha: 1, scale: 1 })
-    gsap.set(intro.value, { autoAlpha: 0 })
-    // section 2 will be handled separately
+    gsap.set(heroImg.value, { autoAlpha: 1, scale: 1 })
+    gsap.set(intro.value, { autoAlpha: 1, y: 0 }) // keep visible
     return
   }
 
-  gsap.set([stage.value, slide.value, intro.value], {
+  // Make sure these elements are ready for animation
+  gsap.set([stage.value, slide.value, intro.value, heroImg.value], {
     willChange: 'transform, opacity',
   })
 
-  // initial state
+  // initial state: hero hidden, text hidden
+  gsap.set(heroImg.value, { autoAlpha: 0, scale: 1.02 })
   gsap.set(intro.value, { autoAlpha: 0, y: 16 })
 
-  // 1) Stage fade in
-  tl.fromTo(
-    stage.value,
-    { autoAlpha: 0, scale: 1.02 },
-    { autoAlpha: 1, scale: 1, duration: 0.6 }
-  )
+  // 1) HERO PHOTO fades in from beige bg
+  tl.to(heroImg.value, {
+    autoAlpha: 1,
+    scale: 1,
+    duration: 2,
+  })
 
-  // 2) Intro in → hold → out
-  tl.to(intro.value, { autoAlpha: 1, y: 0, duration: 0.45 }, '-=0.1')
-    .to({}, { duration: 1.6 }) // hold
-    .to(intro.value, { autoAlpha: 0, y: 8, duration: 0.35 })
+  // 2) Intro text in and stay (same vibe as before)
+  tl.to(
+    intro.value,
+    { autoAlpha: 1, y: 0, duration: 0.45 },
+    '-=0.15' // slightly overlap so it feels connected
+  )
 }
 
 function setupSection2ScrollTrigger() {
@@ -214,16 +219,35 @@ if (o1Ref.value) {
         lockScroll()
       }
     },
-    markers: true,
   })
 }
 
 onMounted(() => {
-  const heroEl = slide.value?.querySelector('img[data-role="hero"]') as HTMLImageElement | null
+  const heroEl = heroImg.value
   if (heroEl?.complete) onHeroLoaded()
 
   setupSection2ScrollTrigger()
+
+  // --- Hero parallax effect (desktop only, no reduced motion) ---
+  //if (!prefersReduced && isDesktop && heroEl && stage.value) {
+  if (!prefersReduced && heroEl && stage.value) {
+    gsap.fromTo(
+      heroEl,
+      { yPercent: -10 },   // start slightly up
+      {
+        yPercent: 10,      // end slightly down
+        ease: 'none',
+        scrollTrigger: {
+          trigger: stage.value,     // the full-height hero section
+          start: 'top top',         // when hero hits top of viewport
+          end: 'bottom top',        // when hero leaves at top
+          scrub: true,              // link animation to scroll
+        },
+      }
+    )
+  }
 })
+
 
 onBeforeUnmount(() => {
   tl?.kill()
@@ -261,6 +285,7 @@ onBeforeUnmount(() => {
         <!-- Big hero image (full width) -->
         <img
           v-if="data?.hero"
+          ref="heroImg"
           data-role="hero"
           :src="data.hero.sourceUrl"
           :alt="data.hero.altText || ''"
@@ -272,7 +297,7 @@ onBeforeUnmount(() => {
         <div
           ref="intro"
           data-intro
-          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[24px] md:pb-[35px] px-6 md:px-10"
+          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[40px] md:pb-[35px] px-6 md:px-10"
         >
           <div class="w-full md:flex justify-between gap-6">
             <p class="body-font-bold">a JUST home is</p>
@@ -352,6 +377,10 @@ body.is-locked {
   visibility: hidden;
 }
 
+.hero--inert [data-role='hero'] {
+  opacity: 0;
+}
+
 .hero--inert [data-slide] {
   opacity: 1;
   visibility: visible;
@@ -383,8 +412,18 @@ body.is-locked {
 
 .hero-stage {
   .hero-image {
+    position: relative;
+    overflow: hidden;
+
     @media (max-width: 767px) {
       height: clamp(292px, 42dvh, 331px);
+    }
+    img {
+      width: 100%;
+      object-fit: cover;
+      @media (min-width: 768px) {
+        height: 112vh;
+      }
     }
   }
 }

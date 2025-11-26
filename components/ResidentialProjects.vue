@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, computed, ref } from 'vue'
 
+let gsap: any
+let ScrollTrigger: any
+
+const projectsSection = ref<HTMLElement | null>(null)
+
 const {
   public: {
     wordpressUrl,
@@ -152,12 +157,61 @@ function showMore() {
   )
 }
 
-onMounted(() => window.addEventListener('keydown', onKey))
-onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
+onMounted(async () => {
+  // existing keyboard listener
+  window.addEventListener('keydown', onKey)
+
+  if (!process.client) return
+
+  const mod = await import('gsap')
+  const st = await import('gsap/ScrollTrigger')
+
+  gsap = mod.gsap
+  ScrollTrigger = st.ScrollTrigger
+  gsap.registerPlugin(ScrollTrigger)
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const isDesktop = window.matchMedia('(min-width: 768px)').matches
+
+  //if (!projectsSection.value || prefersReduced || !isDesktop) return
+  if (!projectsSection.value || prefersReduced ) return
+
+  // Grab all thumbnail images inside the projects section
+  const thumbs = projectsSection.value.querySelectorAll<HTMLElement>('.project-image img')
+
+  thumbs.forEach((img) => {
+    const triggerEl = img.closest('.project') ?? img
+
+    // Subtle vertical parallax as the row scrolls through
+    gsap.fromTo(
+      img,
+      { yPercent: -10 },          // start slightly up
+      {
+        yPercent: 10,            // end slightly down
+        ease: 'none',
+        scrollTrigger: {
+          trigger: triggerEl,
+          start: 'top bottom',   // when project enters viewport
+          end: 'bottom top',     // when project leaves viewport
+          scrub: true,           // link motion to scroll position
+          // markers: true,      // uncomment to debug
+        },
+      }
+    )
+  })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKey)
+  if (ScrollTrigger) {
+    ScrollTrigger.getAll().forEach((t: any) => t.kill())
+  }
+})
+
 </script>
 
 <template>
-  <section class="projects-section">
+  <section ref="projectsSection" class="projects-section">
     <div class="projects-container res-gutter">
       <div class="projects">
         <div
@@ -275,6 +329,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   @media (min-width: 768px) {
     gap: 30px;
   }
+
   &-meta {
     flex-grow: 1;
     display: flex;
@@ -282,24 +337,30 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     position: relative;
     top: 45px;
     margin-bottom: 32px;
-    @media (min-width: 768px)  and (max-width: 1499px) {
+    width: 100%;
+    @media (min-width: 768px) and (max-width: 1499px) {
       top: clamp(31px, calc(31px + 35 * ((100vw - 768px) / (1500 - 768))), 66px);
     }
     @media (min-width: 1500px) {
       top: 66px;
     }
   }
+
   &-name {
     font-size: clamp(100px, 31vw, 464px);
     flex-shrink: 0;
     line-height: 1.05;
   }
+
   &-image {
     position: relative;
+    overflow: hidden; // 👈 make sure everything is clipped on ALL viewports
+
     @media (max-width: 767px) {
       width: 100%;
-      height: auto;
+      height: clamp(220px, 55vw, 320px);
     }
+
     @media (min-width: 768px) {
       top: 8px;
       height: calc(180px + (98 * ((100vw - 768px) / (1175 - 768))));
@@ -310,33 +371,40 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
     @media (min-width: 1500px) {
       height: 353px;
     }
+
     img {
-      @media (min-width: 768px) {
-        position: absolute;
-        transform-origin: center center;
-        transition: transform 220ms ease-out; // subtle & snappy
-        will-change: transform;
-      }
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 120%;
+      object-fit: cover;
+      transform-origin: center center;
+      will-change: transform;
+      transition: transform 220ms ease-out; // keep your hover niceness
     }
   }
+
   &-info {
     display: flex;
     flex-direction: column;
     margin-top: 0.75rem;
   }
+
   &-location {
     font-size: 18px;
     @media (min-width: 768px) {
-      font-size: clamp(19px, 2.45vw, 22px)
+      font-size: clamp(19px, 2.45vw, 22px);
     }
   }
+
   &-year {
     text-transform: uppercase;
     font-size: 16px;
     @media (min-width: 768px) {
-      font-size: clamp(16px, 2vw, 18px)
+      font-size: clamp(16px, 2vw, 18px);
     }
   }
+
   &:hover {
     .project-image img {
       transform: scale(1.05);
