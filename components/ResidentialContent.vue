@@ -1,5 +1,6 @@
 <script setup lang="ts">
 let gsap: any
+let ScrollTrigger: any
 
 const config = useRuntimeConfig();
 const query = `
@@ -35,40 +36,69 @@ const extended = computed(() => {
   const arr = (data.value?.justHomeSuffix ?? []).map((x: any) => x?.suffix).filter(Boolean)
   return arr.length ? [...arr, arr[0]] : []
 })
+const sectionEl = ref<HTMLElement | null>(null)
+
 
 let tl: any
-
+let pinTrigger: any
 
 onMounted(async () => {
   const mod = await import('gsap')
   gsap = mod.gsap
 
+  // --- text loop animation (unchanged) ---
   const suffixEls = suffixContainer.value?.querySelectorAll<HTMLElement>('.suffix-item')
   if (!suffixEls || suffixEls.length <= 1) return
 
-  // stack each row vertically
   gsap.set(suffixEls, { yPercent: (i) => i * 100 })
 
-  // build the loop: step to each next row (last step lands on the CLONE)
-  tl = gsap.timeline({ defaults: { ease: 'power2.inOut', duration: 1.0 }, repeat: -1 })
-  const dwell = 1.2 // visible time per word
+  tl = gsap.timeline({
+    defaults: { ease: 'power2.inOut', duration: 1.0 },
+    repeat: -1
+  })
+  const dwell = 1.2
 
   for (let i = 0; i < suffixEls.length - 1; i++) {
     tl.to(suffixEls, { yPercent: '-=100' }, `+=${dwell}`)
   }
 
-  // we've arrived at the CLONE of first; snap back to the real first row instantly
   tl.add(() => {
     gsap.set(suffixEls, { yPercent: (i) => i * 100 })
   })
+
+  // --- pin / lock section for a short distance ---
+  if (typeof window !== 'undefined') {
+    const { ScrollTrigger: ST } = await import('gsap/ScrollTrigger')
+    ScrollTrigger = ST
+    gsap.registerPlugin(ScrollTrigger)
+
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+    if (isDesktop && sectionEl.value) {
+      pinTrigger = ScrollTrigger.create({
+        trigger: sectionEl.value,
+        start: 'top top',
+        pin: true,
+        pinSpacing: true,
+        // Controls how long it stays pinned. Increase/decrease this value
+        // for a longer/shorter "few seconds" feel.
+        end: '+=500', // ~900px of scroll
+      })
+    }
+  }
 })
 
-onBeforeUnmount(() => tl?.kill())
+onBeforeUnmount(() => {
+  tl?.kill()
+  pinTrigger?.kill?.()
+})
 </script>
 
 
 <template>
-  <section class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden">
+  <section
+    ref="sectionEl"
+    class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden"
+  >
     <div class="a-just-home-is-text flex justify-center flex-row gap-4 sm:gap-6 items-start sm:items-center">
       <!-- Prefix -->
       <h2 class="whitespace-nowrap">
@@ -91,6 +121,7 @@ onBeforeUnmount(() => tl?.kill())
     </div>
   </section>
 </template>
+
 
 <style scoped lang="scss">
 .suffix-container {
@@ -120,6 +151,15 @@ onBeforeUnmount(() => tl?.kill())
   }
   @media (min-width: 1281px) {
     font-size: 76px;
+  }
+}
+
+.content-section {
+  @media (min-width: 768px) {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>
