@@ -322,7 +322,7 @@ onBeforeUnmount(() => {
         <div
           ref="intro"
           data-intro
-          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[40px] md:pb-[35px] px-6 md:px-10"
+          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[40px] md:pb-[35px] px-[20px] md:px-10"
         >
           <div class="w-full md:flex justify-between gap-6">
             <p class="body-font-bold">a JUST home is</p>
@@ -419,9 +419,9 @@ body.is-locked {
 .logo {
 	top: 20px;
 	left: 20px;
-	color: #fff;
+	color: #000;
 	width: 140px;
-	width: 95px;
+	width: 88px;
 	z-index: 99;
   mix-blend-mode: difference;
   position: fixed;
@@ -526,6 +526,74 @@ img {
   }
 }
 
+// .hero-overlays {
+//   /* Walker Warner–style diagonal overlap vars */
+//   --start-padding: 1fr;
+//   --end-padding: 1fr;
+//   --first-image: 12.15fr;  // big image
+//   --overlap-x: 1.51fr;     // gap/overlap band
+//   --second-image: 5.12fr;  // smaller image
+
+//   position: relative;
+//   width: 100%;
+//   max-width: 140rem;       // similar to their module
+//   margin: 0 auto;
+//   display: grid;
+//   grid-template-columns: var(--start-padding) var(--first-image) var(--overlap-x) var(--second-image) var(--end-padding);
+//   grid-template-rows: auto min(40.5rem, 29vw) auto;
+//   align-items: center;
+//   isolation: isolate;
+
+//   @media (max-width: 767px) {
+//     /* Stack nicely on mobile */
+//     max-width: min(335px, 80vw);
+//     grid-template-columns: 1fr;
+//     grid-template-rows: auto auto;
+//     row-gap: 20px;
+//     padding-inline: 0;
+//   }
+// }
+
+// /* Bottom / main image (like their first card) */
+// .overlay-img-2 {
+//   width: 100%;
+//   height: 100%;
+//   object-fit: cover;
+//   display: block;
+//   grid-column: 2 / span 2;  // columns: first-image + overlap band
+//   grid-row: 2 / span 2;     // lower rows
+//   z-index: 1;
+
+//   @media (max-width: 767px) {
+//     grid-column: 1 / -1;
+//     grid-row: 2 / 3;
+//     position: relative;
+//     top: 0;
+//   }
+// }
+
+// /* Top / overlapping image (like their second card) */
+// .overlay-img-1 {
+//   width: 100%;
+//   height: 100%;
+//   object-fit: cover;
+//   display: block;
+//   grid-column: 3 / span 2;  // overlap band + second-image
+//   grid-row: 1 / span 2;     // higher rows so it overlaps diagonally
+//   z-index: 2;
+//   align-self: end;
+
+//   @media (min-width: 768px) {
+//     transform: translateY(10%); // fine-tune overlap “angle”
+//   }
+
+//   @media (max-width: 767px) {
+//     grid-column: 1 / -1;
+//     grid-row: 1 / 2;
+//     transform: none;         // no overlap on tiny screens
+//   }
+// }
+
 .hero-overlays {
   position: relative;
   width: min(43rem, 50vw);
@@ -565,6 +633,9 @@ img {
       width: clamp(494px, 24vw, 640px);
       top: -46%;
     }
+    @media (min-width: 1801px) {
+      width: clamp(550px, 30vw, 640px);
+    }
     @media (max-width: 767px) {
       width: 65%;
       min-width: 270px;
@@ -592,6 +663,9 @@ img {
     }
     @media (min-width: 1601px) {
       width: clamp(340px, 17vw, 420px);
+    }
+    @media (min-width: 1801px) {
+      width: clamp(375px, 21vw, 460px);
     }
   }
 }

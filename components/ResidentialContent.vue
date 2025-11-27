@@ -139,6 +139,9 @@ onBeforeUnmount(() => {
   @media (min-width: 1281px) {
     width: 632px;
   }
+  @media (min-width: 1451px) {
+    width: clamp(718px, calc(40.67vw + 66.13px), 840px);
+  }
 }
 
 .a-just-home-is-text {
@@ -151,6 +154,9 @@ onBeforeUnmount(() => {
   }
   @media (min-width: 1281px) {
     font-size: 76px;
+  }
+  @media (min-width: 1451px) {
+    font-size: 5.5vw;
   }
 }
 
