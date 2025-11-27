@@ -630,11 +630,11 @@ img {
       width: clamp(250px, 38vw, 494px);
     }
     @media (min-width: 1601px) {
-      width: clamp(494px, 24vw, 640px);
+      width: clamp(494px, 32vw, 640px);
       top: -46%;
     }
     @media (min-width: 1801px) {
-      width: clamp(550px, 30vw, 640px);
+      width: clamp(550px, 33vw, 640px);
     }
     @media (max-width: 767px) {
       width: 65%;
@@ -662,10 +662,10 @@ img {
       //width: clamp(250px, 38vw, 494px);
     }
     @media (min-width: 1601px) {
-      width: clamp(340px, 17vw, 420px);
+      width: clamp(340px, 22vw, 420px);
     }
     @media (min-width: 1801px) {
-      width: clamp(375px, 21vw, 460px);
+      width: clamp(375px, 22vw, 460px);
     }
   }
 }

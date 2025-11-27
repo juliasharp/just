@@ -126,7 +126,7 @@ onBeforeUnmount(() => {
 <style scoped lang="scss">
 .suffix-container {
   width: 168px;
-  border-bottom: 2px solid black;
+  //border-bottom: 2px solid black;
   position: relative;
   bottom: -2.5px;
   @media (min-width: 768px) {
@@ -137,7 +137,7 @@ onBeforeUnmount(() => {
     width: 400px;
   }
   @media (min-width: 1281px) {
-    width: 632px;
+    width: 575px;
   }
   @media (min-width: 1451px) {
     width: clamp(718px, calc(40.67vw + 66.13px), 840px);
@@ -153,7 +153,7 @@ onBeforeUnmount(() => {
     font-size: 50px;
   }
   @media (min-width: 1281px) {
-    font-size: 76px;
+    font-size: 5vw;
   }
   @media (min-width: 1451px) {
     font-size: 5.5vw;
