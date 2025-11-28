@@ -640,6 +640,9 @@ img {
   @media (min-width: 1181px) {
     bottom: clamp(40px, 4vw, 91px)
   }
+  @media (min-width: 1601px) {
+    bottom: clamp(40px, 2.5vw, 91px)
+  }
   @media (max-width: 767px) {
     width: min(335px, 80vw);
     margin: 40px auto 70px;
