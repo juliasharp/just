@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import gsap from 'gsap'
 import LogoSVG from '/src/just-logo-res.svg?component';
-import ScrollTrigger from 'gsap/ScrollTrigger'
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
@@ -78,6 +78,26 @@ const isDesktop =
   typeof window !== 'undefined'
     ? window.matchMedia?.('(min-width: 768px)').matches
     : true // SSR fallback
+
+const isLogoHidden = ref(false)
+let lastScrollY = 0
+const HIDE_THRESHOLD = 3000 // px – tweak this if you want it later/earlier
+
+/* Logo/header visibility state */
+function handleScroll() {
+  const current = window.scrollY || document.documentElement.scrollTop
+  const isScrollingDown = current > lastScrollY
+
+  if (isScrollingDown && current > HIDE_THRESHOLD) {
+    // Scrolling down past threshold → hide logo
+    isLogoHidden.value = true
+  } else {
+    // Scrolling up OR above top threshold → show logo
+    isLogoHidden.value = false
+  }
+
+  lastScrollY = current
+}
 
 function onHeroLoaded() {
   requestAnimationFrame(() => {
@@ -271,14 +291,19 @@ onMounted(() => {
       }
     )
   }
+
+  /* scroll listener */
+  lastScrollY = window.scrollY || 0
+  window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 
 onBeforeUnmount(() => {
   tl?.kill()
   ScrollTrigger.killAll()
-})
 
+  window.removeEventListener('scroll', handleScroll)
+})
 
 </script>
 
@@ -290,13 +315,11 @@ onBeforeUnmount(() => {
       { 'hero--inert': !isReady }
     ]"
   >
-    <div class="header flex">
-      <div class="logo animate-in">
+    <header class="header flex">
+      <div class="logo animate-in" :class="{ 'logo--hidden': isLogoHidden }">
         <LogoSVG></LogoSVG>
       </div>
-      <div class="header-right">
-      </div>
-    </div>
+    </header>
     <!-- SECTION 1: Full-height hero image with intro text -->
     <div
       ref="stage"
@@ -419,13 +442,18 @@ body.is-locked {
 .logo {
 	top: 20px;
 	left: 20px;
-	color: #000;
+	color: #fff;
 	width: 140px;
 	width: 88px;
 	z-index: 99;
-  mix-blend-mode: difference;
+  transition:
+    transform 0.35s ease,
+    opacity 0.35s ease;
+  // mix-blend-mode: difference;
   position: fixed;
 	@media (min-width: 768px) {
+    mix-blend-mode: difference;
+    position: fixed;
 		top: 35px;
 		left: 35px;
 		width: 160px;
@@ -433,6 +461,11 @@ body.is-locked {
 	svg * {
 		fill: currentColor;
 	}
+  &.logo--hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .hero-stage {
@@ -630,7 +663,7 @@ img {
       width: clamp(250px, 38vw, 494px);
     }
     @media (min-width: 1601px) {
-      width: clamp(494px, 32vw, 640px);
+      width: clamp(494px, 30vw, 640px);
       top: -46%;
     }
     @media (min-width: 1801px) {
@@ -662,7 +695,7 @@ img {
       //width: clamp(250px, 38vw, 494px);
     }
     @media (min-width: 1601px) {
-      width: clamp(340px, 22vw, 420px);
+      width: clamp(340px, 20vw, 420px);
     }
     @media (min-width: 1801px) {
       width: clamp(375px, 22vw, 460px);
