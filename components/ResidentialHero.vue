@@ -449,14 +449,14 @@ body.is-locked {
   transition:
     transform 0.35s ease,
     opacity 0.35s ease;
-  // mix-blend-mode: difference;
+  mix-blend-mode: difference;
   position: fixed;
 	@media (min-width: 768px) {
     mix-blend-mode: difference;
     position: fixed;
 		top: 35px;
 		left: 35px;
-		width: 160px;
+		width: clamp(120px, 9vw, 160px);
 	}
 	svg * {
 		fill: currentColor;
