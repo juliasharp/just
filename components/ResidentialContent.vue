@@ -159,9 +159,6 @@ onBeforeUnmount(() => {
   @media (min-width: 1281px) {
     font-size: 5vw;
   }
-  @media (min-width: 1451px) {
-    font-size: 5.5vw;
-  }
 }
 
 .content-section {
