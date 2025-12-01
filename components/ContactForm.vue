@@ -24,7 +24,8 @@ const props = defineProps({
   passedFields: { type: Array as () => FieldDef[] | undefined, default: undefined },
   title: { type: String, default: "Let's Collaborate" },
   theme: { type: String, default: 'dark' },
-  bgColor: { type: String, default: '#390F7D' }
+  bgColor: { type: String, default: '#390F7D' },
+  redirectUrl: { type: String, default: '' }
 })
 
 const emit = defineEmits<{ (e:'update:showForm', v:boolean):void; (e:'submitted'):void }>()
@@ -47,8 +48,24 @@ const fields = computed<FieldDef[]>(() => {
 })
 // --- Gravity submit composable ---
 const {
-  formPending, formError, formData, success, errorMsg, submitting, handleSubmit, confirmationType, confirmationMessage,
-} = useGravityForms({ formId: props.gfFormId })
+  formPending,
+  formError,
+  formData,
+  success,
+  errorMsg,
+  submitting,
+  handleSubmit,
+  confirmationType,
+  confirmationMessage,
+} = useGravityForms({
+  formId: props.gfFormId,
+  onSuccess: () => {
+    // If a redirect URL is provided, go there after a successful submission
+    if (props.redirectUrl && typeof window !== 'undefined') {
+      window.location.href = props.redirectUrl
+    }
+  }
+})
 
 // --- Local UI state keyed by our dynamic field.key ---
 const values  = reactive<Record<string, string>>({})

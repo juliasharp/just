@@ -32,6 +32,7 @@ onBeforeUnmount(() => {
         :gfFormId="gfFormId"
         :passed-fields="fields || []"
         :title="'Give it to me!'"
+        redirect-url="https://indd.adobe.com/view/3907f388-3dd2-4607-974f-595e63a656f3"
       />
       <!-- Overlay fades in/out -->
       <Transition name="fade-fast">
