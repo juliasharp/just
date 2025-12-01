@@ -268,7 +268,7 @@ if (isClient && isDev) {
   bottom: 0;
   background: #390F7D;
   color: white;
-  width: calc(340px + 17vw);
+  width: 100%;
 
   transform: translate3d(110%,0,0);
   transition: transform .7s cubic-bezier(.44, .24, .16, 1);
@@ -276,9 +276,12 @@ if (isClient && isDev) {
   &.is-shown {
     transform: translate3d(0, 0, 0);
   }
-  @media (min-width: 1024px) {
+  @media (min-width: 768px) {
     width: calc(340px + 17vw);
   }
+  // @media (min-width: 1024px) {
+  //   width: calc(340px + 17vw);
+  // }
   &__inner {
     position: static;
     display: flex;
