@@ -60,9 +60,8 @@ const {
 } = useGravityForms({
   formId: props.gfFormId,
   onSuccess: () => {
-    // If a redirect URL is provided, go there after a successful submission
     if (props.redirectUrl && typeof window !== 'undefined') {
-      window.location.href = props.redirectUrl
+      window.open(props.redirectUrl, '_blank')  // open in new tab
     }
   }
 })

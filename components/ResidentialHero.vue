@@ -63,6 +63,7 @@ const o1Ref = ref<HTMLElement | null>(null)       // overlay image #1
 const o2Ref = ref<HTMLElement | null>(null)       // overlay image #2
 const heroLeft = ref<HTMLElement | null>(null)
 const heroImg = ref<HTMLImageElement | null>(null)
+const logoRef = ref<HTMLElement | null>(null)
 
 
 let tl: gsap.core.Timeline | null = null
@@ -127,32 +128,51 @@ function runAnimation() {
   if (prefersReduced) {
     gsap.set(stage.value, { autoAlpha: 1, scale: 1 })
     gsap.set(heroImg.value, { autoAlpha: 1, scale: 1 })
-    gsap.set(intro.value, { autoAlpha: 1, y: 0 }) // keep visible
+    gsap.set(intro.value, { autoAlpha: 1, y: 0 })
+    if (logoRef.value) {
+      gsap.set(logoRef.value, { autoAlpha: 1, y: 0 })
+    }
     return
   }
 
-  // Make sure these elements are ready for animation
+  // Prepare elements for animation
   gsap.set([stage.value, slide.value, intro.value, heroImg.value], {
     willChange: 'transform, opacity',
   })
 
-  // initial state: hero hidden, text hidden
-  gsap.set(heroImg.value, { autoAlpha: 0, scale: 1.02 })
-  gsap.set(intro.value, { autoAlpha: 0, y: 16 })
+  // Initial states
+  gsap.set(heroImg.value, { autoAlpha: 0, scale: 1.02 }) // bg slightly zoomed + hidden
+  gsap.set(intro.value, { autoAlpha: 0, y: 16 })         // bottom text hidden + down
+  if (logoRef.value) {
+    gsap.set(logoRef.value, { autoAlpha: 0, y: 0 })    // logo hidden + slightly up
+  }
 
-  // 1) HERO PHOTO fades in from beige bg
+  // 1) Background hero image fades in slowly
   tl.to(heroImg.value, {
     autoAlpha: 1,
     scale: 1,
     duration: 2.5,
   })
 
-  // 2) Intro text in and stay (same vibe as before)
-  tl.to(
-    intro.value,
-    { autoAlpha: 1, y: 0, duration: 0.45 },
-    '-=0.15' // slightly overlap so it feels connected
-  )
+  // 2) Logo appears
+  if (logoRef.value) {
+    tl.to(
+      logoRef.value,
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.6,
+      },
+      '-=1.2' // ← Start logo fade when hero fade still has ~1.2s remaining
+    )
+  }
+
+  // 3) Bottom text comes in and stays
+  tl.to(intro.value, {
+    autoAlpha: 1,
+    y: 0,
+    duration: 0.6,
+  })
 }
 
 function setupSection2ScrollTrigger() {
@@ -316,7 +336,7 @@ onBeforeUnmount(() => {
     ]"
   >
     <header class="header flex">
-      <div class="logo animate-in" :class="{ 'logo--hidden': isLogoHidden }">
+      <div ref="logoRef" class="logo animate-in" :class="{ 'logo--hidden': isLogoHidden }">
         <LogoSVG></LogoSVG>
       </div>
     </header>
@@ -426,6 +446,10 @@ body.is-locked {
 }
 
 .hero--inert [data-role='hero'] {
+  opacity: 0;
+}
+
+.hero--inert .logo {
   opacity: 0;
 }
 
