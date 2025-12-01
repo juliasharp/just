@@ -165,6 +165,20 @@ watch(values, (v) => {
                       .map(f => f.key)
 }, { deep: true })
 
+watch(isShown, (shown) => {
+  if (typeof window === 'undefined') return
+  const body = document.body
+
+  if (shown) {
+    const scrollBar = window.innerWidth - document.documentElement.clientWidth
+    body.style.paddingRight = scrollBar + 'px'
+    body.classList.add('no-scroll')
+  } else {
+    body.style.paddingRight = ''
+    body.classList.remove('no-scroll')
+  }
+})
+
 // expose in window for quick inspection from DevTools
 if (isClient && isDev) {
   (window as any).__CONTACT_FORM_DEBUG__ = {
