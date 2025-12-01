@@ -309,9 +309,13 @@ if (isClient && isDev) {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+    @media (max-width: 767px) {
+      padding-right: calc(13.62px + 3.4398vw);
+      padding-left: calc(13.62px + 3.4398vw);
+    }
   }
   &__header {
-    padding: 40px 45px 0;
+    padding: 40px 40px 0;
     -webkit-box-flex: 0;
     flex-grow: 0;
     flex-shrink: 0;
@@ -328,7 +332,7 @@ if (isClient && isDev) {
       padding-right: 20px;
       font-family: 'Inter Bold';
       @media (max-width: 767px) {
-        font-size: 40px;
+        font-size: 35px;
       }
     }
   }
