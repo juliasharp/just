@@ -81,7 +81,7 @@ onMounted(async () => {
         pinSpacing: true,
         // Controls how long it stays pinned. Increase/decrease this value
         // for a longer/shorter "few seconds" feel.
-        end: '+=700', // ~900px of scroll
+        end: '+=900', // ~900px of scroll
       })
     }
   }
