@@ -298,9 +298,9 @@ onMounted(() => {
   if (!prefersReduced && heroEl && stage.value) {
     gsap.fromTo(
       heroEl,
-      { yPercent: -10 },   // start slightly up
+      { yPercent: -15 },   // start slightly up
       {
-        yPercent: 10,      // end slightly down
+        yPercent: 15,      // end slightly down
         ease: 'none',
         scrollTrigger: {
           trigger: stage.value,     // the full-height hero section
@@ -504,7 +504,7 @@ body.is-locked {
       width: 100%;
       object-fit: cover;
       @media (min-width: 768px) {
-        height: 112vh;
+        height: 118vh;
       }
     }
   }

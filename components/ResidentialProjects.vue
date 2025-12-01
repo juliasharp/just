@@ -176,9 +176,9 @@ function initParallax() {
 
     gsap.fromTo(
       img,
-      { yPercent: -5 },
+      { yPercent: -10 },
       {
-        yPercent: 5,
+        yPercent: 10,
         ease: 'none',
         scrollTrigger: {
           trigger: triggerEl,
