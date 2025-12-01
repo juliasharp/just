@@ -31,6 +31,7 @@ onBeforeUnmount(() => {
         bgColor="#390F7D"
         :gfFormId="gfFormId"
         :passed-fields="fields || []"
+        :title="'Give it to me!'"
       />
       <!-- Overlay fades in/out -->
       <Transition name="fade-fast">

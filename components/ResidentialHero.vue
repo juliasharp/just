@@ -493,7 +493,7 @@ body.is-locked {
   }
   &-left {
     @media (min-width: 768px) {
-      height: 30vh;
+      height: 34vh;
     }
     @media (min-width: 1181px) {
       height: 46vh;
@@ -506,7 +506,10 @@ body.is-locked {
     }
   }
   &-text {
-    font-size: clamp(20px, 2.4vw, 36px);
+    font-size: clamp(20px, 2.4vw, 27px);
+    @media (min-width: 768px) {
+      font-size: clamp(27px, 2.4vw, 36px);
+    }
     line-height: 1.28;
 
     &-initial {
@@ -690,6 +693,9 @@ img {
       max-width: 195px;
       position: relative;
       top: 85px;
+    }
+    @media (min-width: 768px) {
+      width: clamp(210px, 23vw, 340px);
     }
     @media (max-width: 400px) {
       top: 80px;

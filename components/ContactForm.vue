@@ -341,10 +341,16 @@ if (isClient && isDev) {
     background: transparent;
     color: rgb(240, 240, 238);
     border-color: rgb(240, 240, 238);
+    .button svg {
+      fill: rgb(240, 240, 238);
+    }
   }
   &:hover {
     background: rgb(240, 240, 238);
     color: #390F7D;
+    .button svg {
+      fill: #390F7D;
+    }
   }
 }
 

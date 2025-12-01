@@ -128,7 +128,7 @@ onBeforeUnmount(() => {
   width: 168px;
   //border-bottom: 2px solid black;
   position: relative;
-  bottom: -2.5px;
+  width: 320px;
   @media (min-width: 768px) {
     width: 346px;
     bottom: 1px;
@@ -145,7 +145,11 @@ onBeforeUnmount(() => {
 }
 
 .a-just-home-is-text {
-  font-size: 21px;
+  font-size: 40px;
+  @media (max-width: 767px) {
+    flex-direction: column;
+    gap: 0;
+  }
   @media (min-width: 768px) {
     font-size: 40px;
   }
