@@ -117,6 +117,11 @@ export default defineEventHandler(async (event) => {
     } catch {}
 
     if (details?.validation_messages) {
+      console.error('GF validation failed', {
+        status: response.status,
+        validation_messages: details.validation_messages,
+      })
+
       throw createError({
         statusCode: 422,
         statusMessage: 'Validation failed',
@@ -124,11 +129,17 @@ export default defineEventHandler(async (event) => {
       })
     }
 
+    console.error('GF non-OK response', {
+      status: response.status,
+      body: text,
+    })
+
     throw createError({
       statusCode: response.status,
       statusMessage: details?.message || 'Submission Failed',
     })
   }
+
 
   return JSON.parse(text)
 })
