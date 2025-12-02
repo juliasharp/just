@@ -365,7 +365,7 @@ onBeforeUnmount(() => {
         <div
           ref="intro"
           data-intro
-          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[40px] md:pb-[35px] px-[20px] md:px-10"
+          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[60px] md:pb-[35px] px-[12px] md:px-10"
         >
           <div class="w-full md:flex justify-between gap-6">
             <p class="body-font-bold">a JUST home is</p>
@@ -473,8 +473,8 @@ body.is-locked {
   transition:
     transform 0.35s ease,
     opacity 0.35s ease;
-  mix-blend-mode: difference;
-  position: fixed;
+  //mix-blend-mode: difference;
+  //position: fixed;
 	@media (min-width: 768px) {
     mix-blend-mode: difference;
     position: fixed;
@@ -538,7 +538,7 @@ body.is-locked {
 
     &-initial {
       color: #fff;
-      font-size: 18px;
+      font-size: 14px;
 
       @media (min-width: 768px) {
         font-size: clamp(20px, 2.5vw, 41px);
