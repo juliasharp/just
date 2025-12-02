@@ -135,10 +135,14 @@ const submitWithErrors = async () => {
     const messages =
       e?.data?.messages ??
       e?.response?._data?.messages ??
-      ((): any => { try {
-        const parsed = JSON.parse(errorMsg.value || '{}')
-        return parsed?.validation_messages
-      } catch { return null } })()
+      ((): any => {
+        try {
+          const parsed = JSON.parse(errorMsg.value || '{}')
+          return parsed?.validation_messages
+        } catch { return null }
+      })()
+
+    console.warn('GF submit error (frontend)', e, messages)
 
     if (messages && typeof messages === 'object') {
       fieldErrors.value = messages
