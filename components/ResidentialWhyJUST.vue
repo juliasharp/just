@@ -259,6 +259,14 @@ function toggleAccordion(index: number) {
     align-items: center;
     display: flex;
     position: relative;
+    width: 14px;
+    height: 55px;
+    @media (min-width: 768px) {
+      height: 65px;
+    }
+    @media (min-width: 1181px) {
+      height: 72px;
+    }
   }
   &-minus {
     justify-content: center;
@@ -271,6 +279,9 @@ function toggleAccordion(index: number) {
       -webkit-transform: rotate(-90deg);
       transform: rotate(-90deg);
       will-change: transform;
+    }
+    svg {
+      width: 100%;
     }
   }
 }
