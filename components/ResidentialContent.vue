@@ -157,7 +157,7 @@ onBeforeUnmount(() => {
     font-size: 50px;
   }
   @media (min-width: 1281px) {
-    font-size: 5vw;
+    font-size: clamp(60px, 5vw, 103px);
   }
 }
 
