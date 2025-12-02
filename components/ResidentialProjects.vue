@@ -192,6 +192,39 @@ function initParallax() {
   })
 }
 
+// --- Swipe Detection for Mobile Lightbox ---
+let startX = 0
+let endX = 0
+
+function onTouchStart(e: TouchEvent) {
+  startX = e.touches[0].clientX
+}
+
+function onTouchMove(e: TouchEvent) {
+  endX = e.touches[0].clientX
+}
+
+function onTouchEnd() {
+  const diff = endX - startX
+
+  // Adjust threshold depending on your feel
+  const threshold = 50
+
+  if (Math.abs(diff) > threshold) {
+    if (diff < 0) {
+      // Swiped left → next image
+      nextImg()
+    } else {
+      // Swiped right → prev image
+      prevImg()
+    }
+  }
+
+  // Reset for next gesture
+  startX = 0
+  endX = 0
+}
+
 onMounted(async () => {
   window.addEventListener('keydown', onKey)
 
@@ -290,6 +323,9 @@ onBeforeUnmount(() => {
         <div
           class="relative z-10 image-container"
           @click.stop
+          @touchstart="onTouchStart"
+          @touchmove="onTouchMove"
+          @touchend="onTouchEnd"
         >
           <!-- Close button -->
           <button
