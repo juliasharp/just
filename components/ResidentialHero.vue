@@ -2,10 +2,13 @@
 import gsap from 'gsap'
 import LogoSVG from '/src/just-logo-res.svg?component';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { useLogoVisibility } from '~~/composables/useLogoVisibility'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
+
+const { isLogoHidden } = useLogoVisibility()
 
 const config = useRuntimeConfig()
 const query = `
@@ -79,26 +82,6 @@ const isDesktop =
   typeof window !== 'undefined'
     ? window.matchMedia?.('(min-width: 768px)').matches
     : true // SSR fallback
-
-const isLogoHidden = ref(false)
-let lastScrollY = 0
-const HIDE_THRESHOLD = 3000 // px – tweak this if you want it later/earlier
-
-/* Logo/header visibility state */
-function handleScroll() {
-  const current = window.scrollY || document.documentElement.scrollTop
-  const isScrollingDown = current > lastScrollY
-
-  if (isScrollingDown && current > HIDE_THRESHOLD) {
-    // Scrolling down past threshold → hide logo
-    isLogoHidden.value = true
-  } else {
-    // Scrolling up OR above top threshold → show logo
-    isLogoHidden.value = false
-  }
-
-  lastScrollY = current
-}
 
 function onHeroLoaded() {
   requestAnimationFrame(() => {
@@ -294,7 +277,6 @@ onMounted(() => {
   setupSection2ScrollTrigger()
 
   // --- Hero parallax effect (desktop only, no reduced motion) ---
-  //if (!prefersReduced && isDesktop && heroEl && stage.value) {
   if (!prefersReduced && heroEl && stage.value) {
     gsap.fromTo(
       heroEl,
@@ -311,18 +293,12 @@ onMounted(() => {
       }
     )
   }
-
-  /* scroll listener */
-  lastScrollY = window.scrollY || 0
-  window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 
 onBeforeUnmount(() => {
   tl?.kill()
   ScrollTrigger.killAll()
-
-  window.removeEventListener('scroll', handleScroll)
 })
 
 </script>
@@ -486,8 +462,8 @@ body.is-locked {
 		fill: currentColor;
 	}
   &.logo--hidden {
-    transform: translateY(-120%);
-    opacity: 0;
+    transform: translateY(-120%) !important;
+    opacity: 0 !important;
     pointer-events: none;
   }
 }

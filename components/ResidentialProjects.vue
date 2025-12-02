@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, computed, ref, nextTick } from 'vue'
+import { useLogoVisibility } from '~~/composables/useLogoVisibility'
+
+const { isLogoHidden } = useLogoVisibility()
 
 let gsap: any
 let ScrollTrigger: any
@@ -242,6 +245,19 @@ onMounted(async () => {
   if (!projectsSection.value || prefersReduced) return
 
   initParallax()
+
+  ScrollTrigger.create({
+    trigger: projectsSection.value,
+    start: 'top top+=80',  // adjust offset to taste
+    onEnter() {
+      // Scrolling down into projects → hide logo
+      isLogoHidden.value = true
+    },
+    onLeaveBack() {
+      // Scrolling back up above projects → show logo again
+      isLogoHidden.value = false
+    },
+  })
 })
 
 
