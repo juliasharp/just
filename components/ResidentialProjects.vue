@@ -13,7 +13,7 @@ const projectsSection = ref<HTMLElement | null>(null)
 const {
   public: {
     wordpressUrl,
-    residentialUri = '/residential',              // set per-env
+    residentialUri = '/home',              // set per-env
     residentialPageId = ''                        // optional fallback
   }
 } = useRuntimeConfig()

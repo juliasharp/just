@@ -28,7 +28,7 @@ export default defineNuxtConfig({
     public: {
       wordpressBase: process.env.WORDPRESS_BASE,
       wordpressUrl: process.env.NUXT_PUBLIC_WORDPRESS_URL,
-      residentialUri: process.env.NUXT_PUBLIC_RESIDENTIAL_URI || '/residential',
+      residentialUri: process.env.NUXT_PUBLIC_RESIDENTIAL_URI || '/home',
       residentialPageId:
         process.env.NUXT_PUBLIC_RESIDENTIAL_PAGE_ID || '',
     },

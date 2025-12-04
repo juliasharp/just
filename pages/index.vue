@@ -5,7 +5,7 @@ const showContactForm = ref(false);
 </script>
 
 <template>
-   <NuxtLayout name="home" page-name="home" title="JUST Design">
+   <NuxtLayout name="default" page-name="home" title="JUST Design">
       <!--Header Animation & Video -->
       <ConsultingHero />
       <!-- About -->
