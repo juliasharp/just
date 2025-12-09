@@ -271,7 +271,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section ref="projectsSection" class="projects-section">
+  <section ref="projectsSection" class="projects-section just-container">
     <div class="projects-container res-gutter">
       <div class="projects">
         <div

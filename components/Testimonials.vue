@@ -51,7 +51,7 @@ const settings = {
 </script>
 
 <template>
-  <div class="testimonials">
+  <div class="testimonials just-container">
     <div class="testimonials-container">
       <div class="testimonial-outer">
         <Carousel v-bind="settings">

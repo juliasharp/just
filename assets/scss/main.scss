@@ -13,6 +13,7 @@
   --font-family-code: 'Calling Code', sans-serif;
   --residential-gutter-width: 30px;
   --mobile-residential-gutter-width: 20px;
+  --container-max-width: 1825px;
 }
 
 body.residential {
@@ -26,6 +27,12 @@ body.residential {
     padding-left: var(--residential-gutter-width);
     padding-right: var(--residential-gutter-width);
   }
+}
+
+.just-container {
+  width: 100%;
+  max-width: var(--container-max-width) !important;
+  margin: 0 auto;
 }
 
 .body-font {

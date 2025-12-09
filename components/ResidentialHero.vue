@@ -357,8 +357,9 @@ onBeforeUnmount(() => {
       data-static
       class="
         hero-details
+        just-container
         res-gutter
-        md:h-[100dvh]
+        md:min-h-[100dvh]
         flex flex-col md:flex-row items-end justify-between gap-10
         pt-10 md:pt-0
       "
@@ -366,7 +367,7 @@ onBeforeUnmount(() => {
       <!-- Left: hero copy + scroll cue -->
       <div 
         ref="heroLeft"
-        class="hero-left md:max-w-[30ch] lg:max-w-[44ch] flex flex-col justify-between h-full pb-[45px] md:pb-[15px]"
+        class="hero-left md:max-w-[28ch] lg:max-w-[44ch] flex flex-col justify-between h-full pb-[45px] md:pb-[15px]"
       >
         <div>
           <p class="hero-text body-font-medium">
@@ -379,29 +380,43 @@ onBeforeUnmount(() => {
 
       <!-- Right: overlay images (collaged) -->
       <div class="hero-overlays">
-        <!-- Bottom / main image -->
-        <img
-          v-if="data?.o2"
-          ref="o2Ref"
-          data-overlay
-          :src="data.o2.sourceUrl"
-          :alt="data.o2.altText || ''"
-          class="overlay-img-2"
-          loading="eager"
-          decoding="async"
-        />
-
-        <!-- Top / smaller image -->
-        <img
-          v-if="data?.o1"
-          ref="o1Ref"
-          data-overlay
-          :src="data.o1.sourceUrl"
-          :alt="data.o1.altText || ''"
-          class="overlay-img-1"
-          loading="eager"
-          decoding="async"
-        />
+        <div class="hero-overlays__frame">
+          <div class="hero-overlays__grid">
+            <div class="overlay-card overlay-card__wide">
+              <div class="image-card__holder image-card__wide">
+                <div class="image-card">
+                  <img
+                    v-if="data?.o1"
+                    ref="o2Ref"
+                    data-overlay
+                    :src="data.o1.sourceUrl"
+                    :alt="data.o1.altText || ''"
+                    class="overlay-img-1"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div class="overlay-card overlay-card__tall">
+              <div class="image-card__holder image-card__tall">
+                <div class="image-card">
+                  <img
+                    v-if="data?.o2"
+                    ref="o2Ref"
+                    data-overlay
+                    :src="data.o2.sourceUrl"
+                    :alt="data.o2.altText || ''"
+                    class="overlay-img-2"
+                    loading="eager"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </section>
@@ -493,10 +508,7 @@ body.is-locked {
   }
   &-left {
     @media (min-width: 768px) {
-      height: 34vh;
-    }
-    @media (min-width: 1181px) {
-      height: 46vh;
+      height: 30vh;
     }
     @media (min-width: 1301px) {
       height: 37vh;
@@ -504,11 +516,15 @@ body.is-locked {
     @media (min-width: 1601px) {
       height: 45vh;
     }
+    @media (min-width: 1801px) {
+      height: auto;
+      padding-bottom: 50px;
+    }
   }
   &-text {
     font-size: clamp(20px, 2.4vw, 27px);
     @media (min-width: 768px) {
-      font-size: clamp(27px, 2.4vw, 36px);
+      font-size: clamp(25px, 2.4vw, 36px);
     }
     line-height: 1.28;
 
@@ -562,153 +578,231 @@ img {
   }
 }
 
-// .hero-overlays {
-//   /* Walker Warner–style diagonal overlap vars */
-//   --start-padding: 1fr;
-//   --end-padding: 1fr;
-//   --first-image: 12.15fr;  // big image
-//   --overlap-x: 1.51fr;     // gap/overlap band
-//   --second-image: 5.12fr;  // smaller image
-
-//   position: relative;
-//   width: 100%;
-//   max-width: 140rem;       // similar to their module
-//   margin: 0 auto;
-//   display: grid;
-//   grid-template-columns: var(--start-padding) var(--first-image) var(--overlap-x) var(--second-image) var(--end-padding);
-//   grid-template-rows: auto min(40.5rem, 29vw) auto;
-//   align-items: center;
-//   isolation: isolate;
-
-//   @media (max-width: 767px) {
-//     /* Stack nicely on mobile */
-//     max-width: min(335px, 80vw);
-//     grid-template-columns: 1fr;
-//     grid-template-rows: auto auto;
-//     row-gap: 20px;
-//     padding-inline: 0;
-//   }
-// }
-
-// /* Bottom / main image (like their first card) */
-// .overlay-img-2 {
-//   width: 100%;
-//   height: 100%;
-//   object-fit: cover;
-//   display: block;
-//   grid-column: 2 / span 2;  // columns: first-image + overlap band
-//   grid-row: 2 / span 2;     // lower rows
-//   z-index: 1;
-
-//   @media (max-width: 767px) {
-//     grid-column: 1 / -1;
-//     grid-row: 2 / 3;
-//     position: relative;
-//     top: 0;
-//   }
-// }
-
-// /* Top / overlapping image (like their second card) */
-// .overlay-img-1 {
-//   width: 100%;
-//   height: 100%;
-//   object-fit: cover;
-//   display: block;
-//   grid-column: 3 / span 2;  // overlap band + second-image
-//   grid-row: 1 / span 2;     // higher rows so it overlaps diagonally
-//   z-index: 2;
-//   align-self: end;
-
-//   @media (min-width: 768px) {
-//     transform: translateY(10%); // fine-tune overlap “angle”
-//   }
-
-//   @media (max-width: 767px) {
-//     grid-column: 1 / -1;
-//     grid-row: 1 / 2;
-//     transform: none;         // no overlap on tiny screens
-//   }
-// }
-
-.hero-overlays {
-  position: relative;
-  width: min(43rem, 50vw);
-  bottom: 40px;
-  margin: 0 auto;
+.hero-details {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 2.5rem;
   @media (min-width: 768px) {
-    bottom: 16%;
+    flex-direction: row;
+    align-items: flex-end;
+    /* allow the whole section to be tall, but not forced into exactly 100vh */
+    min-height: min(100dvh, 900px);
+    gap: 2rem;
   }
   @media (min-width: 1181px) {
-    bottom: clamp(40px, 4vw, 91px)
-  }
-  @media (min-width: 1601px) {
-    bottom: clamp(40px, 2.5vw, 91px)
-  }
-  @media (max-width: 767px) {
-    width: min(335px, 80vw);
-    margin: 40px auto 70px;
-  }
-  @media (max-width: 400px) {
-    margin: 40px auto 85px;
+    min-height: min(100dvh, 1200px);
+    gap: 5rem;
   }
 }
 
-.overlay-img {
-  &-1 {
-    position: absolute;
-    display: block;
-    object-fit: cover;
-    left: 0;
-    top: -47%;
+.hero-overlays {
+  width: 100%;
+  @media (min-width: 768px) {
+    flex: 1 1 0;
+    align-self: center;
+  }
+
+  &__frame {
+    width: 100%;
+    position: relative;
+    margin: 0 auto;
     @media (min-width: 768px) {
-      width: 80%;
+      height: clamp(27rem, 48vh, 60vh); 
     }
     @media (min-width: 1181px) {
-      width: clamp(250px, 38vw, 494px);
+      height: clamp(32rem, 63vh, 80vh); 
     }
-    @media (min-width: 1601px) {
-      width: clamp(494px, 30vw, 640px);
-      top: -46%;
-    }
-    @media (min-width: 1801px) {
-      width: clamp(550px, 33vw, 640px);
-    }
-    @media (max-width: 767px) {
-      width: 65%;
-      min-width: 270px;
-      left: -4%;
-      top: -14%;
-    }
-    @media (max-width: 400px) {
-      min-width: 245px;
+    @media (min-width: 1581px) {
+      height: clamp(32rem, 92vh, 92vh); 
     }
   }
-  &-2 {
-    width: clamp(180px, 23vw, 340px);
-    display: block;
-    object-fit: cover;
+
+  &__grid {
+    /* layout vars */
+    --start-padding: 0.5fr;
+    --end-padding: 0.5fr;
+    --first-image: 9.15fr;
+    --overlap-x: 1.5fr;
+    --second-image: 5.12fr;
+
+    inset: 0;
+    display: grid;
+    width: 100%;
+    height: 100%;
+    isolation: isolate;
+
+    grid-template-columns: 
+      var(--start-padding) 
+      var(--first-image) 
+      var(--overlap-x) 
+      var(--second-image) 
+      var(--end-padding);
+
+    grid-template-rows: auto auto auto;
+
+    align-items: center;
+    justify-content: center;
+
     @media (max-width: 767px) {
-      max-width: 195px;
-      position: relative;
-      top: 85px;
-    }
-    @media (min-width: 768px) {
-      width: clamp(210px, 23vw, 340px);
-    }
-    @media (max-width: 400px) {
-      top: 80px;
-    }
-    @media (min-width: 1181px) {
-      //width: clamp(250px, 38vw, 494px);
-    }
-    @media (min-width: 1601px) {
-      width: clamp(340px, 20vw, 420px);
-    }
-    @media (min-width: 1801px) {
-      width: clamp(375px, 22vw, 460px);
+      row-gap: 20px;
     }
   }
 }
+
+/* Bottom / main image (like their first card) */
+.overlay-img-2 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  @media (max-width: 767px) {
+    position: relative;
+    top: 0;
+  }
+}
+
+/* Top / overlapping image (like their second card) */
+.overlay-img-1 {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+}
+
+.overlay-card {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  &__wide {
+    grid-column: 2 / span 2;  // same as before
+    grid-row: 1 / span 2;
+    z-index: 2;
+  }
+  &__tall {
+    grid-column: 3 / span 2;  // same as before
+    grid-row: 2 / span 2;     
+    z-index: 1;
+    align-self: center;
+  }
+}
+
+.image-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  &__wide {
+    position: relative;
+    width: 100%;
+    padding-top: 55%;
+    height: unset;
+    @media (min-width: 768px) {
+      padding-top: 70%;
+    }
+    @media (min-width: 1181px) {
+      padding-top:66%;
+    }
+    @media (min-width: 1381px) {
+      padding-top: 55%;
+    }
+  }
+
+  &__tall {
+    padding-top: 133%;
+    height: unset;
+    position: relative;
+    width: 100%;
+    @media (min-width: 768px) {
+      padding-top: 166%;
+    }
+    @media (min-width: 1451px) {
+      padding-top: 133%;
+    }
+  }
+}
+
+// .hero-overlays {
+//   position: relative;
+//   width: min(43rem, 50vw);
+//   bottom: 40px;
+//   margin: 0 auto;
+//   display: flex;
+//   justify-content: flex-end;
+//   @media (min-width: 768px) {
+//     bottom: 16%;
+//   }
+//   @media (min-width: 1181px) {
+//     bottom: clamp(40px, 4vw, 91px)
+//   }
+//   @media (min-width: 1601px) {
+//     bottom: clamp(40px, 2.5vw, 91px)
+//   }
+//   @media (max-width: 767px) {
+//     width: min(335px, 80vw);
+//     margin: 40px auto 70px;
+//   }
+//   @media (max-width: 400px) {
+//     margin: 40px auto 85px;
+//   }
+// }
+
+// .overlay-img {
+//   &-1 {
+//     position: absolute;
+//     display: block;
+//     object-fit: cover;
+//     left: 0;
+//     top: -47%;
+//     @media (min-width: 768px) {
+//       width: 80%;
+//     }
+//     @media (min-width: 1181px) {
+//       width: clamp(250px, 38vw, 494px);
+//     }
+//     @media (min-width: 1601px) {
+//       width: clamp(494px, 30vw, 640px);
+//       top: -46%;
+//     }
+//     @media (min-width: 1801px) {
+//       width: clamp(550px, 33vw, 640px);
+//     }
+//     @media (max-width: 767px) {
+//       width: 65%;
+//       min-width: 270px;
+//       left: -4%;
+//       top: -14%;
+//     }
+//     @media (max-width: 400px) {
+//       min-width: 245px;
+//     }
+//   }
+//   &-2 {
+//     width: clamp(180px, 23vw, 340px);
+//     display: block;
+//     object-fit: cover;
+//     @media (max-width: 767px) {
+//       max-width: 195px;
+//       position: relative;
+//       top: 85px;
+//     }
+//     @media (min-width: 768px) {
+//       width: clamp(210px, 23vw, 340px);
+//     }
+//     @media (max-width: 400px) {
+//       top: 80px;
+//     }
+//     @media (min-width: 1181px) {
+//       //width: clamp(250px, 38vw, 494px);
+//     }
+//     @media (min-width: 1601px) {
+//       width: clamp(340px, 20vw, 420px);
+//     }
+//     @media (min-width: 1801px) {
+//       width: clamp(375px, 22vw, 460px);
+//     }
+//   }
+// }
 </style>

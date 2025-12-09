@@ -97,7 +97,7 @@ onBeforeUnmount(() => {
 <template>
   <section
     ref="sectionEl"
-    class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden"
+    class="content-section just-container px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden"
   >
     <div class="a-just-home-is-text flex justify-center flex-row gap-4 sm:gap-6 items-start sm:items-center">
       <!-- Prefix -->
@@ -157,7 +157,7 @@ onBeforeUnmount(() => {
     font-size: 50px;
   }
   @media (min-width: 1281px) {
-    font-size: clamp(60px, 5vw, 103px);
+    font-size: clamp(60px, 5vw, 100px);
   }
 }
 

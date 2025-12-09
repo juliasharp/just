@@ -66,7 +66,7 @@ function toggleAccordion(index: number) {
 </script>
 
 <template>
-  <section class="why-just-section">
+  <section class="why-just-section just-container">
     <div class="why-just-container flex res-gutter">
       <div class="left">
         <h2 class="why-just-header body-font-bold">
@@ -159,6 +159,7 @@ function toggleAccordion(index: number) {
     }
     .left {
       flex-basis: 50%;
+      max-width: 715px;
       @media (max-width: 767px) {
         margin-top: 50px;
       }
@@ -169,6 +170,9 @@ function toggleAccordion(index: number) {
       }
       @media (min-width: 1181px) {
         max-width: 34vw;
+      }
+      @media (min-width: 1381px) {
+        max-width: clamp(24vw, 33vw, 650px);
       }
       margin-left: auto;
     }
