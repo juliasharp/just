@@ -145,7 +145,7 @@ onBeforeUnmount(() => {
 }
 
 .a-just-home-is-text {
-  font-size: 40px;
+  font-size: 36px;
   @media (max-width: 767px) {
     flex-direction: column;
     gap: 0;
