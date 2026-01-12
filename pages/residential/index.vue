@@ -47,7 +47,6 @@ useSeoMeta({
     <ResidentialContent />
     <ResidentialProjects />
     <ResidentialTestimonials />
-    <ResidentialWhyJUST />
     <ResidentialDesignJourney />
     <ResidentialFooter/>
   </NuxtLayout>
