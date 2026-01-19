@@ -11,6 +11,7 @@ const showContactForm = ref(false);
 </script>
 
 <template>
+<<<<<<< Updated upstream
   <NuxtLayout name="residential" page-name="gateway" title="Residential| JUST Design">
     <ResidentialHero />
     <ResidentialContent />
@@ -19,5 +20,24 @@ const showContactForm = ref(false);
     <ResidentialWhyJUST />
     <ResidentialDesignJourney />
     <ResidentialFooter/>
+=======
+  <NuxtLayout name="residential" page-name="JUST Design | Residential Architects & Designers" title="Residential| JUST Design">
+    <main class="residential-page no-scroll-snap">
+      <ResidentialHero />
+      <ResidentialContent />
+      <ResidentialContentGrid />
+      <ResidentialProjects />
+      <ResidentialTestimonials />
+      <ResidentialDesignJourney />
+      <ResidentialFooter/>
+    </main>
+>>>>>>> Stashed changes
   </NuxtLayout>
 </template>
+
+<style>
+.residential-page {
+  /* Ensure smooth scrolling */
+  scroll-behavior: smooth;
+}
+</style>

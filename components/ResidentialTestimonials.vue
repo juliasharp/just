@@ -47,7 +47,7 @@ const settings = {
 </script>
 
 <template>
-  <section class="testimonial-section h-[100dvh] overflow-hidden">
+  <section class="testimonial-section snap-section snap-panel">
     <!-- Full-height flexbox to center the stage -->
     <div class="h-full flex items-center justify-center">
       <!-- Stage: controls max width + horizontal padding -->

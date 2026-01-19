@@ -81,7 +81,7 @@ onMounted(async () => {
         pinSpacing: true,
         // Controls how long it stays pinned. Increase/decrease this value
         // for a longer/shorter "few seconds" feel.
-        end: '+=900', // ~900px of scroll
+        //end: '+=900', // ~900px of scroll
       })
     }
   }
@@ -97,23 +97,27 @@ onBeforeUnmount(() => {
 <template>
   <section
     ref="sectionEl"
+<<<<<<< Updated upstream
     class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden"
+=======
+    class="snap-section snap-panel content-section just-container px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden"
+>>>>>>> Stashed changes
   >
-    <div class="a-just-home-is-text flex justify-center flex-row gap-4 sm:gap-6 items-start sm:items-center">
+    <div class="a-just-home-is-text flex justify-center flex-col items-center">
       <!-- Prefix -->
       <h2 class="whitespace-nowrap">
-        A <span class="body-font-bold">JUST</span> home is
+        A <span class="body-font-bold">JUST</span> home is...
       </h2>
 
       <!-- Suffix animation -->
       <div
         ref="suffixContainer"
-        class="relative h-[1.2em] overflow-hidden leading-tight body-font-bold suffix-container"
+        class="relative h-[1.2em] overflow-hidden leading-tight suffix-container"
       >
         <div
           v-for="(item, i) in extended"
           :key="i"
-          class="suffix-item absolute top-0 left-0 w-full"
+          class="suffix-item absolute top-0 left-0 w-full body-font-medium"
         >
           {{ item }}
         </div>
@@ -125,26 +129,13 @@ onBeforeUnmount(() => {
 
 <style scoped lang="scss">
 .suffix-container {
-  width: 168px;
+  width: 100%;
   //border-bottom: 2px solid black;
   position: relative;
-  width: 320px;
-  @media (min-width: 768px) {
-    width: 346px;
-    bottom: 1px;
-  }
-  @media (min-width: 1021px) {
-    width: 400px;
-  }
-  @media (min-width: 1281px) {
-    width: 575px;
-  }
-  @media (min-width: 1451px) {
-    width: clamp(718px, calc(40.67vw + 66.13px), 840px);
-  }
 }
 
 .a-just-home-is-text {
+<<<<<<< Updated upstream
   font-size: 40px;
   @media (max-width: 767px) {
     flex-direction: column;
@@ -158,6 +149,15 @@ onBeforeUnmount(() => {
   }
   @media (min-width: 1281px) {
     font-size: clamp(60px, 5vw, 103px);
+=======
+  font-size: clamp(26px, 5.375vw, 42px);
+  gap: 0;
+  text-align: center;
+  width: 100%;
+  line-height: 1.3;
+  @media (min-width: 768px) {
+    font-size: clamp(40px, 4.5vw, 75px);
+>>>>>>> Stashed changes
   }
 }
 
