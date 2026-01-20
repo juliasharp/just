@@ -50,6 +50,17 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+// Optional: Add smooth scrollbar
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Ensure smooth scrolling on touch devices
+body {
+  -webkit-overflow-scrolling: touch;
+}
+
 body.residential {
   background-color: var(--residential-background-color);
 }
