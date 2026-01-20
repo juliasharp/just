@@ -27,6 +27,17 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 
+// Optional: Add smooth scrollbar
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Ensure smooth scrolling on touch devices
+body {
+  -webkit-overflow-scrolling: touch;
+}
+
 body.residential {
   background-color: var(--residential-background-color);
 }
@@ -51,6 +62,14 @@ body {
 
 .no-snap {
   scroll-snap-align: none;
+}
+
+// Disable scroll snap for all children when parent has no-scroll-snap
+.no-scroll-snap {
+  .snap-section,
+  .snap-panel {
+    scroll-snap-align: none;
+  }
 }
 
 .res-gutter {

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+let gsap: any
+let ScrollTrigger: any
 
 const config = useRuntimeConfig();
 const query = `
@@ -44,10 +46,39 @@ const settings = {
   mouseDrag: false,
   touchDrag: true,
 }
+
+const sectionEl = ref<HTMLElement | null>(null)
+let pinTrigger: any
+
+onMounted(async () => {
+  const mod = await import('gsap')
+  gsap = mod.gsap
+
+  // --- pin / lock section for a short distance ---
+  if (typeof window !== 'undefined') {
+    const { ScrollTrigger: ST } = await import('gsap/ScrollTrigger')
+    ScrollTrigger = ST
+    gsap.registerPlugin(ScrollTrigger)
+
+    const isDesktop = window.matchMedia('(min-width: 768px)').matches
+    if (isDesktop && sectionEl.value) {
+      pinTrigger = ScrollTrigger.create({
+        trigger: sectionEl.value,
+        start: 'top top',
+        pin: true,
+        pinSpacing: true,
+      })
+    }
+  }
+})
+
+onBeforeUnmount(() => {
+  pinTrigger?.kill?.()
+})
 </script>
 
 <template>
-  <section class="testimonial-section snap-section snap-panel">
+  <section ref="sectionEl" class="testimonial-section snap-section snap-panel">
     <!-- Full-height flexbox to center the stage -->
     <div class="h-full flex items-center justify-center">
       <!-- Stage: controls max width + horizontal padding -->
@@ -82,6 +113,13 @@ const settings = {
 </template>
 
 <style scoped lang="scss">
+.testimonial-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .testimonial {
   display: block;
   font-size: clamp(24px, 3.5vw, 52px);

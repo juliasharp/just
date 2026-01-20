@@ -10,12 +10,8 @@ const projectsSection = ref<HTMLElement | null>(null)
 const {
   public: {
     wordpressUrl,
-<<<<<<< Updated upstream
-    residentialUri = '/residential',              // set per-env
-    residentialPageId = ''                        // optional fallback
-=======
+    residentialUri = '/residential',              // set per-env                      // optional fallback
     residentialPageId = ''
->>>>>>> Stashed changes
   }
 } = useRuntimeConfig()
 

@@ -97,11 +97,7 @@ onBeforeUnmount(() => {
 <template>
   <section
     ref="sectionEl"
-<<<<<<< Updated upstream
-    class="content-section px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden"
-=======
     class="snap-section snap-panel content-section just-container px-6 pt-[7rem] pb-[7rem] md:pt-[13rem] md:pb-[15rem] xl:pt-[19rem] xl:pb-[21rem] overflow-hidden"
->>>>>>> Stashed changes
   >
     <div class="a-just-home-is-text flex justify-center flex-col items-center">
       <!-- Prefix -->
@@ -135,21 +131,6 @@ onBeforeUnmount(() => {
 }
 
 .a-just-home-is-text {
-<<<<<<< Updated upstream
-  font-size: 40px;
-  @media (max-width: 767px) {
-    flex-direction: column;
-    gap: 0;
-  }
-  @media (min-width: 768px) {
-    font-size: 40px;
-  }
-  @media (min-width: 1021px) {
-    font-size: 50px;
-  }
-  @media (min-width: 1281px) {
-    font-size: clamp(60px, 5vw, 103px);
-=======
   font-size: clamp(26px, 5.375vw, 42px);
   gap: 0;
   text-align: center;
@@ -157,7 +138,6 @@ onBeforeUnmount(() => {
   line-height: 1.3;
   @media (min-width: 768px) {
     font-size: clamp(40px, 4.5vw, 75px);
->>>>>>> Stashed changes
   }
 }
 

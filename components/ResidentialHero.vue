@@ -2,14 +2,28 @@
 import gsap from 'gsap'
 import LogoSVG from '/src/just-logo-res.svg?component';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-<<<<<<< Updated upstream
-=======
-import { useLogoVisibility } from '~~/composables/useLogoVisibility'
 import { useSectionScrollAnims } from '~/composables/useSectionScrollAnims'
->>>>>>> Stashed changes
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
+}
+
+// Logo visibility state (handled locally)
+const isLogoHidden = ref(false)
+let lastScrollY = 0
+const HIDE_THRESHOLD = 3000 // px – tweak this if you want it later/earlier
+
+function handleScroll() {
+  const current = window.scrollY || document.documentElement.scrollTop
+  const isScrollingDown = current > lastScrollY
+
+  if (isScrollingDown && current > HIDE_THRESHOLD) {
+    isLogoHidden.value = true
+  } else {
+    isLogoHidden.value = false
+  }
+
+  lastScrollY = current
 }
 
 const config = useRuntimeConfig()
@@ -109,26 +123,6 @@ const isDesktop =
   typeof window !== 'undefined'
     ? window.matchMedia?.('(min-width: 768px)').matches
     : true // SSR fallback
-
-const isLogoHidden = ref(false)
-let lastScrollY = 0
-const HIDE_THRESHOLD = 3000 // px – tweak this if you want it later/earlier
-
-/* Logo/header visibility state */
-function handleScroll() {
-  const current = window.scrollY || document.documentElement.scrollTop
-  const isScrollingDown = current > lastScrollY
-
-  if (isScrollingDown && current > HIDE_THRESHOLD) {
-    // Scrolling down past threshold → hide logo
-    isLogoHidden.value = true
-  } else {
-    // Scrolling up OR above top threshold → show logo
-    isLogoHidden.value = false
-  }
-
-  lastScrollY = current
-}
 
 function onHeroLoaded() {
   requestAnimationFrame(() => {
@@ -242,7 +236,6 @@ onMounted(() => {
   if (heroEl?.complete) onHeroLoaded()
 
   // 2) Generic panel enter/exit animations for this component
-  // IMPORTANT: do NOT nest onMounted inside onMounted.
   if (root.value) {
     initPanelAnims(root.value, {
       start: 'top 75%',
@@ -254,10 +247,6 @@ onMounted(() => {
   // 3) Your custom Section 2 timeline + pin/hold
   setupSection2ScrollTrigger()
 
-<<<<<<< Updated upstream
-  // --- Hero parallax effect (desktop only, no reduced motion) ---
-  //if (!prefersReduced && isDesktop && heroEl && stage.value) {
-=======
   // 4) Pin the hero-details section for a moment
   if (!prefersReduced && isDesktop && staticPane.value) {
     heroTriggers.push(
@@ -271,8 +260,7 @@ onMounted(() => {
     )
   }
 
-  // 4) Hero parallax ScrollTrigger
->>>>>>> Stashed changes
+  // 5) Hero parallax ScrollTrigger
   if (!prefersReduced && heroEl && stage.value) {
     const tween = gsap.fromTo(
       heroEl,
@@ -295,11 +283,6 @@ onMounted(() => {
     }
   }
 
-<<<<<<< Updated upstream
-  /* scroll listener */
-  lastScrollY = window.scrollY || 0
-  window.addEventListener('scroll', handleScroll, { passive: true })
-=======
   // 6) Refresh ScrollTrigger on resize to recalculate pin positions
   let resizeTimeout: ReturnType<typeof setTimeout> | null = null
   const handleResize = () => {
@@ -310,22 +293,21 @@ onMounted(() => {
   }
   window.addEventListener('resize', handleResize)
 
+  // 7) Logo visibility scroll listener
+  lastScrollY = window.scrollY || 0
+  window.addEventListener('scroll', handleScroll, { passive: true })
+
   // Store cleanup function
   onBeforeUnmount(() => {
     window.removeEventListener('resize', handleResize)
+    window.removeEventListener('scroll', handleScroll)
     if (resizeTimeout) clearTimeout(resizeTimeout)
   })
->>>>>>> Stashed changes
 })
 
 onBeforeUnmount(() => {
   // Kill your hero intro timeline
   tl?.kill()
-<<<<<<< Updated upstream
-  ScrollTrigger.killAll()
-
-  window.removeEventListener('scroll', handleScroll)
-=======
   tl = null
 
   // Kill triggers you created locally in this component
@@ -334,7 +316,6 @@ onBeforeUnmount(() => {
 
   // Kill triggers created by useSectionScrollAnims
   killAll()
->>>>>>> Stashed changes
 })
 
 </script>
@@ -396,55 +377,6 @@ onBeforeUnmount(() => {
     <section
       ref="staticPane"
       data-static
-<<<<<<< Updated upstream
-      class="
-        hero-details
-        res-gutter
-        md:h-[100dvh]
-        flex flex-col md:flex-row items-end justify-between gap-10
-        pt-10 md:pt-0
-      "
-    >
-      <!-- Left: hero copy + scroll cue -->
-      <div 
-        ref="heroLeft"
-        class="hero-left md:max-w-[30ch] lg:max-w-[44ch] flex flex-col justify-between h-full pb-[45px] md:pb-[15px]"
-      >
-        <div>
-          <p class="hero-text body-font-medium">
-            <span class="body-font-bold">JUST Design</span> is a minority-owned
-            architecture and design studio specializing in thoughtful, modern
-            residential projects that balance craft, function, and feeling.
-          </p>
-        </div>
-      </div>
-
-      <!-- Right: overlay images (collaged) -->
-      <div class="hero-overlays">
-        <!-- Bottom / main image -->
-        <img
-          v-if="data?.o2"
-          ref="o2Ref"
-          data-overlay
-          :src="data.o2.sourceUrl"
-          :alt="data.o2.altText || ''"
-          class="overlay-img-2"
-          loading="eager"
-          decoding="async"
-        />
-
-        <!-- Top / smaller image -->
-        <img
-          v-if="data?.o1"
-          ref="o1Ref"
-          data-overlay
-          :src="data.o1.sourceUrl"
-          :alt="data.o1.altText || ''"
-          class="overlay-img-1"
-          loading="eager"
-          decoding="async"
-        />
-=======
       class="hero-details"
     >
       <!-- Left: Background image with brown overlay and text -->
@@ -555,7 +487,6 @@ onBeforeUnmount(() => {
             />
           </div>
         </div>
->>>>>>> Stashed changes
       </div>
     </section>
   </section>
@@ -597,8 +528,6 @@ onBeforeUnmount(() => {
   transition:
     transform 0.35s ease,
     opacity 0.35s ease;
-  //mix-blend-mode: difference;
-  //position: fixed;
 	@media (min-width: 768px) {
     mix-blend-mode: difference;
     position: fixed;
@@ -610,8 +539,8 @@ onBeforeUnmount(() => {
 		fill: currentColor;
 	}
   &.logo--hidden {
-    transform: translateY(-120%);
-    opacity: 0;
+    transform: translateY(-120%) !important;
+    opacity: 0 !important;
     pointer-events: none;
   }
 }
@@ -713,98 +642,6 @@ img {
   }
 }
 
-<<<<<<< Updated upstream
-// .hero-overlays {
-//   /* Walker Warner–style diagonal overlap vars */
-//   --start-padding: 1fr;
-//   --end-padding: 1fr;
-//   --first-image: 12.15fr;  // big image
-//   --overlap-x: 1.51fr;     // gap/overlap band
-//   --second-image: 5.12fr;  // smaller image
-
-//   position: relative;
-//   width: 100%;
-//   max-width: 140rem;       // similar to their module
-//   margin: 0 auto;
-//   display: grid;
-//   grid-template-columns: var(--start-padding) var(--first-image) var(--overlap-x) var(--second-image) var(--end-padding);
-//   grid-template-rows: auto min(40.5rem, 29vw) auto;
-//   align-items: center;
-//   isolation: isolate;
-
-//   @media (max-width: 767px) {
-//     /* Stack nicely on mobile */
-//     max-width: min(335px, 80vw);
-//     grid-template-columns: 1fr;
-//     grid-template-rows: auto auto;
-//     row-gap: 20px;
-//     padding-inline: 0;
-//   }
-// }
-
-// /* Bottom / main image (like their first card) */
-// .overlay-img-2 {
-//   width: 100%;
-//   height: 100%;
-//   object-fit: cover;
-//   display: block;
-//   grid-column: 2 / span 2;  // columns: first-image + overlap band
-//   grid-row: 2 / span 2;     // lower rows
-//   z-index: 1;
-
-//   @media (max-width: 767px) {
-//     grid-column: 1 / -1;
-//     grid-row: 2 / 3;
-//     position: relative;
-//     top: 0;
-//   }
-// }
-
-// /* Top / overlapping image (like their second card) */
-// .overlay-img-1 {
-//   width: 100%;
-//   height: 100%;
-//   object-fit: cover;
-//   display: block;
-//   grid-column: 3 / span 2;  // overlap band + second-image
-//   grid-row: 1 / span 2;     // higher rows so it overlaps diagonally
-//   z-index: 2;
-//   align-self: end;
-
-//   @media (min-width: 768px) {
-//     transform: translateY(10%); // fine-tune overlap “angle”
-//   }
-
-//   @media (max-width: 767px) {
-//     grid-column: 1 / -1;
-//     grid-row: 1 / 2;
-//     transform: none;         // no overlap on tiny screens
-//   }
-// }
-
-.hero-overlays {
-  position: relative;
-  width: min(43rem, 50vw);
-  bottom: 40px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: flex-end;
-  @media (min-width: 768px) {
-    bottom: 16%;
-  }
-  @media (min-width: 1181px) {
-    bottom: clamp(40px, 4vw, 91px)
-  }
-  @media (min-width: 1601px) {
-    bottom: clamp(40px, 2.5vw, 91px)
-  }
-  @media (max-width: 767px) {
-    width: min(335px, 80vw);
-    margin: 40px auto 70px;
-  }
-  @media (max-width: 400px) {
-    margin: 40px auto 85px;
-=======
 .hero-details {
   display: flex;
   flex-direction: column;
@@ -843,64 +680,8 @@ img {
     height: 100%;
     object-fit: cover;
     z-index: 1;
->>>>>>> Stashed changes
   }
 
-<<<<<<< Updated upstream
-.overlay-img {
-  &-1 {
-    position: absolute;
-    display: block;
-    object-fit: cover;
-    left: 0;
-    top: -47%;
-    @media (min-width: 768px) {
-      width: 80%;
-    }
-    @media (min-width: 1181px) {
-      width: clamp(250px, 38vw, 494px);
-    }
-    @media (min-width: 1601px) {
-      width: clamp(494px, 30vw, 640px);
-      top: -46%;
-    }
-    @media (min-width: 1801px) {
-      width: clamp(550px, 33vw, 640px);
-    }
-    @media (max-width: 767px) {
-      width: 65%;
-      min-width: 270px;
-      left: -4%;
-      top: -14%;
-    }
-    @media (max-width: 400px) {
-      min-width: 245px;
-    }
-  }
-  &-2 {
-    width: clamp(180px, 23vw, 340px);
-    display: block;
-    object-fit: cover;
-    @media (max-width: 767px) {
-      max-width: 195px;
-      position: relative;
-      top: 85px;
-    }
-    @media (min-width: 768px) {
-      width: clamp(210px, 23vw, 340px);
-    }
-    @media (max-width: 400px) {
-      top: 80px;
-    }
-    @media (min-width: 1181px) {
-      //width: clamp(250px, 38vw, 494px);
-    }
-    @media (min-width: 1601px) {
-      width: clamp(340px, 20vw, 420px);
-    }
-    @media (min-width: 1801px) {
-      width: clamp(375px, 22vw, 460px);
-=======
   &__bg-placeholder {
     position: absolute;
     inset: 0;
@@ -993,7 +774,6 @@ img {
 
     @media (min-width: 1024px) {
       padding: 60px;
->>>>>>> Stashed changes
     }
   }
 
@@ -1084,7 +864,7 @@ img {
     transform: scale(1.01);
   }
 
-  &__collage-img { 
+  &__collage-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
