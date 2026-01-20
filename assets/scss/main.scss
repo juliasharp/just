@@ -7,6 +7,7 @@
   --residential-background-color: #EFEFE1;
   --accent-color-pink: #FE15C0;
   --accent-color-brown: #A55027;
+  --accent-color-brown: #A55027;
   --body-font-normal: 'Inter', sans-serif;
   --body-font-medium: 'Inter Medium', sans-serif;
   --body-font-bold: 'Inter Bold', sans-serif;
@@ -14,6 +15,17 @@
   --font-family-code: 'Calling Code', sans-serif;
   --residential-gutter-width: 30px;
   --mobile-residential-gutter-width: 20px;
+}
+
+// Optional: Add smooth scrollbar
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Ensure smooth scrolling on touch devices
+body {
+  -webkit-overflow-scrolling: touch;
 }
 
 // Optional: Add smooth scrollbar

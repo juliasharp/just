@@ -49,6 +49,11 @@ async function fetchProjects() {
     return { page: null, projects: [] as GqlProject[] }
   }
 
+  if (!residentialPageId) {
+    console.warn('No residentialPageId provided')
+    return { page: null, projects: [] as GqlProject[] }
+  }
+
   try {
     const res: any = await $fetch(wordpressUrl, {
       method: 'POST',
@@ -56,9 +61,26 @@ async function fetchProjects() {
         query: QUERY_BY_ID,
         variables: { id: residentialPageId },
       },
+      body: {
+        query: QUERY_BY_ID,
+        variables: { id: residentialPageId },
+      },
     })
 
+
     const page = res?.data?.page ?? null
+
+    return {
+      page,
+      projects: (page?.residentialLp?.projects ?? []) as GqlProject[],
+    }
+  } catch (e) {
+    console.error(
+      'Residential (ID) fetch failed',
+      e instanceof Error ? e.message : e
+    )
+    return { page: null, projects: [] as GqlProject[] }
+  }
 
     return {
       page,
