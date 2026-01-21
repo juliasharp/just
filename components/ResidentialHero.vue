@@ -554,7 +554,6 @@ onBeforeUnmount(() => {
       object-fit: cover;
       height: 118vh;
       @media (max-width: 767px) {
-        height: 100dvh;
         object-position: 42% 50%;
       }
     }
