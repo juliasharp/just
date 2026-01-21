@@ -72,16 +72,12 @@ onMounted(async () => {
     ScrollTrigger = ST
     gsap.registerPlugin(ScrollTrigger)
 
-    const isDesktop = window.matchMedia('(min-width: 768px)').matches
-    if (isDesktop && sectionEl.value) {
+    if (sectionEl.value) {
       pinTrigger = ScrollTrigger.create({
         trigger: sectionEl.value,
         start: 'top top',
         pin: true,
         pinSpacing: true,
-        // Controls how long it stays pinned. Increase/decrease this value
-        // for a longer/shorter "few seconds" feel.
-        //end: '+=900', // ~900px of scroll
       })
     }
   }
@@ -146,5 +142,8 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+  @media (max-width: 767px) {
+    height: 100dvh;
+  }
 }
 </style>
