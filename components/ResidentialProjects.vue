@@ -150,6 +150,11 @@ async function showMore() {
   // wait for DOM to render new projects, then attach parallax
   await nextTick()
   initParallax()
+
+  // Refresh all ScrollTriggers so downstream sections (like testimonials) recalculate their positions
+  if (ScrollTrigger) {
+    ScrollTrigger.refresh()
+  }
 }
 
 function initParallax() {
