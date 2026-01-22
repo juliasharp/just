@@ -1,7 +1,5 @@
 <script setup lang="ts">
 const route = useRoute();
-
-const showContactForm = ref(false);
 </script>
 
 <template>
@@ -20,7 +18,7 @@ const showContactForm = ref(false);
       <!-- Partners -->
       <ConsultingPartners />
       <!-- Team Photo -->
-      <ConsultingFooter v-model:showForm="showContactForm"></ConsultingFooter>
+      <ConsultingFooter />
       <ConsultingFooterImage />
   </NuxtLayout>
 </template>

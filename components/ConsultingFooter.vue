@@ -1,27 +1,10 @@
 <script setup lang="ts">
 import LinkedinSVG from '/src/linkedin.svg?component';
-const props = defineProps({
-	showForm: {
-		type: Boolean,
-		default: false
-	}
-});
 
-const emit = defineEmits<{
-  (e: 'update:showForm', value: boolean): void;
-}>();
-
-const isShown = computed({
-  get() {
-    return props.showForm;
-  },
-  set(value: boolean) {
-    emit('update:showForm', value);
-  }
-});
+const showContactForm = useContactForm()
 
 function showForm() {
-  isShown.value = true;
+  showContactForm.value = true
 }
 
 </script>

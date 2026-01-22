@@ -18,6 +18,25 @@ const {
   }
 } = useRuntimeConfig()
 
+const QUERY_BY_URI = /* GraphQL */ `
+  query ResidentialProjectsByUri($uri: String!) {
+    page(id: $uri, idType: URI) {
+      id
+      uri
+      title
+      residentialLp {
+        projects {
+          featuredImage { node { altText sourceUrl } }
+          location
+          projectName
+          year
+          photoGallery { nodes { altText sourceUrl } }
+        }
+      }
+    }
+  }
+`
+
 const QUERY_BY_ID = /* GraphQL */ `
   query ResidentialProjectsById($id: ID!) {
     page(id: $id, idType: DATABASE_ID) {
