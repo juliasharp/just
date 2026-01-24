@@ -662,7 +662,7 @@ img {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 120px 20px 60px;
+    padding: 50px 20px 60px;
 
     @media (min-width: 1024px) {
       width: 50vw;
@@ -670,6 +670,7 @@ img {
       min-height: unset;
       padding: 0;
       justify-content: center;
+      padding: 120px 20px 60px;
     }
   }
 
@@ -680,6 +681,9 @@ img {
     height: 100%;
     object-fit: cover;
     z-index: 1;
+    @media (max-width: 1024px) {
+      height: 80%;
+    }
   }
 
   &__bg-placeholder {
@@ -695,12 +699,13 @@ img {
     position: relative;
     z-index: 2;
     background-color: var(--accent-color-brown);
-    padding: 90px 25px;
+    padding: 45px 25px;
     max-width: 635px;
     width: 90%;
 
     @media (min-width: 1024px) {
       width: 70%;
+      padding: 90px 25px;
     }
   }
 
