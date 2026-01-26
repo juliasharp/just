@@ -121,22 +121,35 @@ function onSlideChange(swiper: SwiperType) {
   activeIndex.value = swiper.activeIndex
 }
 
+// Track if the content grid section is in view
+const isInView = ref(false)
+
 // Store image swiper instances
 function onImageSwiper(swiper: SwiperType, index: number) {
   imageSwipers.value.set(index, swiper)
-  // Start paused, will be controlled by active slide
+  // Start paused, will be controlled by visibility and active slide
   swiper.autoplay?.stop()
 }
 
-// Control image slideshow autoplay based on active slide
-watch(activeIndex, (newIndex) => {
+// Control image slideshow autoplay based on active slide AND section visibility
+function updateImageAutoplay() {
   imageSwipers.value.forEach((swiper, index) => {
-    if (index === newIndex) {
+    if (isInView.value && index === activeIndex.value) {
       swiper.autoplay?.start()
     } else {
       swiper.autoplay?.stop()
     }
   })
+}
+
+// Watch for slide changes
+watch(activeIndex, () => {
+  updateImageAutoplay()
+})
+
+// Watch for visibility changes
+watch(isInView, () => {
+  updateImageAutoplay()
 })
 
 // Helper to get images array from item
@@ -159,6 +172,26 @@ function setupScrollTriggers() {
   }
 
   const slideHeight = window.innerHeight
+
+  // Create a visibility trigger for the entire section
+  const visibilityTrigger = ScrollTrigger.create({
+    trigger: containerRef.value,
+    start: 'top bottom',
+    end: 'bottom top',
+    onEnter: () => {
+      isInView.value = true
+    },
+    onLeave: () => {
+      isInView.value = false
+    },
+    onEnterBack: () => {
+      isInView.value = true
+    },
+    onLeaveBack: () => {
+      isInView.value = false
+    },
+  })
+  scrollTriggers.push(visibilityTrigger)
 
   // Create ScrollTriggers for each slide
   // Offset by 1 so first slide has dwell time before transitioning
@@ -224,11 +257,7 @@ onMounted(() => {
   if (isDesktop.value) {
     nextTick(() => {
       setupScrollTriggers()
-      // Start autoplay for first slide
-      const firstSwiper = imageSwipers.value.get(0)
-      if (firstSwiper) {
-        firstSwiper.autoplay?.start()
-      }
+      // Autoplay will start automatically when section comes into view via ScrollTrigger
     })
   } else {
     // On mobile/tablet, remove height constraint for normal stacked layout

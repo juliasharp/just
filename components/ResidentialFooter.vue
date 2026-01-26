@@ -48,6 +48,7 @@ if (error.value) {
 
 const footerImage = computed(() => data.value?.footerImage)
 const footerImageMobile = computed(() => data.value?.footerImageMobile)
+const currentYear = new Date().getFullYear()
 
 const isMobile = ref(false)
 
@@ -81,7 +82,7 @@ onBeforeUnmount(() => {
         <a href="mailto:info@just.design">Contact.</a>
       </div>
       <div class="footer-links-right">
-        <p>Copyright © 2025. JUST Design.</p>
+        <p>Copyright © {{ currentYear }}. JUST Design.</p>
       </div>
     </div>
   </div>
