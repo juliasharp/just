@@ -595,6 +595,8 @@ onBeforeUnmount(() => {
         font-size: clamp(20px, 2.5vw, 41px);
       }
       @media (max-width: 767px) {
+        align-items: end;
+        padding-bottom: 65px;
         span {
           display: block;
         }
