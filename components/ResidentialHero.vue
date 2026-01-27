@@ -596,7 +596,7 @@ onBeforeUnmount(() => {
       }
       @media (max-width: 767px) {
         align-items: end;
-        padding-bottom: 65px;
+        padding-bottom: 35px;
         span {
           display: block;
         }
