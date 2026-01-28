@@ -6,15 +6,14 @@ const { isLogoHidden } = useLogoVisibility()
 
 let gsap: any
 let ScrollTrigger: any
-let prefersReduced = false 
+let prefersReduced = false
 
 const projectsSection = ref<HTMLElement | null>(null)
 
 const {
   public: {
     wordpressUrl,
-    residentialUri = '/home',              // set per-env
-    residentialPageId = ''                        // optional fallback
+    residentialPageId = ''
   }
 } = useRuntimeConfig()
 
@@ -66,42 +65,33 @@ type GqlProject = {
 }
 
 async function fetchProjects() {
-  // Try URI first
+  if (!residentialPageId) {
+    console.warn('No residentialPageId provided')
+    return { page: null, projects: [] as GqlProject[] }
+  }
+
   try {
     const res: any = await $fetch(wordpressUrl, {
       method: 'POST',
-      body: { query: QUERY_BY_URI, variables: { uri: residentialUri } }
+      body: {
+        query: QUERY_BY_ID,
+        variables: { id: residentialPageId },
+      },
     })
+
     const page = res?.data?.page ?? null
-    if (page) {
-      return {
-        page,
-        projects: (page.residentialLp?.projects ?? []) as GqlProject[],
-      }
+
+    return {
+      page,
+      projects: (page?.residentialLp?.projects ?? []) as GqlProject[],
     }
   } catch (e) {
-    console.error('Residential (URI) fetch failed', e)
+    console.error(
+      'Residential (ID) fetch failed',
+      e instanceof Error ? e.message : e
+    )
+    return { page: null, projects: [] as GqlProject[] }
   }
-
-  // Fallback to DB ID if provided (useful for local)
-  if (residentialPageId) {
-    try {
-      const res: any = await $fetch(wordpressUrl, {
-        method: 'POST',
-        body: { query: QUERY_BY_ID, variables: { id: residentialPageId } }
-      })
-      const page = res?.data?.page ?? null
-      return {
-        page,
-        projects: (page?.residentialLp?.projects ?? []) as GqlProject[],
-      }
-    } catch (e) {
-      console.error('Residential (ID) fetch failed', e)
-    }
-  }
-
-  // Final safe fallback
-  return { page: null, projects: [] as GqlProject[] }
 }
 
 const { data, error, pending } = await useAsyncData('residential-projects', fetchProjects, {
@@ -182,6 +172,11 @@ async function showMore() {
   // wait for DOM to render new projects, then attach parallax
   await nextTick()
   initParallax()
+
+  // Refresh all ScrollTriggers so downstream sections (like testimonials) recalculate their positions
+  if (ScrollTrigger) {
+    ScrollTrigger.refresh()
+  }
 }
 
 function initParallax() {
@@ -492,8 +487,8 @@ onBeforeUnmount(() => {
   .project {
     flex-direction: column;
     align-items: flex-start;
-    .project-name { 
-      font-size: clamp(140px, 20vw, 260px); 
+    .project-name {
+      font-size: clamp(140px, 20vw, 260px);
       position: relative;
       top: 42px;
     }

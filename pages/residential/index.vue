@@ -26,7 +26,7 @@ const { data } = await useFetch(config.public.wordpressUrl, {
   body: { query }
 })
 
-const page = computed(() => data.value?.data?.page ?? null)
+const page = computed(() => (data.value as any)?.data?.page ?? null)
 const image = computed(() => page.value?.featuredImage?.node?.sourceUrl ?? null)
 
 useSeoMeta({
@@ -43,11 +43,21 @@ useSeoMeta({
 
 <template>
   <NuxtLayout name="residential" page-name="JUST Design | Residential Architects & Designers" title="Residential| JUST Design">
-    <ResidentialHero />
-    <ResidentialContent />
-    <ResidentialProjects />
-    <ResidentialTestimonials />
-    <ResidentialDesignJourney />
-    <ResidentialFooter/>
+    <main class="residential-page no-scroll-snap">
+      <ResidentialHero />
+      <ResidentialContent />
+      <ResidentialContentGrid />
+      <ResidentialProjects />
+      <ResidentialTestimonials />
+      <ResidentialDesignJourney />
+      <ResidentialFooter/>
+    </main>
   </NuxtLayout>
 </template>
+
+<style>
+.residential-page {
+  /* Ensure smooth scrolling */
+  scroll-behavior: smooth;
+}
+</style>

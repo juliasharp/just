@@ -2,20 +2,44 @@
 import gsap from 'gsap'
 import LogoSVG from '/src/just-logo-res.svg?component';
 import ScrollTrigger from 'gsap/ScrollTrigger';
-import { useLogoVisibility } from '~~/composables/useLogoVisibility'
+import { useSectionScrollAnims } from '~/composables/useSectionScrollAnims'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
 }
 
-const { isLogoHidden } = useLogoVisibility()
+// Logo visibility state (handled locally)
+const isLogoHidden = ref(false)
+let lastScrollY = 0
+const HIDE_THRESHOLD = 3000 // px – tweak this if you want it later/earlier
+
+function handleScroll() {
+  const current = window.scrollY || document.documentElement.scrollTop
+  const isScrollingDown = current > lastScrollY
+
+  if (isScrollingDown && current > HIDE_THRESHOLD) {
+    isLogoHidden.value = true
+  } else {
+    isLogoHidden.value = false
+  }
+
+  lastScrollY = current
+}
 
 const config = useRuntimeConfig()
+
 const query = `
   query NewQuery {
     page(id: "234", idType: DATABASE_ID) {
       residentialLp {
         heroImage {
+          node {
+            altText
+            sourceUrl
+          }
+        }
+        whoWeAre
+        ctaLeftBg {
           node {
             altText
             sourceUrl
@@ -48,6 +72,8 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
     const lp = d?.data?.page?.residentialLp
     return {
       hero: lp?.heroImage?.node || null,
+      whoweare: lp?.whoWeAre || '',
+      ctaBg: lp?.ctaLeftBg?.node || null,
       o1: lp?.heroImageLayerTop?.node || null,
       o2: lp?.heroImageLayerBottom?.node || null,
     }
@@ -68,11 +94,26 @@ const heroLeft = ref<HTMLElement | null>(null)
 const heroImg = ref<HTMLImageElement | null>(null)
 const logoRef = ref<HTMLElement | null>(null)
 
+const { initPanelAnims, killAll } = useSectionScrollAnims()
+
+const heroTriggers: ScrollTrigger[] = []
 
 let tl: gsap.core.Timeline | null = null
 
 const isReady = ref(false) // hide intro / static / overlays until animation sets them
-let section2Trigger: ScrollTrigger | null = null
+
+// Hover state for collage images
+const hoveredImage = ref<number | null>(null)
+
+function handleImageHover(imageNum: number) {
+  hoveredImage.value = imageNum
+}
+
+function handleImageLeave(imageNum: number) {
+  if (hoveredImage.value === imageNum) {
+    hoveredImage.value = null
+  }
+}
 
 const prefersReduced =
   typeof window !== 'undefined' &&
@@ -87,19 +128,8 @@ function onHeroLoaded() {
   requestAnimationFrame(() => {
     runAnimation()
     isReady.value = true
+    ScrollTrigger.refresh(true)
   })
-}
-
-function lockScroll() {
-  if (typeof document === 'undefined') return
-  document.documentElement.classList.add('is-locked')
-  document.body.classList.add('is-locked')
-}
-
-function unlockScroll() {
-  if (typeof document === 'undefined') return
-  document.documentElement.classList.remove('is-locked')
-  document.body.classList.remove('is-locked')
 }
 
 function runAnimation() {
@@ -161,7 +191,7 @@ function runAnimation() {
 function setupSection2ScrollTrigger() {
   if (!staticPane.value) return
 
-  // Reduced motion: just show everything, no lock, no animation
+  // Reduced motion / mobile: show everything
   if (prefersReduced || !isDesktop) {
     gsap.set(staticPane.value, { autoAlpha: 1, y: 0 })
     if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 1, y: 0, scale: 1 })
@@ -170,135 +200,122 @@ function setupSection2ScrollTrigger() {
     return
   }
 
-  // Initial hidden states for section 2 elements
-  gsap.set(staticPane.value, { autoAlpha: 0, y: 24 })
+  // Initial hidden states - don't animate y on staticPane to avoid pin-spacer gap issues
+  gsap.set(staticPane.value, { autoAlpha: 0 })
+  if (o2Ref.value) gsap.set(o2Ref.value, { autoAlpha: 0, y: 24, scale: 1.02 })
+  if (o1Ref.value) gsap.set(o1Ref.value, { autoAlpha: 0, y: 24, scale: 1.02 })
+  if (heroLeft.value) gsap.set(heroLeft.value, { autoAlpha: 0, y: 24 })
 
-  if (o2Ref.value) {
-    gsap.set(o2Ref.value, {
-      autoAlpha: 0,
-      y: 24,
-      scale: 1.02, // match hero starting scale
-    })
-  }
-
-  if (o1Ref.value) {
-    gsap.set(o1Ref.value, {
-      autoAlpha: 0,
-      y: 24,
-      scale: 1.02, // match hero starting scale
-    })
-  }
-
-  if (heroLeft.value) {
-    gsap.set(heroLeft.value, { autoAlpha: 0, y: 24 })
-  }
-
-  // Timeline for section 2 (plays once when triggered)
+  // Timeline for section 2
   const tl2 = gsap.timeline({
     paused: true,
     defaults: { ease: 'power3.out' },
-    onComplete() {
-      // when stagger is done, unlock scroll and kill lock trigger
-      unlockScroll()
-      section2Trigger?.kill()
-      section2Trigger = null
-    },
   })
 
-  // Fade in whole section wrapper
-  tl2.to(staticPane.value, { autoAlpha: 1, y: 0, duration: 0.9 }, 0)
+  tl2.to(staticPane.value, { autoAlpha: 1, duration: 0.9 }, 0)
 
-  // 1) bottom image first (o2) – fade + scale match hero
-  if (o2Ref.value) {
-    tl2.to(
-      o2Ref.value,
-      {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,    // match hero end scale
-        duration: 2, // match hero fade duration
-      },
-      0.1
-    )
-  }
+  if (o2Ref.value) tl2.to(o2Ref.value, { autoAlpha: 1, y: 0, scale: 1, duration: 1.6 }, 0.1)
+  if (o1Ref.value) tl2.to(o1Ref.value, { autoAlpha: 1, y: 0, scale: 1, duration: 1.6 }, '-=1.0')
+  if (heroLeft.value) tl2.to(heroLeft.value, { autoAlpha: 1, y: 0, duration: 0.75 }, '-=0.3')
 
-  // 2) then top image (o1) – starts partway through o2
-  if (o1Ref.value) {
-    tl2.to(
-      o1Ref.value,
-      {
-        autoAlpha: 1,
-        y: 0,
-        scale: 1,
-        duration: 2, // same feel as hero
-      },
-      '-=1.2'        // overlap so they feel connected, tweak as desired
-    )
-  }
-
-  // 3) then text block
-  if (heroLeft.value) {
-    tl2.to(
-      heroLeft.value,
-      { autoAlpha: 1, y: 0, duration: 0.75 },
-      '-=0.4'
-    )
-  }
-
-  // tiny hold at the end
-  tl2.to({}, { duration: 0.7 })
-
-  // --- Trigger 1: start animation early (top 70%) ---
-  ScrollTrigger.create({
-    trigger: staticPane.value,
-    start: 'top 70%',
-    onEnter(self) {
-      if (self.direction !== 1) return
-      if (tl2.progress() === 0) tl2.play() // play only once
-    },
-  })
-
-  // --- Trigger 2: lock scroll at top top ---
-  section2Trigger = ScrollTrigger.create({
-    trigger: staticPane.value,
-    start: 'top top',
-    onEnter(self) {
-      if (self.direction === 1) {
-        lockScroll()
-      }
-    },
-  })
+  // Trigger: play when entering
+  heroTriggers.push(
+    ScrollTrigger.create({
+      trigger: staticPane.value,
+      start: 'top 75%',
+      onEnter: () => tl2.play(),
+      onEnterBack: () => tl2.play(),
+    })
+  )
 }
 
 onMounted(() => {
   const heroEl = heroImg.value
+
+  // 1) Hero image load-triggered intro animation
   if (heroEl?.complete) onHeroLoaded()
 
+  // 2) Generic panel enter/exit animations for this component
+  if (root.value) {
+    initPanelAnims(root.value, {
+      start: 'top 75%',
+      once: false,
+      animateOnEnterBack: true,
+    })
+  }
+
+  // 3) Your custom Section 2 timeline + pin/hold
   setupSection2ScrollTrigger()
 
-  // --- Hero parallax effect (desktop only, no reduced motion) ---
+  // 4) Pin the hero-details section for a moment
+  if (!prefersReduced && isDesktop && staticPane.value) {
+    heroTriggers.push(
+      ScrollTrigger.create({
+        trigger: staticPane.value,
+        start: 'top top',
+        end: '+=50%', // Pin for 50% of viewport height of scroll
+        pin: true,
+        pinSpacing: true,
+      })
+    )
+  }
+
+  // 5) Hero parallax ScrollTrigger
   if (!prefersReduced && heroEl && stage.value) {
-    gsap.fromTo(
+    const tween = gsap.fromTo(
       heroEl,
-      { yPercent: -15 },   // start slightly up
+      { yPercent: -15 },
       {
-        yPercent: 15,      // end slightly down
+        yPercent: 15,
         ease: 'none',
         scrollTrigger: {
-          trigger: stage.value,     // the full-height hero section
-          start: 'top top',         // when hero hits top of viewport
-          end: 'bottom top',        // when hero leaves at top
-          scrub: true,              // link animation to scroll
+          trigger: stage.value,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
         },
       }
     )
+
+    // Track the ScrollTrigger created by this tween so we can kill it.
+    if ((tween as any).scrollTrigger) {
+      heroTriggers.push((tween as any).scrollTrigger)
+    }
   }
+
+  // 6) Refresh ScrollTrigger on resize to recalculate pin positions
+  let resizeTimeout: ReturnType<typeof setTimeout> | null = null
+  const handleResize = () => {
+    if (resizeTimeout) clearTimeout(resizeTimeout)
+    resizeTimeout = setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 200)
+  }
+  window.addEventListener('resize', handleResize)
+
+  // 7) Logo visibility scroll listener
+  lastScrollY = window.scrollY || 0
+  window.addEventListener('scroll', handleScroll, { passive: true })
+
+  // Store cleanup function
+  onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize)
+    window.removeEventListener('scroll', handleScroll)
+    if (resizeTimeout) clearTimeout(resizeTimeout)
+  })
 })
 
-
 onBeforeUnmount(() => {
+  // Kill your hero intro timeline
   tl?.kill()
-  ScrollTrigger.killAll()
+  tl = null
+
+  // Kill triggers you created locally in this component
+  heroTriggers.forEach((t) => t.kill())
+  heroTriggers.length = 0
+
+  // Kill triggers created by useSectionScrollAnims
+  killAll()
 })
 
 </script>
@@ -319,7 +336,7 @@ onBeforeUnmount(() => {
     <!-- SECTION 1: Full-height hero image with intro text -->
     <div
       ref="stage"
-      class="hero-stage relative w-full sm::h-[calc(100dvh-78px)] md:h-[100dvh]"
+      class="hero-stage snap-section snap-panel relative w-full"
     >
       <div
         ref="slide"
@@ -328,7 +345,7 @@ onBeforeUnmount(() => {
       >
         <!-- Big hero image (full width) -->
         <img
-          v-if="data?.hero"
+          v-if="data?.hero?.sourceUrl"
           ref="heroImg"
           data-role="hero"
           :src="data.hero.sourceUrl"
@@ -338,83 +355,136 @@ onBeforeUnmount(() => {
           decoding="async"
           @load="onHeroLoaded"
         />
+        <div v-else class="absolute inset-0 bg-gray-300" @load="onHeroLoaded" />
         <div
           ref="intro"
           data-intro
-          class="hero-text-initial absolute inset-0 z-30 flex items-end pb-[60px] md:pb-[35px] px-[12px] md:px-10"
+          class="hero-text-initial absolute inset-0 z-30 flex items-center justify-center pt-[80px] px-[12px] md:px-10"
         >
-          <div class="w-full md:flex justify-between gap-6">
-            <p class="body-font-bold">a JUST home is</p>
-            <p>a place where everything that’s important to you thrives!</p>
-          </div>
+          <p class="body-font-bold">
+            <span>
+              Bold ideas. Meaningful homes.
+            </span>
+            <span>
+              Designed around you.
+            </span>
+          </p>
         </div>
       </div>
     </div>
 
-    <!-- SECTION 2: Hero text + overlay images (second 100vh section) -->
+    <!-- SECTION 2: Hero details (second section) -->
     <section
       ref="staticPane"
       data-static
-      class="
-        hero-details
-        just-container
-        res-gutter
-        md:min-h-[100dvh]
-        flex flex-col md:flex-row items-end justify-between gap-10
-        pt-10 md:pt-0
-      "
+      class="hero-details"
     >
-      <!-- Left: hero copy + scroll cue -->
-      <div 
-        ref="heroLeft"
-        class="hero-left md:max-w-[28ch] lg:max-w-[44ch] flex flex-col justify-between h-full pb-[45px] md:pb-[15px]"
-      >
-        <div>
-          <p class="hero-text body-font-medium">
-            <span class="body-font-bold">JUST Design</span> is a minority-owned
-            architecture and design studio specializing in thoughtful, modern
-            residential projects that balance craft, function, and feeling.
-          </p>
+      <!-- Left: Background image with brown overlay and text -->
+      <div class="hero-details__left">
+        <img
+          v-if="data?.ctaBg?.sourceUrl"
+          :src="data.ctaBg.sourceUrl"
+          :alt="data.ctaBg.altText || 'Background'"
+          class="hero-details__bg-img"
+          loading="eager"
+          decoding="async"
+        />
+        <div v-else class="hero-details__bg-placeholder" />
+        <div
+          ref="heroLeft"
+          class="hero-details__text-block"
+        >
+          <div class="hero-details__text body-font-medium" v-html="data?.whoweare || 'No content available'" />
+        </div>
+
+        <!-- Mobile overlay: second collage image at bottom -->
+        <div class="hero-details__mobile-overlay">
+          <img
+            v-if="data?.o2?.sourceUrl"
+            :src="data.o2.sourceUrl"
+            :alt="data.o2.altText || ''"
+            loading="eager"
+            decoding="async"
+          />
         </div>
       </div>
 
-      <!-- Right: overlay images (collaged) -->
-      <div class="hero-overlays">
-        <div class="hero-overlays__frame">
-          <div class="hero-overlays__grid">
-            <div class="overlay-card overlay-card__wide">
-              <div class="image-card__holder image-card__wide">
-                <div class="image-card">
-                  <img
-                    v-if="data?.o1"
-                    ref="o2Ref"
-                    data-overlay
-                    :src="data.o1.sourceUrl"
-                    :alt="data.o1.altText || ''"
-                    class="overlay-img-1"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div class="overlay-card overlay-card__tall">
-              <div class="image-card__holder image-card__tall">
-                <div class="image-card">
-                  <img
-                    v-if="data?.o2"
-                    ref="o2Ref"
-                    data-overlay
-                    :src="data.o2.sourceUrl"
-                    :alt="data.o2.altText || ''"
-                    class="overlay-img-2"
-                    loading="eager"
-                    decoding="async"
-                  />
-                </div>
-              </div>
-            </div>
+      <!-- Right: Layered images with hover-to-front effect -->
+      <div class="hero-details__right">
+        <div
+          :class="[
+            'hero-details__collage',
+            { 'hover-image-1': hoveredImage === 1 },
+            { 'hover-image-2': hoveredImage === 2 }
+          ]"
+        >
+          <!-- Image 1 (top-right position) - base layer -->
+          <div
+            class="hero-details__collage-item hero-details__collage-item--1"
+            @mouseenter="handleImageHover(1)"
+            @mouseleave="handleImageLeave(1)"
+          >
+            <img
+              v-if="data?.o1?.sourceUrl"
+              ref="o1Ref"
+              data-overlay
+              :src="data.o1.sourceUrl"
+              :alt="data.o1.altText || ''"
+              class="hero-details__collage-img"
+              loading="eager"
+              decoding="async"
+            />
+            <div v-else class="hero-details__img-placeholder" />
+          </div>
+
+          <!-- Image 2 (bottom-left position) - base layer -->
+          <div
+            class="hero-details__collage-item hero-details__collage-item--2"
+            @mouseenter="handleImageHover(2)"
+            @mouseleave="handleImageLeave(2)"
+          >
+            <img
+              v-if="data?.o2?.sourceUrl"
+              ref="o2Ref"
+              data-overlay
+              :src="data.o2.sourceUrl"
+              :alt="data.o2.altText || ''"
+              class="hero-details__collage-img"
+              loading="eager"
+              decoding="async"
+            />
+            <div v-else class="hero-details__img-placeholder" />
+          </div>
+
+          <!-- Hover layers - positioned absolutely at collage root for proper z-index -->
+          <div
+            class="hero-details__collage-hover hero-details__collage-hover--1"
+            @mouseenter="handleImageHover(1)"
+            @mouseleave="handleImageLeave(1)"
+          >
+            <img
+              v-if="data?.o1?.sourceUrl"
+              :src="data.o1.sourceUrl"
+              :alt="data.o1.altText || ''"
+              class="hero-details__collage-img"
+              loading="eager"
+              decoding="async"
+            />
+          </div>
+
+          <div
+            class="hero-details__collage-hover hero-details__collage-hover--2"
+            @mouseenter="handleImageHover(2)"
+            @mouseleave="handleImageLeave(2)"
+          >
+            <img
+              v-if="data?.o2?.sourceUrl"
+              :src="data.o2.sourceUrl"
+              :alt="data.o2.altText || ''"
+              class="hero-details__collage-img"
+              loading="eager"
+              decoding="async"
+            />
           </div>
         </div>
       </div>
@@ -423,12 +493,6 @@ onBeforeUnmount(() => {
 </template>
 
 <style lang="scss">
-html.is-locked,
-body.is-locked {
-  overflow: hidden;
-  overscroll-behavior: contain;
-}
-
 .hero--inert [data-intro],
 .hero--inert [data-static],
 .hero--inert [data-overlay] {
@@ -464,8 +528,6 @@ body.is-locked {
   transition:
     transform 0.35s ease,
     opacity 0.35s ease;
-  //mix-blend-mode: difference;
-  //position: fixed;
 	@media (min-width: 768px) {
     mix-blend-mode: difference;
     position: fixed;
@@ -487,15 +549,12 @@ body.is-locked {
   .hero-image {
     position: relative;
     overflow: hidden;
-
-    @media (max-width: 767px) {
-      height: clamp(292px, 42dvh, 331px);
-    }
     img {
       width: 100%;
       object-fit: cover;
-      @media (min-width: 768px) {
-        height: 118vh;
+      height: 118vh;
+      @media (max-width: 767px) {
+        object-position: 42% 50%;
       }
     }
   }
@@ -531,9 +590,17 @@ body.is-locked {
     &-initial {
       color: #fff;
       font-size: 14px;
-
+      text-align: center;
+      font-size: 22px;
       @media (min-width: 768px) {
         font-size: clamp(20px, 2.5vw, 41px);
+      }
+      @media (max-width: 767px) {
+        align-items: end;
+        padding-bottom: 35px;
+        span {
+          display: block;
+        }
       }
     }
   }
@@ -581,146 +648,241 @@ img {
 .hero-details {
   display: flex;
   flex-direction: column;
-  gap: 2.5rem;
-  @media (min-width: 768px) {
-    flex-direction: row;
-    align-items: flex-end;
-    /* allow the whole section to be tall, but not forced into exactly 100vh */
-    min-height: min(100dvh, 900px);
-    gap: 2rem;
-  }
-  @media (min-width: 1181px) {
-    min-height: min(100dvh, 1200px);
-    gap: 5rem;
-  }
-}
-
-.hero-overlays {
-  width: 100%;
-  @media (min-width: 768px) {
-    flex: 1 1 0;
-    align-self: center;
-  }
-
-  &__frame {
-    width: 100%;
-    position: relative;
-    margin: 0 auto;
-    @media (min-width: 768px) {
-      height: clamp(27rem, 48vh, 60vh); 
-    }
-    @media (min-width: 1181px) {
-      height: clamp(32rem, 63vh, 80vh); 
-    }
-    @media (min-width: 1581px) {
-      height: clamp(32rem, 92vh, 92vh); 
-    }
-  }
-
-  &__grid {
-    /* layout vars */
-    --start-padding: 0.5fr;
-    --end-padding: 0.5fr;
-    --first-image: 9.15fr;
-    --overlap-x: 1.5fr;
-    --second-image: 5.12fr;
-
-    inset: 0;
-    display: grid;
-    width: 100%;
-    height: 100%;
-    isolation: isolate;
-
-    grid-template-columns: 
-      var(--start-padding) 
-      var(--first-image) 
-      var(--overlap-x) 
-      var(--second-image) 
-      var(--end-padding);
-
-    grid-template-rows: auto auto auto;
-
-    align-items: center;
-    justify-content: center;
-
-    @media (max-width: 767px) {
-      row-gap: 20px;
-    }
-  }
-}
-
-/* Bottom / main image (like their first card) */
-.overlay-img-2 {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  user-select: none;
-  @media (max-width: 767px) {
-    position: relative;
-    top: 0;
-  }
-}
-
-/* Top / overlapping image (like their second card) */
-.overlay-img-1 {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  user-select: none;
-}
-
-.overlay-card {
   width: 100%;
   position: relative;
-  overflow: hidden;
-  &__wide {
-    grid-column: 2 / span 2;  // same as before
-    grid-row: 1 / span 2;
-    z-index: 2;
+
+  @media (min-width: 1024px) {
+    flex-direction: row;
+    height: 100vh;
   }
-  &__tall {
-    grid-column: 3 / span 2;  // same as before
-    grid-row: 2 / span 2;     
+
+  // Left side: background image + brown text block
+  &__left {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 50px 20px 60px;
+
+    @media (min-width: 1024px) {
+      width: 50vw;
+      height: 100vh;
+      min-height: unset;
+      padding: 0;
+      justify-content: center;
+      padding: 120px 20px 60px;
+    }
+  }
+
+  &__bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     z-index: 1;
-    align-self: center;
-  }
-}
-
-.image-card {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  &__wide {
-    position: relative;
-    width: 100%;
-    padding-top: 55%;
-    height: unset;
-    @media (min-width: 768px) {
-      padding-top: 70%;
-    }
-    @media (min-width: 1181px) {
-      padding-top:66%;
-    }
-    @media (min-width: 1381px) {
-      padding-top: 55%;
+    @media (max-width: 1024px) {
+      height: 80%;
     }
   }
 
-  &__tall {
-    padding-top: 133%;
-    height: unset;
+  &__bg-placeholder {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    z-index: 1;
+  }
+
+  &__text-block {
+    position: relative;
+    z-index: 2;
+    background-color: var(--accent-color-brown);
+    padding: 45px 25px;
+    max-width: 635px;
+    width: 90%;
+
+    @media (min-width: 1024px) {
+      width: 70%;
+      padding: 90px 25px;
+    }
+  }
+
+  &__text {
+    color: #FFFFFF;
+    font-size: clamp(18px, 1.75vw, 32px);
+    line-height: 1.5;
+    text-align: center;
+
+    p {
+      margin: 0 0 1em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    strong {
+      font-weight: 700;
+    }
+  }
+
+  // Right side: collage grid with hover-to-front effect
+  &__right {
     position: relative;
     width: 100%;
-    @media (min-width: 768px) {
-      padding-top: 166%;
+    min-height: 500px;
+
+    // Hide on mobile - we show overlay image differently
+    display: none;
+
+    @media (min-width: 1024px) {
+      display: block;
+      width: 50vw;
+      height: 100vh;
+      min-height: unset;
     }
-    @media (min-width: 1451px) {
-      padding-top: 133%;
+  }
+
+  // Mobile overlay image - shows second collage image below text block
+  &__mobile-overlay {
+    display: block;
+    position: relative;
+    width: 85%;
+    max-width: 400px;
+    z-index: 3;
+    margin-top: 40px;
+
+    @media (min-width: 1024px) {
+      display: none;
     }
+
+    img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+    }
+  }
+
+  // CSS Grid collage container - ensures images never disconnect
+  &__collage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    // 12-column grid for precise positioning
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 1fr);
+    padding: 40px 20px;
+
+    @media (min-width: 1024px) {
+      padding: 60px;
+    }
+  }
+
+  // Base layer items
+  &__collage-item {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  // Image 1: Top-right position (landscape)
+  &__collage-item--1 {
+    grid-column: 4 / 13;
+    grid-row: 1 / 7;
+    z-index: 1;
+
+    @media (min-width: 1024px) {
+      grid-column: 5 / 13;
+      grid-row: 1 / 7;
+    }
+  }
+
+  // Image 2: Bottom-left position (portrait)
+  &__collage-item--2 {
+    grid-column: 1 / 8;
+    grid-row: 5 / 13;
+    z-index: 2;
+
+    @media (min-width: 1024px) {
+      grid-column: 1 / 7;
+      grid-row: 5 / 13;
+    }
+  }
+
+  // Hover layers - same grid positions but higher z-index, hidden by default
+  &__collage-hover {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0;
+    z-index: 10;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  // Hover layer for image 1 - same position as base
+  &__collage-hover--1 {
+    grid-column: 4 / 13;
+    grid-row: 1 / 7;
+
+    @media (min-width: 1024px) {
+      grid-column: 5 / 13;
+      grid-row: 1 / 7;
+    }
+  }
+
+  // Hover layer for image 2 - same position as base
+  &__collage-hover--2 {
+    grid-column: 1 / 8;
+    grid-row: 5 / 13;
+
+    @media (min-width: 1024px) {
+      grid-column: 1 / 7;
+      grid-row: 5 / 13;
+    }
+  }
+
+  // When image 1 is hovered, show its hover layer
+  &__collage.hover-image-1 &__collage-hover--1 {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  // When image 2 is hovered, show its hover layer
+  &__collage.hover-image-2 &__collage-hover--2 {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  // Subtle scale effect on hover layer images
+  &__collage-hover &__collage-img {
+    transform: scale(1);
+    transition: transform 0.6s ease;
+  }
+
+  &__collage.hover-image-1 &__collage-hover--1 &__collage-img,
+  &__collage.hover-image-2 &__collage-hover--2 &__collage-img {
+    transform: scale(1.01);
+  }
+
+  &__collage-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &__img-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
   }
 }
 
