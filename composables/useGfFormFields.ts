@@ -1,4 +1,4 @@
-// composables/useGfFieldsGql.ts
+// composables/useGfFormFields.ts
 type GfInput = { id: string; label?: string | null }
 type GfNode = {
   __typename: string

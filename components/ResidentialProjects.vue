@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, computed, ref, nextTick } from 'vue'
+import { useLogoVisibility } from '~~/composables/useLogoVisibility'
+
+const { isLogoHidden } = useLogoVisibility()
 
 let gsap: any
 let ScrollTrigger: any
@@ -13,6 +16,25 @@ const {
     residentialPageId = ''
   }
 } = useRuntimeConfig()
+
+const QUERY_BY_URI = /* GraphQL */ `
+  query ResidentialProjectsByUri($uri: String!) {
+    page(id: $uri, idType: URI) {
+      id
+      uri
+      title
+      residentialLp {
+        projects {
+          featuredImage { node { altText sourceUrl } }
+          location
+          projectName
+          year
+          photoGallery { nodes { altText sourceUrl } }
+        }
+      }
+    }
+  }
+`
 
 const QUERY_BY_ID = /* GraphQL */ `
   query ResidentialProjectsById($id: ID!) {
@@ -187,6 +209,39 @@ function initParallax() {
   })
 }
 
+// --- Swipe Detection for Mobile Lightbox ---
+let startX = 0
+let endX = 0
+
+function onTouchStart(e: TouchEvent) {
+  startX = e.touches[0].clientX
+}
+
+function onTouchMove(e: TouchEvent) {
+  endX = e.touches[0].clientX
+}
+
+function onTouchEnd() {
+  const diff = endX - startX
+
+  // Adjust threshold depending on your feel
+  const threshold = 50
+
+  if (Math.abs(diff) > threshold) {
+    if (diff < 0) {
+      // Swiped left → next image
+      nextImg()
+    } else {
+      // Swiped right → prev image
+      prevImg()
+    }
+  }
+
+  // Reset for next gesture
+  startX = 0
+  endX = 0
+}
+
 onMounted(async () => {
   window.addEventListener('keydown', onKey)
 
@@ -204,6 +259,19 @@ onMounted(async () => {
   if (!projectsSection.value || prefersReduced) return
 
   initParallax()
+
+  ScrollTrigger.create({
+    trigger: projectsSection.value,
+    start: 'top top+=80',  // adjust offset to taste
+    onEnter() {
+      // Scrolling down into projects → hide logo
+      isLogoHidden.value = true
+    },
+    onLeaveBack() {
+      // Scrolling back up above projects → show logo again
+      isLogoHidden.value = false
+    },
+  })
 })
 
 
@@ -217,7 +285,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <section ref="projectsSection" class="projects-section">
+  <section ref="projectsSection" class="projects-section just-container">
     <div class="projects-container res-gutter">
       <div class="projects">
         <div
@@ -285,6 +353,9 @@ onBeforeUnmount(() => {
         <div
           class="relative z-10 image-container"
           @click.stop
+          @touchstart="onTouchStart"
+          @touchmove="onTouchMove"
+          @touchend="onTouchEnd"
         >
           <!-- Close button -->
           <button

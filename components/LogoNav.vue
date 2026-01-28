@@ -22,10 +22,6 @@ const isShown = computed({
   }
 });
 
-function showContact() {
-  isShown.value = true;
-}
-
 </script>
 
 <template>
@@ -70,5 +66,18 @@ function showContact() {
 	svg * {
 		fill: currentColor;
 	}
+}
+
+:global(html.logo-fixed-in-hero) .logo {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  margin-top: 0;
+  margin-left: 0;
+
+  @media (min-width: 768px) {
+    top: 35px;
+    left: 35px;
+  }
 }
 </style>

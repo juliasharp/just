@@ -26,18 +26,25 @@ onMounted(() => {
     <SansLogoNav v-model:showForm="showContactForm"/>
     <div id="smooth-wrapper">
       <div id="smooth-content">
-        <!-- <div class="page-inner m-auto"> -->
-          <slot />
-        <!-- </div> -->
-        <Footer v-model:showForm="showContactForm"></Footer>
-        <FooterImage />
+        <slot />
       </div>
     </div>
-    <ContactForm 
-      v-if="showContactForm" 
-      v-model:showForm="showContactForm"
-    />
-    <div v-if="showContactForm" class="overlay"></div>
+    <Teleport to="body">
+      <!-- Keep mounted; panel slides via its own .is-shown class -->
+      <ContactForm 
+        v-model:showForm="showContactForm" 
+        :gfFormId="gfFormId"
+        :passed-fields="fields || []"
+      />
+      <!-- Overlay fades in/out -->
+      <Transition name="fade-fast">
+        <div
+          v-show="showContactForm"
+          class="overlay"
+          @click="showContactForm = false"
+        />
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -46,6 +53,7 @@ onMounted(() => {
 #smooth-wrapper {
   overflow: hidden !important;
 }
+
 .overlay {
   position: fixed;
   inset: 0px;

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import ResidentialDesignJourney from '~/components/ResidentialDesignJourney.vue';
-import ResidentialHero from '~/components/ResidentialHero.vue';
-import ResidentialProjects from '~/components/ResidentialProjects.vue';
-import ResidentialTestimonials from '~/components/ResidentialTestimonials.vue';
+import ResidentialDesignJourney from '~/components/ResidentialDesignJourney.vue'
+import ResidentialHero from '~/components/ResidentialHero.vue'
+import ResidentialProjects from '~/components/ResidentialProjects.vue'
+import ResidentialTestimonials from '~/components/ResidentialTestimonials.vue'
 
 const config = useRuntimeConfig()
 

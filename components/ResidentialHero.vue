@@ -567,10 +567,7 @@ onBeforeUnmount(() => {
   }
   &-left {
     @media (min-width: 768px) {
-      height: 34vh;
-    }
-    @media (min-width: 1181px) {
-      height: 46vh;
+      height: 30vh;
     }
     @media (min-width: 1301px) {
       height: 37vh;
@@ -578,11 +575,15 @@ onBeforeUnmount(() => {
     @media (min-width: 1601px) {
       height: 45vh;
     }
+    @media (min-width: 1801px) {
+      height: auto;
+      padding-bottom: 50px;
+    }
   }
   &-text {
     font-size: clamp(20px, 2.4vw, 27px);
     @media (min-width: 768px) {
-      font-size: clamp(27px, 2.4vw, 36px);
+      font-size: clamp(25px, 2.4vw, 36px);
     }
     line-height: 1.28;
 
@@ -884,4 +885,86 @@ img {
     background: linear-gradient(135deg, #e0e0e0 0%, #c0c0c0 100%);
   }
 }
+
+// .hero-overlays {
+//   position: relative;
+//   width: min(43rem, 50vw);
+//   bottom: 40px;
+//   margin: 0 auto;
+//   display: flex;
+//   justify-content: flex-end;
+//   @media (min-width: 768px) {
+//     bottom: 16%;
+//   }
+//   @media (min-width: 1181px) {
+//     bottom: clamp(40px, 4vw, 91px)
+//   }
+//   @media (min-width: 1601px) {
+//     bottom: clamp(40px, 2.5vw, 91px)
+//   }
+//   @media (max-width: 767px) {
+//     width: min(335px, 80vw);
+//     margin: 40px auto 70px;
+//   }
+//   @media (max-width: 400px) {
+//     margin: 40px auto 85px;
+//   }
+// }
+
+// .overlay-img {
+//   &-1 {
+//     position: absolute;
+//     display: block;
+//     object-fit: cover;
+//     left: 0;
+//     top: -47%;
+//     @media (min-width: 768px) {
+//       width: 80%;
+//     }
+//     @media (min-width: 1181px) {
+//       width: clamp(250px, 38vw, 494px);
+//     }
+//     @media (min-width: 1601px) {
+//       width: clamp(494px, 30vw, 640px);
+//       top: -46%;
+//     }
+//     @media (min-width: 1801px) {
+//       width: clamp(550px, 33vw, 640px);
+//     }
+//     @media (max-width: 767px) {
+//       width: 65%;
+//       min-width: 270px;
+//       left: -4%;
+//       top: -14%;
+//     }
+//     @media (max-width: 400px) {
+//       min-width: 245px;
+//     }
+//   }
+//   &-2 {
+//     width: clamp(180px, 23vw, 340px);
+//     display: block;
+//     object-fit: cover;
+//     @media (max-width: 767px) {
+//       max-width: 195px;
+//       position: relative;
+//       top: 85px;
+//     }
+//     @media (min-width: 768px) {
+//       width: clamp(210px, 23vw, 340px);
+//     }
+//     @media (max-width: 400px) {
+//       top: 80px;
+//     }
+//     @media (min-width: 1181px) {
+//       //width: clamp(250px, 38vw, 494px);
+//     }
+//     @media (min-width: 1601px) {
+//       width: clamp(340px, 20vw, 420px);
+//     }
+//     @media (min-width: 1801px) {
+//       width: clamp(375px, 22vw, 460px);
+//     }
+//   }
+// }
 </style>
