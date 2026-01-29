@@ -6,9 +6,6 @@ const { isLogoHidden } = useLogoVisibility()
 
 let gsap: any
 let ScrollTrigger: any
-let prefersReduced = false
-
-const projectsSection = ref<HTMLElement | null>(null)
 
 const {
   public: {
@@ -169,9 +166,8 @@ async function showMore() {
     projects.value.length
   )
 
-  // wait for DOM to render new projects, then attach parallax
+  // wait for DOM to render new projects
   await nextTick()
-  initParallax()
 
   // Refresh all ScrollTriggers so downstream sections (like testimonials) recalculate their positions
   if (ScrollTrigger) {
@@ -179,68 +175,7 @@ async function showMore() {
   }
 }
 
-function initParallax() {
-  if (!projectsSection.value || !gsap || !ScrollTrigger || prefersReduced) return
-
-  const thumbs = projectsSection.value.querySelectorAll<HTMLElement>('.project-image img')
-
-  thumbs.forEach((img) => {
-    // Avoid creating multiple ScrollTriggers on the same image
-    if ((img as any).dataset.parallaxInit === 'true') return
-    ;(img as any).dataset.parallaxInit = 'true'
-
-    const triggerEl = img.closest('.project') ?? img
-
-    gsap.fromTo(
-      img,
-      { yPercent: -10 },
-      {
-        yPercent: 10,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: triggerEl,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-          // markers: true,
-        },
-      }
-    )
-  })
-}
-
-// --- Swipe Detection for Mobile Lightbox ---
-let startX = 0
-let endX = 0
-
-function onTouchStart(e: TouchEvent) {
-  startX = e.touches[0].clientX
-}
-
-function onTouchMove(e: TouchEvent) {
-  endX = e.touches[0].clientX
-}
-
-function onTouchEnd() {
-  const diff = endX - startX
-
-  // Adjust threshold depending on your feel
-  const threshold = 50
-
-  if (Math.abs(diff) > threshold) {
-    if (diff < 0) {
-      // Swiped left → next image
-      nextImg()
-    } else {
-      // Swiped right → prev image
-      prevImg()
-    }
-  }
-
-  // Reset for next gesture
-  startX = 0
-  endX = 0
-}
+// Parallax removed - using CSS hover scale instead
 
 onMounted(async () => {
   window.addEventListener('keydown', onKey)
@@ -253,25 +188,6 @@ onMounted(async () => {
   gsap = mod.gsap
   ScrollTrigger = st.ScrollTrigger
   gsap.registerPlugin(ScrollTrigger)
-
-  prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-
-  if (!projectsSection.value || prefersReduced) return
-
-  initParallax()
-
-  ScrollTrigger.create({
-    trigger: projectsSection.value,
-    start: 'top top+=80',  // adjust offset to taste
-    onEnter() {
-      // Scrolling down into projects → hide logo
-      isLogoHidden.value = true
-    },
-    onLeaveBack() {
-      // Scrolling back up above projects → show logo again
-      isLogoHidden.value = false
-    },
-  })
 })
 
 
@@ -453,13 +369,16 @@ onBeforeUnmount(() => {
       position: absolute;
       inset: 0;
       width: 100%;
-      height: 120%;
+      height: 100%;
       object-fit: cover;
       transform-origin: center center;
-      will-change: transform;
-      transition: transform 220ms ease-out; // keep your hover niceness
+      transition: transform 400ms ease-out;
     }
   }
+}
+
+.project:hover .project-image img {
+  transform: scale(1.05);
 
   &-info {
     display: flex;
