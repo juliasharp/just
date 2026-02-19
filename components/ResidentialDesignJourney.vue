@@ -5,7 +5,7 @@
 <template>
   <div class="home-design-journey-wrapper res-gutter">
     <div class="home-design-journey flex justify-center">
-      <p class="body-font-medium relative">Your home design journey starts <a class="body-font-bold underline-animation" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0vOk-6SjMEuI785o1Cw9aw_nwkd5eBN3zxngmob9FFca2AKM1Wt9f2O-0UusulfQ5BV88auueL" target="_blank">here</a>.</p>
+      <p class="body-font-medium relative">Book your discovery call <a class="body-font-bold underline-animation" href="https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ0vOk-6SjMEuI785o1Cw9aw_nwkd5eBN3zxngmob9FFca2AKM1Wt9f2O-0UusulfQ5BV88auueL" target="_blank">here</a>.</p>
     </div>
   </div>
 </template>
