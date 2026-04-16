@@ -98,6 +98,11 @@ const showContactForm = useContactForm()
 .chair-image {
   grid-column: 18 / 24;
   align-self: center;
+  @media (max-width: 767px) {
+    grid-column: 1 / -1;
+    max-width: 280px;
+    margin: 30px auto;
+  }
 }
 
 .chair-img {

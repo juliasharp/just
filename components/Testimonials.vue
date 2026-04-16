@@ -68,7 +68,7 @@ const settings = {
     position: relative;
     @media (max-width: 760px) {
       margin-top: 0;
-      padding: 0 40px;
+      padding: 0 16px;
     }
     &:before {
       content: '';

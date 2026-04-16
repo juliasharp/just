@@ -128,7 +128,7 @@ onBeforeUnmount(() => {
       padding: 105px 50px 50px;
     }
     @media (max-width: 760px) {
-      padding: 85px 20px 100px;
+      padding: 20px 20px 100px;
     }
   }
   &__visual {
@@ -174,25 +174,26 @@ onBeforeUnmount(() => {
     span {
       font-family: 'Inter Bold';
     }
-    &Header {
-      font-family: 'Inter Bold';
-      font-size: 48px;
-      padding-bottom: 24px;
-      color: #C6F250;
-      @media (max-width: 1600px) {
-        font-size: 40px;
-        padding-bottom: 12px;
-      }
-      @media (max-width: 1480px) {
-        font-size: 32px;
-      }
-      @media (max-width: 900px) {
-        font-size: 28px;
-        padding-bottom: 5px;
-      }
-      @media (max-width: 760px) {
-        font-size: 22px;
-      }
+  }
+
+  &-textHeader {
+    font-family: 'Inter Bold';
+    font-size: 48px;
+    padding-bottom: 24px;
+    color: #C6F250;
+    @media (max-width: 1600px) {
+      font-size: 40px;
+      padding-bottom: 12px;
+    }
+    @media (max-width: 1480px) {
+      font-size: 32px;
+    }
+    @media (max-width: 900px) {
+      font-size: 28px;
+      padding-bottom: 5px;
+    }
+    @media (max-width: 760px) {
+      font-size: 22px;
     }
   }
 }

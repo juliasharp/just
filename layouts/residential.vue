@@ -6,14 +6,16 @@ const props = defineProps({
   formId: {
     type: Number,
     default: 1
+  },
+  formTitle: {
+    type: String,
+    default: 'Give it to me!'
   }
 });
 
-const gfFormId = computed(() => props.formId)
-
 const showContactForm = useContactForm()
 
-const { fields, pending, error } = useGfFormFields(gfFormId)
+const { fields, pending, error } = useGfFormFields(props.formId)
 
 onMounted(() => {
   document.body.classList.add('residential')
@@ -34,9 +36,9 @@ onBeforeUnmount(() => {
       <ContactForm 
         v-model:showForm="showContactForm" 
         bgColor="#390F7D"
-        :gfFormId="gfFormId"
+        :gfFormId="props.formId"
         :passed-fields="fields || []"
-        :title="'Give it to me!'"
+        :title="props.formTitle"
         redirect-url="https://indd.adobe.com/view/3907f388-3dd2-4607-974f-595e63a656f3"
       />
       <!-- Overlay fades in/out -->

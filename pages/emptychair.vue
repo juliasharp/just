@@ -3,7 +3,7 @@ const route = useRoute();
 </script>
 
 <template>
-  <NuxtLayout name="residential" page-name="JUST Design | Residential Architects & Designers" title="JUST Design | Empty Chair">
+  <NuxtLayout name="residential" :form-id="3" form-title="Contact Us" page-name="JUST Design | Residential Architects & Designers" title="JUST Design | Empty Chair">
     <main class="emptychair-page">
       <EmptyChairHero />
       <EmptyChairContent />
