@@ -27,6 +27,10 @@ const props = defineProps({
   color: #ffffff;
   width: fit-content;
   z-index: 0;
+  font-size: 25px;
+  @media (max-width: 767px) {
+    font-size: 16px;
+  }
   &:after {
     content: '';
     position: absolute;

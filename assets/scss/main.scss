@@ -8,6 +8,7 @@
   --accent-color-pink: #FE15C0;
   --accent-color-brown: #A55027;
   --accent-color-brown: #A55027;
+  --accent-color-yellow: #BDF412;
   --body-font-normal: 'Inter', sans-serif;
   --body-font-medium: 'Inter Medium', sans-serif;
   --body-font-bold: 'Inter Bold', sans-serif;
@@ -111,6 +112,20 @@ body {
   margin: 0 auto;
 }
 
+.ec-container {
+  align-items: flex-start;
+  border-top: 1px solid #707070;
+  margin: 0 16px;
+  padding-top: 16px;
+  @media (min-width: 768px) {
+    margin: 0 32px;
+    display: grid;
+    padding-top: 20px;
+    grid-template-columns: repeat(24, 1fr);
+    grid-column-gap: 16px;
+  }
+}
+
 .body-font {
   font-family: var(--body-font-normal);
 }
@@ -127,6 +142,7 @@ body {
   font-family: var(--font-family-code);
   font-weight: 700;
   letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .font-family-accent {

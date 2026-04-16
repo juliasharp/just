@@ -48,7 +48,6 @@ if (error.value) {
 
 const footerImage = computed(() => data.value?.footerImage)
 const footerImageMobile = computed(() => data.value?.footerImageMobile)
-const currentYear = new Date().getFullYear()
 
 const isMobile = ref(false)
 
@@ -75,16 +74,7 @@ onBeforeUnmount(() => {
     <div class="footer-contact-text res-gutter py-[2rem] md:py-[4rem]">
       <p class="body-font-medium text-center relative">For more in depth information about our design phases and process, <button @click = "showContact" class="underline-animation">download your free design guide now!</button></p>
     </div>
-    <div class="footer-links flex justify-between res-gutter">
-      <div class="footer-links-left">
-        <a href="https://www.instagram.com/__justdesign/" target="_blank">Instagram.</a>
-        <a href="https://www.linkedin.com/company/just-design-inc/" target="_blank">LinkedIn.</a>
-        <a href="mailto:info@just.design">Contact.</a>
-      </div>
-      <div class="footer-links-right">
-        <p>Copyright © {{ currentYear }}. JUST Design.</p>
-      </div>
-    </div>
+    <FooterLinks />
   </div>
 </template>
 

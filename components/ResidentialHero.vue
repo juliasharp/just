@@ -1,29 +1,10 @@
 <script setup lang="ts">
 import gsap from 'gsap'
-import LogoSVG from '/src/just-logo-res.svg?component';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { useSectionScrollAnims } from '~/composables/useSectionScrollAnims'
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger)
-}
-
-// Logo visibility state (handled locally)
-const isLogoHidden = ref(false)
-let lastScrollY = 0
-const HIDE_THRESHOLD = 3000 // px – tweak this if you want it later/earlier
-
-function handleScroll() {
-  const current = window.scrollY || document.documentElement.scrollTop
-  const isScrollingDown = current > lastScrollY
-
-  if (isScrollingDown && current > HIDE_THRESHOLD) {
-    isLogoHidden.value = true
-  } else {
-    isLogoHidden.value = false
-  }
-
-  lastScrollY = current
 }
 
 const config = useRuntimeConfig()
@@ -92,7 +73,6 @@ const o1Ref = ref<HTMLElement | null>(null)       // overlay image #1
 const o2Ref = ref<HTMLElement | null>(null)       // overlay image #2
 const heroLeft = ref<HTMLElement | null>(null)
 const heroImg = ref<HTMLImageElement | null>(null)
-const logoRef = ref<HTMLElement | null>(null)
 
 const { initPanelAnims, killAll } = useSectionScrollAnims()
 
@@ -142,9 +122,6 @@ function runAnimation() {
     gsap.set(stage.value, { autoAlpha: 1, scale: 1 })
     gsap.set(heroImg.value, { autoAlpha: 1, scale: 1 })
     gsap.set(intro.value, { autoAlpha: 1, y: 0 })
-    if (logoRef.value) {
-      gsap.set(logoRef.value, { autoAlpha: 1, y: 0 })
-    }
     return
   }
 
@@ -156,9 +133,6 @@ function runAnimation() {
   // Initial states
   gsap.set(heroImg.value, { autoAlpha: 0, scale: 1.02 }) // bg slightly zoomed + hidden
   gsap.set(intro.value, { autoAlpha: 0, y: 16 })         // bottom text hidden + down
-  if (logoRef.value) {
-    gsap.set(logoRef.value, { autoAlpha: 0, y: 0 })    // logo hidden + slightly up
-  }
 
   // 1) Background hero image fades in slowly
   tl.to(heroImg.value, {
@@ -166,19 +140,6 @@ function runAnimation() {
     scale: 1,
     duration: 2.5,
   })
-
-  // 2) Logo appears
-  if (logoRef.value) {
-    tl.to(
-      logoRef.value,
-      {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.6,
-      },
-      '-=1.2' // ← Start logo fade when hero fade still has ~1.2s remaining
-    )
-  }
 
   // 3) Bottom text comes in and stays
   tl.to(intro.value, {
@@ -293,14 +254,8 @@ onMounted(() => {
   }
   window.addEventListener('resize', handleResize)
 
-  // 7) Logo visibility scroll listener
-  lastScrollY = window.scrollY || 0
-  window.addEventListener('scroll', handleScroll, { passive: true })
-
-  // Store cleanup function
   onBeforeUnmount(() => {
     window.removeEventListener('resize', handleResize)
-    window.removeEventListener('scroll', handleScroll)
     if (resizeTimeout) clearTimeout(resizeTimeout)
   })
 })
@@ -328,11 +283,6 @@ onBeforeUnmount(() => {
       { 'hero--inert': !isReady }
     ]"
   >
-    <header class="header flex">
-      <div ref="logoRef" class="logo animate-in" :class="{ 'logo--hidden': isLogoHidden }">
-        <LogoSVG></LogoSVG>
-      </div>
-    </header>
     <!-- SECTION 1: Full-height hero image with intro text -->
     <div
       ref="stage"
@@ -504,45 +454,9 @@ onBeforeUnmount(() => {
   opacity: 0;
 }
 
-.hero--inert .logo {
-  opacity: 0;
-}
-
 .hero--inert [data-slide] {
   opacity: 1;
   visibility: visible;
-}
-
-.header {
-	position: absolute;
-  display: flex;
-}
-
-.logo {
-	top: 20px;
-	left: 20px;
-	color: #fff;
-	width: 140px;
-	width: 88px;
-	z-index: 99;
-  transition:
-    transform 0.35s ease,
-    opacity 0.35s ease;
-	@media (min-width: 768px) {
-    mix-blend-mode: difference;
-    position: fixed;
-		top: 35px;
-		left: 35px;
-		width: clamp(120px, 9vw, 160px);
-	}
-	svg * {
-		fill: currentColor;
-	}
-  &.logo--hidden {
-    transform: translateY(-120%) !important;
-    opacity: 0 !important;
-    pointer-events: none;
-  }
 }
 
 .hero-stage {

@@ -2,10 +2,14 @@
 
 const props = defineProps({
   title: String,
-  pageName: String
+  pageName: String,
+  formId: {
+    type: Number,
+    default: 1
+  }
 });
 
-const gfFormId = 1
+const gfFormId = computed(() => props.formId)
 
 const showContactForm = useContactForm()
 
@@ -23,6 +27,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div id="viewport" :class="`page ${props.pageName}`">
+    <ResidentialLogo />
     <slot />
     <Teleport to="body">
       <!-- Keep mounted; panel slides via its own .is-shown class -->
