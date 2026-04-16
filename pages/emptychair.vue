@@ -28,11 +28,14 @@ const route = useRoute();
   letter-spacing: 0.05em;
   color: var(--accent-color-pink);
   text-transform: uppercase;
-  grid-column: span 6;
+  grid-column: span 8;
   margin-bottom: 30px;
   @media (min-width: 768px) {
-    font-size: 20px;
+    font-size: 19px;
     margin-bottom: 40px;
+  }
+  @media (min-width: 1281px) {
+    font-size: 20px;
   }
 }
 </style>

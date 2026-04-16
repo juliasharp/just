@@ -71,14 +71,17 @@ const showContactForm = useContactForm()
     grid-column: 2 / 12;
     align-self: center;
     font-size: 20px;
+    max-width: 625px;
     @media (min-width: 768px) {
       font-size: 24px;
     }
     @media (min-width: 1200px) {
       font-size: 28px;
+      margin-top: -15%;
     }
     @media (min-width: 1600px) {
       font-size: 35px;
+      margin-top: -20%;
     }
     p {
       margin-top: 30px;

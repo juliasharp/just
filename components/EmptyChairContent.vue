@@ -53,7 +53,10 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
     }
     &s {
       @media (min-width: 768px) {
-        grid-column: 11 / 24;
+        grid-column: 8 / 24;
+      }
+      @media (min-width: 1001px) {
+        grid-column: 11 / 22;
       }
     }
     &:not(:first-of-type) {
