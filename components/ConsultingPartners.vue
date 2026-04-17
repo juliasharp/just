@@ -45,6 +45,29 @@ const encodedQuery = encodeURIComponent(`
   }
 `);
 
+const testimonialsQuery = encodeURIComponent(`
+  query NewQuery {
+    page(id: "6", idType: DATABASE_ID) {
+      landingPage {
+        testimonials {
+          quote
+          authorTitlw
+        }
+      }
+    }
+  }
+`);
+
+const { data: testimonialsData } = await useFetch(`${config.public.wordpressUrl}?query=${testimonialsQuery}`, {
+  method: 'get',
+  transform: (data) => {
+    return (data?.data?.page?.landingPage?.testimonials ?? []).map((t: any) => ({
+      quote: t.quote,
+      authorTitle: t.authorTitlw,
+    }))
+  }
+})
+
 const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${encodedQuery}`, {
   method: 'get',
   transform: (data) => {
@@ -78,7 +101,7 @@ const loadMorePartners = () => {
 
 <template>
   <div class="partners-outer section-bg section-with-title">
-    <Testimonials />
+    <Testimonials :testimonials="testimonialsData ?? []" />
     <div class="section-container">
       <SectionTitle title="collaborators" color="brown"></SectionTitle>
       <ul class="partners">

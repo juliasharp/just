@@ -1,42 +1,7 @@
 <script setup lang="ts">
-const testimonials = ref([]);
-
-const config = useRuntimeConfig();
-
-const encodedQuery = encodeURIComponent(`
-  query NewQuery {
-    page(id: "6", idType: DATABASE_ID) {
-      landingPage {
-        testimonials {
-          quote
-          authorTitlw
-        }
-      }
-    }
-  }
-`);
-
-const { data, error } = await useFetch(`${config.public.wordpressUrl}?query=${encodedQuery}`, {
-  method: 'get',
-  transform: (data) => {
-    if (data?.data?.page?.landingPage?.testimonials) {
-      return data.data.page.landingPage.testimonials.map((testimonial) => ({
-        quote: testimonial.quote,
-        // author: testimonial.authorName,
-        authorTitle: testimonial.authorTitlw,
-      }));
-    } else {
-      console.error("Unexpected response structure for team", data);
-      return [];
-    }
-  }
-});
-
-if (error.value) {
-  console.error('Error fetching team data:', error.value);
-} else {
-  testimonials.value = data.value;
-}
+const props = defineProps<{
+  testimonials: { quote: string; authorTitle: string }[]
+}>()
 
 const settings = {
   itemsToShow: 1,
@@ -55,7 +20,7 @@ const settings = {
     <div class="testimonials-container">
       <div class="testimonial-outer">
         <Carousel v-bind="settings">
-          <Slide v-for="(testimonial, index) in testimonials" :key="index" class="team-slide">
+          <Slide v-for="(testimonial, index) in props.testimonials" :key="index" class="team-slide">
             <transition name="fade"  mode="out-in">
               <div class="testimonial-slide">
                 <p class="quote">{{ testimonial.quote }}</p>
@@ -99,11 +64,11 @@ const settings = {
   &-container {
     max-width: 1700px;
     padding: 0 50px;
-    margin: 20px auto 80px;
+    margin: 20px auto 45px;
     position: relative;
     @media (max-width: 760px) {
       margin-top: 0;
-      padding: 0 40px;
+      padding: 0 16px;
     }
     &:before {
       content: '';
@@ -168,6 +133,7 @@ const settings = {
     padding: 72px 95px;
     text-align: left;
     position: relative;
+    max-width: 1350px;
     @media (max-width: 1000px) {
       padding: 50px 60px;
     }

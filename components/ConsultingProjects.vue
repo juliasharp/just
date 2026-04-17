@@ -1,7 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-const projects = ref([]);
-const selectedProject = ref(null);
+type Project = {
+  name: string
+  description: string
+  meta: string
+  date: string
+  images: { altText: string; link: string }[]
+}
+const projects = ref<Project[]>([]);
+const selectedProject = ref<string | null>(null);
 
 const config = useRuntimeConfig();
 const { data, error } = await useFetch(config.public.wordpressUrl, {
@@ -119,7 +126,7 @@ onBeforeUnmount(() => {
               </Carousel>
             </template>
             <template v-else>
-              <li v-for="(project, index) in projects" :key="projects.name" :class="{ active: activeProject === project.name }">
+              <li v-for="(project, index) in projects" :key="project.name" :class="{ active: activeProject === project.name }">
                 <a @click="selectProject(project.name)">{{ project.name }}</a>
               </li>
             </template>
@@ -366,6 +373,7 @@ onBeforeUnmount(() => {
 
 .projects-names a {
   position: relative;
+  text-transform: uppercase;
   @media (max-width: 760px) {
     max-width: 123px;
   }
@@ -563,8 +571,9 @@ onBeforeUnmount(() => {
   &.carousel__next {
     right: -15px;
   }
-  svg {
-    fill: #C6F250;
+  :deep(.carousel__prev),
+  :deep(.carousel__next) {
+    color: #C6F250;
   }
 }
 
@@ -575,5 +584,12 @@ onBeforeUnmount(() => {
       display: none;
     }
   }
+}
+</style>
+
+<style lang="scss">
+.projects-names .carousel__prev,
+.projects-names .carousel__next {
+  color: #C6F250;
 }
 </style>
