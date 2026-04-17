@@ -1,4 +1,82 @@
 <script setup lang="ts">
+import gsap from 'gsap'
+import ScrollTrigger from 'gsap/ScrollTrigger'
+
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger)
+}
+
+const galleryContainer = ref<HTMLElement | null>(null)
+const rowTop = ref<HTMLElement | null>(null)
+const rowBottom = ref<HTMLElement | null>(null)
+
+const SLIDE_AMOUNT = 80
+let ctx: gsap.Context | null = null
+
+function initAnimation() {
+  ctx = gsap.context(() => {
+    gsap.fromTo(
+      rowBottom.value,
+      { x: SLIDE_AMOUNT },
+      {
+        x: -SLIDE_AMOUNT,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: galleryContainer.value,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      }
+    )
+    gsap.fromTo(
+      rowTop.value,
+      { x: -SLIDE_AMOUNT },
+      {
+        x: SLIDE_AMOUNT,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: galleryContainer.value,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        }
+      }
+    )
+  }, galleryContainer.value!)
+}
+
+function killAnimation() {
+  ctx?.revert()
+  ctx = null
+  // Reset transforms so rows sit in their natural position on mobile
+  gsap.set([rowBottom.value, rowTop.value], { x: 0 })
+}
+
+const isDesktop = ref(false)
+
+function onResize() {
+  const desktop = window.innerWidth >= 768
+  if (desktop === isDesktop.value) return
+  isDesktop.value = desktop
+  if (desktop) {
+    initAnimation()
+  } else {
+    killAnimation()
+  }
+}
+
+onMounted(() => {
+  isDesktop.value = window.innerWidth >= 768
+  if (isDesktop.value) initAnimation()
+  window.addEventListener('resize', onResize)
+})
+
+onBeforeUnmount(() => {
+  killAnimation()
+  window.removeEventListener('resize', onResize)
+})
+
 const config = useRuntimeConfig()
 
 const query = `
@@ -42,8 +120,8 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
     <div class="ec-container">
       <h2 class="gallery-section-title ec-section-title">{{ data?.gallerySectionTitle }}</h2>
     </div>
-    <div class="gallery-container">
-      <div class="gallery-row gallery-row--bottom">
+    <div class="gallery-container" ref="galleryContainer">
+      <div class="gallery-row gallery-row--bottom" ref="rowBottom">
         <div v-for="(item, index) in data?.imageGallery?.slice(0, 4)" :key="index" :class="`gallery-item gallery-item--${Number(index) + 1}`">
           <img
             v-if="item.imageOrVideo?.node?.mimeType?.startsWith('image/')"
@@ -64,7 +142,7 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
           />
         </div>
       </div>
-      <div class="gallery-row gallery-row--top">
+      <div class="gallery-row gallery-row--top" ref="rowTop">
         <div v-for="(item, index) in data?.imageGallery?.slice(4)" :key="index" :class="`gallery-item gallery-item--${Number(index) + 5}`">
           <img
             v-if="item.imageOrVideo?.node?.mimeType?.startsWith('image/')"
