@@ -122,7 +122,7 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
     </div>
     <div class="gallery-container" ref="galleryContainer">
       <div class="gallery-row gallery-row--bottom" ref="rowBottom">
-        <div v-for="(item, index) in data?.imageGallery?.slice(0, 4)" :key="index" :class="`gallery-item gallery-item--${Number(index) + 1}`">
+        <div v-for="(item, index) in data?.imageGallery?.slice(0, 5)" :key="index" :class="`gallery-item gallery-item--${Number(index) + 1}`">
           <img
             v-if="item.imageOrVideo?.node?.mimeType?.startsWith('image/')"
             :src="item.imageOrVideo.node.sourceUrl"
@@ -143,7 +143,7 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
         </div>
       </div>
       <div class="gallery-row gallery-row--top" ref="rowTop">
-        <div v-for="(item, index) in data?.imageGallery?.slice(4)" :key="index" :class="`gallery-item gallery-item--${Number(index) + 5}`">
+        <div v-for="(item, index) in data?.imageGallery?.slice(5)" :key="index" :class="`gallery-item gallery-item--${Number(index) + 6}`">
           <img
             v-if="item.imageOrVideo?.node?.mimeType?.startsWith('image/')"
             :src="item.imageOrVideo.node.sourceUrl"
@@ -179,24 +179,37 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
   padding: 40px 0 80px;
   display: flex;
   flex-direction: column;
-  gap: 35px;
+  gap: 16px;
+  @media (min-width: 768px) {
+    gap: 24px;
+  }
+  @media (min-width: 1381px) {
+    gap: 35px;
+  }
   @media (max-width: 767px) {
-    gap: 16px;
     padding: 0 1rem 50px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 16px;
   }
 }
 
 .gallery-row {
   display: flex;
-  gap: 36px;
-  margin-left: -6%;
-  margin-right: -6%;
+  gap: 16px;
+  @media (min-width: 768px) {
+    gap: 24px;
+  }
+  @media (min-width: 1381px) {
+    gap: 36px;
+  }
+  margin-left: -4%;
+  margin-right: -4%;
 
   @media (max-width: 767px) {
     margin-left: 0;
     margin-right: 0;
-    flex-wrap: wrap;
-    gap: 16px;
+    display: contents;
   }
 
   &--bottom {
@@ -215,54 +228,68 @@ const { data, error } = await useFetch(config.public.wordpressUrl, {
 }
 
 .gallery-item {
-  width: calc(25% - 36px * 3 / 4);
+  width: calc(20% - 36px * 4 / 5);
   flex-shrink: 0;
-
   @media (max-width: 767px) {
-    width: calc(50% - 16px / 2);
-  }
-  &--1 {
-    @media (max-width: 767px) {
-      width: calc(57% - 8px);
-    }
-  }
-  &--2 {
-    @media (max-width: 767px) {
-      width: calc(43% - 8px);
-    }
+    width: auto;
+    grid-column: span 6;
   }
   &--3 {
     @media (max-width: 767px) {
-      width: calc(54% - 8px);
+      grid-column: span 8;
+    }
+    @media (min-width: 768px) {
+      width: calc(24% - 28.8px);
     }
   }
   &--4 {
     @media (max-width: 767px) {
-      width: calc(46% - 8px);
+      grid-column: span 4;
+    }
+    @media (min-width: 768px) {
+      width: calc(14% - 28.8px);
     }
   }
   &--5 {
-    width: calc(25% - 8px);
     @media (min-width: 768px) {
-      width: calc(18% - 36px * 3 / 4)
+      width: calc(22% - 28.8px);
+    }
+    @media (max-width: 767px) {
+      grid-column: span 7;
     }
   }
   &--6 {
-    width: calc(75% - 8px);
     @media (min-width: 768px) {
-      width: calc(27% - 36px * 3 / 4)
+      width: calc(16% - 28.8px);
+    }
+    @media (max-width: 767px) {
+      grid-column: span 5;
     }
   }
   &--7 {
-    width: calc(65% - 8px);
     @media (min-width: 768px) {
-      width: calc(33% - 36px * 3 / 4)
+      width: calc(23% - 28.8px);
     }
   }
   &--8 {
-    width: calc(35% - 8px);
     @media (min-width: 768px) {
-      width: calc(22% - 36px * 3 / 4)
+      width: calc(24% - 28.8px);
+    }
+  }
+  &--9 {
+    @media (min-width: 768px) {
+      width: calc(25% - 28.8px);
+    }
+    @media (max-width: 767px) {
+      grid-column: span 9;
+    }
+  }
+  &--10 {
+    @media (min-width: 768px) {
+      width: calc(12% - 28.8px);
+    }
+    @media (max-width: 767px) {
+      grid-column: span 3;
     }
   }
 }
