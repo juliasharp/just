@@ -74,8 +74,8 @@ onMounted(() => {
     max-width: 1825px;
     margin: 0 auto;
     @media (max-width: 767px) {
-      padding-left: 30px;
-      padding-right: 30px;
+      padding-left: 16px;
+      padding-right: 16px;
     }
   }
   &-text {

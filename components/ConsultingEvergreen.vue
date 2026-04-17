@@ -13,7 +13,7 @@ const displayedHeaders = ref([]); // Updated to hold multiple headers
 const headers = ['+ ACT ', '+ COLLABORATE ', '+ DESIGN', '= EQUITABLE FUTURE NOW'];
 const dataHeaders = ['DETERMINE YOUR ACTION', 'BUILD YOUR TEAM', 'CREATE AND REALIZE', 'EMPOWER AND THRIVE'];
 const data = [
-  `<p><span style="font-family: 'Inter Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project. <br /> <span style="display:block; padding-top:10px;"><span style="font-family: 'Inter Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</span></p>`, 
+  `<p><span style="font-family: 'Inter Bold'">JUST Act</span> is your opportunity to envision and plan the actions we will take together in designing your project. <br /> <span class="act-second-line"><span style="font-family: 'Inter Bold'">JUST Act</span> is also our non-profit equity engine, partnering to build the just legacy you want to see in the world!</span></p>`,
   `JUST is your access to engage diverse expertise and perspectives to inform and guide your project. Drawing on decades of experience from designers, creatives, subject matter experts, leaders, and activists, <span style="font-family: 'Inter Bold'">JUST Collaborate</span> is your platform to imagine, innovate, and implement!`, 
   `With a project specific approach, <span style="font-family: 'Inter Bold'">JUST Design</span> will integrate our expertise in creating and guiding equitable processes to work with you to develop your project through key phases of design, and bring it to life!`,
   `By uniting Act, Collaborate, and Design, we shape transformative solutions that support your needs and inspire just and healthy change - enabling you to <span style="font-style: italic">live your future <span style="font-weight: bold;">now</span></span>.`
@@ -174,6 +174,10 @@ onBeforeUnmount(() => {
     span {
       font-family: 'Inter Bold';
     }
+    :deep(.act-second-line) {
+      display: block;
+      padding-top: 10px;
+    }
   }
 
   &-textHeader {
@@ -318,7 +322,7 @@ h2 {
   }
   @media (max-width: 450px) {
     transform: translateX(50%) scale(0.4);
-    top: 2%;
+    top: 9%;
   }
   svg {
     height: auto !important;
