@@ -1,5 +1,40 @@
 <script setup lang="ts">
 const route = useRoute();
+
+const config = useRuntimeConfig()
+
+const query = `
+  query HomePage {
+    page(id: "435", idType: DATABASE_ID) {
+      featuredImage {
+        node {
+          sourceUrl
+        }
+      }
+      title
+      content
+    }
+  }
+`
+
+const { data } = await useFetch(config.public.wordpressUrl, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: { query }
+})
+
+const page = computed(() => (data.value as any)?.data?.page ?? null)
+const image = computed(() => page.value?.featuredImage?.node?.sourceUrl ?? null)
+
+useSeoMeta({
+  title: () => page.value?.title || 'JUST Design | The Empty Chair -- making the avoidable unavoidable',
+  ogTitle: () => page.value?.title || 'JUST Design | The Empty Chair',
+  description: () => page.value?.content?.substring(0, 155) || 'JUST Design | The Empty Chair',
+  ogDescription: () => page.value?.content?.substring(0, 155) || 'JUST Design | The Empty Chair',
+  ogImage: () => image.value,
+  twitterImage: () => image.value,
+  twitterCard: 'summary_large_image',
+})
 </script>
 
 <template>
