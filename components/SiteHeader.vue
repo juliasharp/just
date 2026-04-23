@@ -117,7 +117,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <header class="site-header">
+  <header class="site-header" :class="{ 'nav-is-open': isOpen }">
     <!-- Logo -->
     <div
       class="site-logo"
@@ -151,7 +151,7 @@ onBeforeUnmount(() => {
       </ul>
     </nav>
 
-    <!-- Hamburger → X -->
+    <!-- Hamburger → X (with nav-is-open for mobile blend-mode override) -->
     <button
       class="site-hamburger"
       :class="{ 'is-open': isOpen, 'site-hamburger--hero-hidden': heroHidden }"
@@ -178,10 +178,17 @@ onBeforeUnmount(() => {
   justify-content: space-between;
   padding: 20px;
   pointer-events: none;
+  mix-blend-mode: difference;
 
   @media (min-width: 768px) {
     padding: 35px;
-    mix-blend-mode: difference;
+  }
+
+  // Disable blend when mobile nav is open so the black overlay stays solid
+  @media (max-width: 767px) {
+    &.nav-is-open {
+      mix-blend-mode: normal;
+    }
   }
 }
 
