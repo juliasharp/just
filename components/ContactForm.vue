@@ -277,7 +277,7 @@ if (isClient && isDev) {
 <style lang="scss" scoped>
 .contact-form {
   position: fixed;
-  z-index: 99;
+  z-index: 201;
   display: flex;
   flex-direction: column;
   top: 0;

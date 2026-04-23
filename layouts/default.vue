@@ -23,7 +23,6 @@ onMounted(() => {
 
 <template>
   <div id="viewport" :class="`page ${props.pageName}`">
-    <SansLogoNav v-model:showForm="showContactForm"/>
     <div id="smooth-wrapper">
       <div id="smooth-content">
         <slot />

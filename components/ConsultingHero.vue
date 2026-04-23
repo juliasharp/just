@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { gsap } from 'gsap';
 import lottie from 'lottie-web';
+const heroReady = useHeroReady()
 import type { AnimationItem } from 'lottie-web';
 import LogoShapes from '@/assets/just-shapes-NEWNEW.json';
 import LogoShapesMobile from '@/assets/header-shapes-mobile.json';
@@ -82,8 +83,9 @@ const loadAnimation = (isMobile: boolean) => {
       currentLottieInstance?.play();
 
       currentLottieInstance?.addEventListener('complete', () => {
-        showAnimation.value = false; // Hide the animation
-        showVideo.value = true; // Show the video
+        showAnimation.value = false;
+        showVideo.value = true;
+        heroReady.value = true;
       });
     } else {
       const totalFrames = currentLottieInstance?.totalFrames || 0;
@@ -114,6 +116,7 @@ const loadAnimation = (isMobile: boolean) => {
           onComplete: () => {
             showAnimation.value = false;
             showVideo.value = true;
+            heroReady.value = true;
           },
         }
       );
@@ -146,6 +149,7 @@ const debounce = (fn: () => void, delay: number) => {
 };
 
 onMounted(() => {
+  heroReady.value = false
   isMobileView.value = window.innerWidth < 761;
   loadAnimation(isMobileView.value);
 
