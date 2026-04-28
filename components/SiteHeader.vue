@@ -127,9 +127,18 @@ watch(() => route.path, () => {
   if (isOpen.value) closeNav()
 })
 
+watch(heroReady, (ready) => {
+  if (ready && isConsultingPage.value && window.innerWidth < 768) {
+    isLogoHidden.value = true
+  }
+})
+
 onMounted(() => {
   currentBreakpoint = window.innerWidth >= 768
   lastScrollY = window.scrollY || 0
+  if (isConsultingPage.value && window.innerWidth < 768) {
+    isLogoHidden.value = true
+  }
   window.addEventListener('scroll', handleScroll, { passive: true })
   window.addEventListener('resize', handleResize)
 })
