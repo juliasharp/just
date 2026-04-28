@@ -3,11 +3,15 @@ import gsap from 'gsap'
 import LogoSVG from '/src/just-logo-res.svg?component'
 
 const isOpen = ref(false)
+const navLinksReady = ref(true)
 const navRef = ref<HTMLElement | null>(null)
+const hamburgerRef = ref<HTMLElement | null>(null)
 const isLogoHidden = ref(false)
 let lastScrollY = 0
+let scrollUpAccum = 0
 let currentBreakpoint = true // true = desktop
-const HIDE_THRESHOLD = 3000
+const HIDE_THRESHOLD = 50
+const SHOW_THRESHOLD = 150
 
 const showContactForm = useContactForm()
 const heroReady = useHeroReady()
@@ -24,10 +28,12 @@ function handleScroll() {
     return
   }
   const isScrollingDown = current > lastScrollY
-  if (isScrollingDown && current > HIDE_THRESHOLD) {
-    isLogoHidden.value = true
+  if (isScrollingDown) {
+    scrollUpAccum = 0
+    if (current > HIDE_THRESHOLD) isLogoHidden.value = true
   } else {
-    isLogoHidden.value = false
+    scrollUpAccum += lastScrollY - current
+    if (scrollUpAccum > SHOW_THRESHOLD) isLogoHidden.value = false
   }
   lastScrollY = current
 }
@@ -41,16 +47,20 @@ function openNav() {
     gsap.set(links, { opacity: 0, y: 24 })
     gsap.fromTo(navRef.value,
       { x: '100%' },
-      { x: '0%', duration: 0.6, ease: 'power3.inOut' }
+      { x: '0%', duration: 0.9, ease: 'power3.inOut' }
     )
     gsap.to(links, {
       opacity: 1, y: 0,
       duration: 0.45, stagger: 0.07, delay: 0.35, ease: 'power3.out',
     })
   } else {
+    navLinksReady.value = false
+    gsap.killTweensOf(navRef.value)
+    gsap.set(navRef.value, { x: 0 })
+    const slideX = getSlideX()
     gsap.fromTo(navRef.value,
-      { opacity: 0, x: 60 },
-      { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' }
+      { x: slideX, autoAlpha: 0 },
+      { x: 0, autoAlpha: 1, duration: 0.8, ease: 'power3.inOut', onComplete: () => { navLinksReady.value = true } }
     )
   }
 }
@@ -64,15 +74,29 @@ function closeNav() {
       onComplete: () => { isOpen.value = false },
     })
   } else {
+    navLinksReady.value = false
+    const slideX = getSlideX()
     gsap.to(navRef.value, {
-      opacity: 0,
-      x: 60,
-      duration: 0.35,
-      ease: 'power3.in',
-      onComplete: () => { isOpen.value = false },
+      x: slideX,
+      autoAlpha: 0,
+      duration: 0.6,
+      ease: 'power3.inOut',
+      onComplete: () => {
+        isOpen.value = false
+        navLinksReady.value = true
+      },
     })
   }
 }
+
+function getSlideX() {
+  if (!navRef.value || !hamburgerRef.value) return 300
+  gsap.set(navRef.value, { x: 0 })
+  const navRect = navRef.value.getBoundingClientRect()
+  const hamRect = hamburgerRef.value.getBoundingClientRect()
+  return (hamRect.left + hamRect.width / 2) - (navRect.left + navRect.width / 2)
+}
+
 
 function handleContact() {
   showContactForm.value = true
@@ -123,16 +147,14 @@ onBeforeUnmount(() => {
       class="site-logo"
       :class="{ 'site-logo--hidden': isLogoHidden && !isOpen, 'site-logo--hero-hidden': heroHidden }"
     >
-      <NuxtLink to="/" aria-label="JUST Design home">
-        <LogoSVG />
-      </NuxtLink>
+      <LogoSVG />
     </div>
 
     <!-- Nav links (slides in from right, inline) -->
     <nav
       ref="navRef"
       class="site-nav"
-      :class="{ 'is-open': isOpen }"
+      :class="{ 'is-open': isOpen, 'nav-links-ready': navLinksReady }"
       aria-label="Main navigation"
     >
       <ul class="site-nav__links">
@@ -153,6 +175,7 @@ onBeforeUnmount(() => {
 
     <!-- Hamburger → X (with nav-is-open for mobile blend-mode override) -->
     <button
+      ref="hamburgerRef"
       class="site-hamburger"
       :class="{ 'is-open': isOpen, 'site-hamburger--hero-hidden': heroHidden }"
       :aria-expanded="isOpen"
@@ -203,13 +226,12 @@ onBeforeUnmount(() => {
     width: clamp(120px, 9vw, 160px);
   }
 
-  a {
+  svg {
     display: block;
-    color: #fff;
     animation: site-logo-in 0.6s ease 1.3s both;
 
-    svg * {
-      fill: currentColor;
+    * {
+      fill: #fff;
     }
   }
 
@@ -325,7 +347,7 @@ onBeforeUnmount(() => {
 
 .nav-link {
   color: #fff;
-  font-size: clamp(14px, 1.3vw, 18px);
+  font-size: clamp(18px, 1.35vw, 28px);
   font-family: var(--body-font-medium);
   text-decoration: none;
   background: none;
@@ -333,17 +355,30 @@ onBeforeUnmount(() => {
   cursor: pointer;
   padding: 0;
   white-space: nowrap;
-
+  position: relative;
   @media (max-width: 767px) {
     font-size: 28px;
   }
 
-  &.router-link-active {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-    @media (max-width: 767px) {
-      text-underline-offset: 7px;
-    }
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s ease;
   }
+
+  &:hover::after {
+    transform: scaleX(1);
+  }
+}
+
+.site-nav.nav-links-ready .nav-link.router-link-active::after {
+  transform: scaleX(1);
 }
 </style>
