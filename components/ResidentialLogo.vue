@@ -26,8 +26,9 @@ onMounted(() => {
   lastScrollY = window.scrollY || 0
   window.addEventListener('scroll', handleScroll, { passive: true })
 
-  if (!prefersReduced && logoRef.value) {
-    gsap.set(logoRef.value, { autoAlpha: 0 })
+  if (prefersReduced) {
+    gsap.set(logoRef.value, { autoAlpha: 1 })
+  } else {
     gsap.to(logoRef.value, {
       autoAlpha: 1,
       duration: 0.6,
@@ -70,6 +71,8 @@ onBeforeUnmount(() => {
   color: #fff;
   width: 88px;
   pointer-events: auto;
+  opacity: 0;
+  visibility: hidden;
   transition:
     transform 0.35s ease,
     opacity 0.35s ease;

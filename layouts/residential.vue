@@ -29,7 +29,6 @@ onBeforeUnmount(() => {
 
 <template>
   <div id="viewport" :class="`page ${props.pageName}`">
-    <ResidentialLogo />
     <slot />
     <Teleport to="body">
       <!-- Keep mounted; panel slides via its own .is-shown class -->
