@@ -27,6 +27,12 @@ function handleScroll() {
     lastScrollY = current
     return
   }
+  const atBottom = Math.ceil(current + window.innerHeight) >= document.documentElement.scrollHeight
+  if (atBottom) {
+    openNav()
+    lastScrollY = current
+    return
+  }
   const isScrollingDown = current > lastScrollY
   if (isScrollingDown) {
     scrollUpAccum = 0
@@ -127,18 +133,9 @@ watch(() => route.path, () => {
   if (isOpen.value) closeNav()
 })
 
-watch(heroReady, (ready) => {
-  if (ready && isConsultingPage.value && window.innerWidth < 768) {
-    isLogoHidden.value = true
-  }
-})
-
 onMounted(() => {
   currentBreakpoint = window.innerWidth >= 768
   lastScrollY = window.scrollY || 0
-  if (isConsultingPage.value && window.innerWidth < 768) {
-    isLogoHidden.value = true
-  }
   window.addEventListener('scroll', handleScroll, { passive: true })
   window.addEventListener('resize', handleResize)
 })
@@ -154,7 +151,7 @@ onBeforeUnmount(() => {
     <!-- Logo -->
     <div
       class="site-logo"
-      :class="{ 'site-logo--hidden': isLogoHidden && !isOpen, 'site-logo--hero-hidden': heroHidden }"
+      :class="{ 'site-logo--hidden': !isOpen && (isConsultingPage || isLogoHidden), 'site-logo--hero-hidden': heroHidden }"
     >
       <LogoSVG />
     </div>
