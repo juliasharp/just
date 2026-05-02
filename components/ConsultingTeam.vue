@@ -9,11 +9,15 @@ const activeProfileHover = ref(null);
 const carouselTrackRef = ref(null);
 
 const isMobile = ref(false);
+const viewportCols = ref(5);
 
-const updateIsMobile = () => {
-  if (typeof window !== 'undefined') {
-    isMobile.value = window.innerWidth <= 760;
-  }
+const updateViewportState = () => {
+  if (typeof window === 'undefined') return;
+  const w = window.innerWidth;
+  isMobile.value = w <= 760;
+  const count = team.value.length;
+  const maxCols = w > 1280 ? count : 4;
+  viewportCols.value = count > 0 ? Math.min(count, maxCols) : maxCols;
 };
 
 const config = useRuntimeConfig();
@@ -147,29 +151,29 @@ const orderedTeam = computed(() => {
   return team.value;
 });
 
+const settings = computed(() => {
+  const count = team.value.length || 1;
+  return {
+    itemsToShow: Math.min(count, 4),
+    snapAlign: 'start' as const,
+    mouseDrag: false,
+    arrows: true,
+    breakpoints: {
+      1281: { itemsToShow: count, arrows: true },
+    },
+  };
+});
+
+watch(team, updateViewportState);
+
 onMounted(() => {
-  updateIsMobile();
-  window.addEventListener('resize', updateIsMobile);
+  updateViewportState();
+  window.addEventListener('resize', updateViewportState);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateIsMobile);
+  window.removeEventListener('resize', updateViewportState);
 });
-
-const settings = {
-  itemsToShow: 3,
-  snapAlign: 'start',
-  mouseDrag: false,
-  arrows: true,
-  breakpoints: {
-    900: {
-      itemsToShow: 4,
-    },
-    1280: {
-      itemsToShow: 5,
-    },
-  }
-};
 </script>
 
 <template>
@@ -179,11 +183,13 @@ const settings = {
     </div>
     <div class="team-container">
       <div ref="componentRef" class="team-container-inner flex">
-          <Carousel 
-            v-if="!isMobile" 
-            ref="carouselTrackRef" 
-            v-bind="settings" 
+          <Carousel
+            v-if="!isMobile"
+            ref="carouselTrackRef"
+            v-bind="settings"
             class="carousel"
+            :class="{ 'carousel--has-selection': selectedTeamMember || team.length > viewportCols }"
+            :style="{ '--items': viewportCols }"
           >
             <Slide 
               v-for="(member, index) in orderedTeam" 
@@ -278,32 +284,25 @@ const settings = {
   background-color: #000000;
   &-item {
     cursor: pointer;
+    display: block;
+    height: 100%;
   }
   &-slide {
     position: relative;
-    flex: 0 0 calc(20%);
+    --info-width: 760px;
     transition: flex 0.3s ease, width 0.3s ease;
     @media (max-width: 1280px) {
-      flex: 0 0 calc(25%);
+      --info-width: 695px;
     }
-    @media (max-width: 900px) {
-      flex: 0 0 calc(33.33%);
+    @media (max-width: 980px) {
+      --info-width: 650px;
+    }
+    @media (max-width: 760px) {
+      --info-width: 350px;
     }
     &.expanded {
-      flex: 0 0 calc(20% + 760px);
+      flex: 0 0 calc(100% / var(--items, 5) + var(--info-width, 760px)) !important;
       max-width: none;
-      @media (max-width: 1280px) {
-        flex: 0 0 calc(25% + 695px);
-      }
-      @media (max-width: 980px) {
-        flex: 0 0 calc(25% + 520px);
-      }
-      @media (max-width: 900px) {
-        flex: 0 0 calc(33.33% + 520px);
-      }
-      @media (max-width: 760px) {
-        flex: 0 0 calc(33.33% + 350px);
-      }
     }
     &-content {
       display: flex;
@@ -313,14 +312,14 @@ const settings = {
   }
   &-photo {
     overflow: hidden;
-    @media (min-width: 1201px) {
-      max-width: calc(100vw / 5);
-    }
-    @media (min-width: 901px) and (max-width: 1280px) {
-      max-width: calc(100vw / 4);
-    }
-    @media (max-width: 900px) and (min-width: 761px) {
-      max-width: calc(100vw / 3);
+    @media (min-width: 761px) {
+      max-width: calc(100vw / var(--items, 5));
+      height: 100%;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
     img {
       @media (max-width: 760px) {
@@ -339,6 +338,11 @@ const settings = {
   &-info {
     background: #ffffff;
     transition: all 0.3s ease;
+    overflow: hidden;
+    @media (min-width: 761px) {
+      width: var(--info-width, 760px);
+      flex-shrink: 0;
+    }
     @media (max-width: 760px) {
       position: absolute;
       z-index: 9;
@@ -348,8 +352,9 @@ const settings = {
       transition: transform 0.3s ease;
       color: #000000;
       text-align: left;
+      box-sizing: border-box;
       @media (min-width: 1481px) {
-        padding: 90px 80px 60px;
+        padding: 68px 80px 60px;
         width: 760px;
       }
       @media (min-width: 1281px) and (max-width: 1480px) {
@@ -358,10 +363,10 @@ const settings = {
       }
       @media (min-width: 981px) and (max-width: 1280px) {
         width: 695px;
-        padding: 65px 50px 50px;
+        padding: 36px 36px 40px;
       }
       @media (min-width: 761px) and (max-width: 980px) {
-        width: 520px;
+        width: 650px;
         padding: 40px 32px 40px;
       }
       @media (max-width: 760px) {
@@ -390,12 +395,13 @@ const settings = {
       p {
         line-height: 1.4;
         margin-top: 38px;
-        @media (max-width: 1040px) {
-          margin-top: 30px;
+        @media (max-width: 1280px) {
+          margin-top: 24px;
+          font-size: 16px;
         }
         @media (max-width: 980px) {
           font-size: 16px;
-          margin-top: 25px;
+          margin-top: 18px;
         }
         @media (max-width: 760px) {
           margin-top: 20px;
@@ -475,6 +481,9 @@ const settings = {
   text-transform: uppercase;
   font-family: 'Calling Code';
   transition: all .3s ease-in-out;
+  @media (max-width: 1080px) {
+    font-family: 16px;
+  }
   &.desktop {
     position: absolute;
     bottom: 50px;
@@ -491,5 +500,47 @@ const settings = {
   .team-slide {
     scroll-snap-align: start;
   }
+}
+
+:deep(.carousel__prev),
+:deep(.carousel__next) {
+  display: none;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: none;
+  color: #fff;
+  border: none;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+:deep(.carousel__prev) {
+  left: 16px;
+}
+
+:deep(.carousel__next) {
+  right: 16px;
+}
+
+:deep(.carousel__prev--disabled),
+:deep(.carousel__next--disabled) {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.carousel--has-selection :deep(.carousel__prev),
+.carousel--has-selection :deep(.carousel__next) {
+  display: flex;
 }
 </style>

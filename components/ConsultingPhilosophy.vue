@@ -89,7 +89,7 @@ onMounted(() => {
       opacity: 1; /* Ensure it starts fully visible post-animation */
       transform: translateY(0);
       color: #ffffff;
-      font-size: 70px;
+      font-size: 65px;
       line-height: 1.21;
       position: relative;
       padding: 70px 80px;
